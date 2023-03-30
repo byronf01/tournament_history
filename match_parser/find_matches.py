@@ -8,7 +8,7 @@ This file looks through all osu! mps and stores all mps that are tournament matc
 load_dotenv()
 
 my_osu_id = 16626263 # hiyah's osu ID
-oldest_fallback = 79322841
+oldest_fallback = 79322873
 newest_fallback = 107658859
 ignore = ["o!mm Private", "ETX"]
 MATCH_BASE_URL = "osu.ppy.sh/community/matches/"
@@ -17,7 +17,7 @@ CLIENT_SECRET = os.getenv('client-secret')
 # OSU_API_TOKEN = os.getenv('osu-api-token')
 
 # Note parse_mps will not find matches that hiyah was not present in but was part of a team
-def parse_mps(start=oldest_fallback):
+def parse_mps(old, start=oldest_fallback):
 
     new_mps = set()
 
@@ -37,83 +37,90 @@ def parse_mps(start=oldest_fallback):
         'Authorization': f'Bearer {token}',
     }
 
-    start_time = time.time()
+    try: 
 
-    start = 107542800
-    # target: find 107542811
+        start_time = time.time()
 
-    # Iterate from newest to newest possible mp
-    newest_fallback = 107542830 # test for now
-    for mp in range(start, newest_fallback, 1):
-        
-        # API call and check criteria 1) hiyah in lobby 2) lobby is v2 3) lobby name is "ACRONYM: {something}"
-        try: 
-            time.sleep(0.2) 
-            score_info = requests.get(f'{API_BASE_URL}matches/{str(mp)}', headers=headers)
-            info = score_info.json()
-            print("Parsing match " + str(mp))
-        except Exception as e:
-            print("API call falled")
-            print(f'URL: {MATCH_BASE_URL}{str(mp)}')
-            continue
+        with open('matches.txt', 'a') as f:
 
-        try: 
-            # check 1
-            # matches can be formated "ACRONYM: (a) vs (b)" or "ACRONYM (a) vs (b)" or "ACRONYM: something"
-            match_name = info['match']['name'] 
-            case1 = r'([a-zA-Z0-9!\.]+): \(.*\) vs\.? \(.*\)' 
-            case2 = r'([a-zA-Z0-9!\.]+) \(.*\) vs\.? \(.*\)'
-            case3 = r'([a-zA-Z0-9!\.]+): .*'
-
-            match1 = re.search(case1, match_name)
-            match2 = re.search(case2, match_name)
-            match3 = re.search(case3, match_name)
-
-            if match1:
-                if match1.group(1) in ignore:
+            # Iterate from newest to newest possible mp
+            for mp in range(start, newest_fallback, 1):
+                
+                # API call and check criteria 1) hiyah in lobby 2) lobby is v2 3) lobby name is "ACRONYM: {something}"
+                try: 
+                    score_info = requests.get(f'{API_BASE_URL}matches/{str(mp)}', headers=headers)
+                    info = score_info.json()
+                    print("Parsing match " + str(mp))
+                    if 'error' in info.keys(): # mp has been deprecated 
+                        continue 
+                except Exception as e:
+                    print("API call falled")
+                    print(f'URL: {MATCH_BASE_URL}{str(mp)}')
                     continue
-            elif match2:
-                if match2.group(1) in ignore:
-                    continue 
-            elif match3: 
-                if match3.group(1) in ignore: 
-                    continue
-            else:
-                continue
-            
-            # check 2 (user played in match) and 3 (match is v2)
-            playedMap = False
-            v2_threshold = 3
-            # check if user played at least one map
-            for event in info['events']:
-                if event['detail']['type'] == 'other':
-                    
-                    if event['game']['scoring_type'] != 'scorev2':
-                        v2_threshold -= 1
-                        # Fail if 3 or more maps not played in score v2
-                        if v2_threshold <= 0:
-                            playedMap = False
-                            break
+
+                try: 
+                    # check 1
+                    # matches can be formated "ACRONYM: (a) vs (b)" or "ACRONYM (a) vs (b)" or "ACRONYM: something"
+                    match_name = info['match']['name'] 
+                    case1 = r'([a-zA-Z0-9!\.]+): \(.*\) vs\.? \(.*\)' 
+                    case2 = r'([a-zA-Z0-9!\.]+) \(.*\) vs\.? \(.*\)'
+                    case3 = r'([a-zA-Z0-9!\.]+): .*'
+
+                    match1 = re.search(case1, match_name)
+                    match2 = re.search(case2, match_name)
+                    match3 = re.search(case3, match_name)
+
+                    if match1:
+                        if match1.group(1) in ignore:
+                            continue
+                    elif match2:
+                        if match2.group(1) in ignore:
+                            continue 
+                    elif match3: 
+                        if match3.group(1) in ignore: 
+                            continue
                     else:
-                        scores = event['game']['scores']
-                        for s in scores:
-                            # user plays at least one map
-                            if s["user_id"] == my_osu_id:
-                                playedMap = True
-            
-            if playedMap == False:
-                continue 
+                        continue
+                    
+                    # check 2 (user played in match) and 3 (match is v2)
+                    playedMap = False
+                    v2_threshold = 3
+                    # check if user played at least one map
+                    for event in info['events']:
+                        if event['detail']['type'] == 'other':
+                            
+                            if event['game']['scoring_type'] != 'scorev2':
+                                v2_threshold -= 1
+                                # Fail if 3 or more maps not played in score v2
+                                if v2_threshold <= 0:
+                                    playedMap = False
+                                    break
+                            else:
+                                scores = event['game']['scores']
+                                for s in scores:
+                                    # user plays at least one map
+                                    if s["user_id"] == my_osu_id:
+                                        playedMap = True
+                    
+                    if playedMap == False:
+                        continue 
+                    
+                    # do not add duplicate mps
+                    if mp not in old:
+                        f.write('\n' + str(mp))
+                        print(str(mp) + " added! ")  
+                    
+                except Exception as e:
+                    print("Error with mp")
+                    print(info)
+                    continue
 
-            new_mps.add(mp)      
-            
-
-        except Exception as e:
-            print("Error with mp")
-            print(info)
-            continue
-
-    end_time = time.time() 
-    print(f'{str(newest_fallback - start)} mps in {str(end_time - start_time)} seconds')
+            end_time = time.time() 
+            print(f'{str(newest_fallback - start)} mps in {str(end_time - start_time)} seconds')
+    except:
+        print("Unknown Error occured")
+        end_time = time.time() 
+        print(f'{str(mp - start)} mps in {str(end_time - start_time)} seconds')
 
     return new_mps
 
@@ -136,16 +143,7 @@ def update_mps():
     else:
         newest = max(all_matches)
     
-    new_mps = parse_mps(newest)
-    
-    if len(new_mps) == 0: return 
-    
-    updated = all_matches.union(new_mps)
-
-    # write new matches to match file
-    with open('matches.txt', 'w') as f:
-        for mp in updated:
-            f.write(str(mp) + '\n')
+    parse_mps(all_matches) 
 
 if __name__ == "__main__":
     update_mps()
