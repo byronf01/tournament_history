@@ -8,18 +8,19 @@ This file looks through all osu! mps and stores all mps that are tournament matc
 load_dotenv()
 
 my_osu_id = 16626263 # hiyah's osu ID
-oldest_fallback = 79322873
-newest_fallback = 107658859
-ignore = ["o!mm Private", "ETX"]
+oldest_fallback = 107658859
+newest_fallback = 110000000 
+ignore = ["o!mm Private", "ETX", "o!mm Ranked", "o!mm Team Private"]
 MATCH_BASE_URL = "osu.ppy.sh/community/matches/"
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
 CLIENT_SECRET = os.getenv('client-secret')
-# OSU_API_TOKEN = os.getenv('osu-api-token')
+
 
 # Note parse_mps will not find matches that hiyah was not present in but was part of a team
 def parse_mps(old, start=oldest_fallback):
 
     new_mps = set()
+    consecutive_errors = 0
 
     data = {
         'client_id': 21309,
@@ -53,9 +54,14 @@ def parse_mps(old, start=oldest_fallback):
                     print("Parsing match " + str(mp))
                     if 'error' in info.keys(): # mp has been deprecated 
                         continue 
+                    consecutive_errors = 0
                 except Exception as e:
                     print("API call falled")
                     print(f'URL: {MATCH_BASE_URL}{str(mp)}')
+                    consecutive_errors += 1
+                    if consecutive_errors >= 10:
+                        # breaking issue with API
+                        exit()
                     continue
 
                 try: 
