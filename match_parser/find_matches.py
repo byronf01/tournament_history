@@ -15,9 +15,28 @@ MATCH_BASE_URL = "osu.ppy.sh/community/matches/"
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
 CLIENT_SECRET = os.getenv('client-secret')
 
+def ignore(mp: int):
+    """
+    Adds a match to ignore to ignore_matches file if not already in.
+    """
+    with open("ignore_matches.txt", "r") as f:
+        contents = f.read()
+    contents = contents.split('\n')
+    for mp_check in contents:
+        if int(mp_check) == mp:
+            return None 
+        
+    with open("ignore_matches.txt", "a") as f:
+        f.write("\n" + str(mp)) 
+        print(str(mp) + " added to ignore")  
 
-# Note parse_mps will not find matches that hiyah was not present in but was part of a team
+
+
 def parse_mps(old, start=oldest_fallback):
+    """
+    Finds all tournament matches that specified user has played in.
+    Note parse_mps will not find matches that hiyah was not present in but was part of a team.
+    """
 
     new_mps = set()
     consecutive_errors = 0

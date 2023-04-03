@@ -1,11 +1,9 @@
 # note that if there are any fields that cant be filled they should be filled manually
 
-
 # First enter tournament's name
 
-# Enter forum post 
+# Enter forum post (what if no forum?)
     # get tournament start-end date?
-    # get the acronym
     # get spreadsheet from forum
     # get bracket from forum or spreadsheet
 
