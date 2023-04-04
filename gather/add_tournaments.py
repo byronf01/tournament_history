@@ -1,8 +1,7 @@
 # note that if there are any fields that cant be filled they should be filled manually
 
-# First enter tournament's name
-
 # Enter forum post (what if no forum?)
+    # get tournament's name (probably have to do manually)
     # get tournament start-end date?
     # get spreadsheet from forum
     # get bracket from forum or spreadsheet
@@ -26,5 +25,3 @@
 # calculate match costs after knowing # warm up maps
 
 # return tournament obj 
-
-if __name__ == "__main__":
