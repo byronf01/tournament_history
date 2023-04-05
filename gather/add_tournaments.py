@@ -1,3 +1,7 @@
+from get_tournament_data import sheet_data
+
+def construct_tourn
+
 # note that if there are any fields that cant be filled they should be filled manually
 
 # Enter forum post (what if no forum?)
@@ -25,3 +29,6 @@
 # calculate match costs after knowing # warm up maps
 
 # return tournament obj 
+
+if __name__ == "__main__":
+    # classify tournaments by acronym??
