@@ -10,7 +10,7 @@ load_dotenv()
 my_osu_id = 16626263 # hiyah's osu ID
 oldest_fallback = 107658859
 newest_fallback = 110000000 
-ignore = ["o!mm Private", "ETX", "o!mm Ranked", "o!mm Team Private"]
+ignore = ["o!mm Private", "ETX", "o!mm Ranked", "o!mm Team Private", "RMoT", "RMOT"]
 MATCH_BASE_URL = "osu.ppy.sh/community/matches/"
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
 CLIENT_SECRET = os.getenv('client-secret')
