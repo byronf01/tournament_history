@@ -46,19 +46,23 @@ class Match:
         # stores collection of match costs per player
         self.__matchcosts = {} 
         
-        a = input("Please review mp manually and enter # warmups, # extraneous maps at end, map # of aborts separated by commas")
-        b = input()
-        c = input()
+        """
+        print("Review mp manually (None if no irregularities) ")
+        a = input("# warmups:  ")
+        b = input("# extraneous maps at end: ")
+        c = input("map number of aborts separated by commas:")
         self.__warmups = 2 if a == "" else int(a)
         self.__end = 0 if b == "" else int(b)
         self.__aborts = [] if c == "" else [int(foo) for foo in c.split(",")]
         
         self.__events = self.__process()
+        """
 
+    """
     def __process(self):
-        """
+        
         Main function that proccesses the mp. Returns a dictionary of maps that were played in the match and details of each map. 
-        """
+        
         try:
             response = requests.post('https://osu.ppy.sh/oauth/token', data=self.__apiData)
             token = response.json().get('access_token')
@@ -106,9 +110,12 @@ class Match:
 
                 map_link = "https://osu.ppy.sh/b/" + str(event['game']['beatmap']['id'])
                 map_background = event['game']['beatmap']['beatmapset']['covers']['cover']
-                map_title = event['game']['beatmap']['']
+                artist = event['game']['beatmap']['beatmapset']['artist']
+                title = event['game']['beatmap']['beatmapset']['title']
+                difficulty = event['game']['beatmap']['version']
+                map_title = f'{artist} - {title} [{difficulty}]'
+
                 scores = event['game']['scores']
-                
                 # Process list of scores
                 if self.__teamType == 'team-vs':
 
@@ -118,15 +125,22 @@ class Match:
                     red_team = set()
                     for s in scores:
 
+                        # Determine team that the score belongs to
+                        pass
+                        # Determine team of the player and add to set
+
+                    
+                    # Compare red - blue scores, add 1 to match result for winning team
                         
 
                 elif self.__teamType == 'head-to-head':
-
-            
-                
-                    
-    def getMatch():
-        return None # what should be the key for match? match title?
+                    pass
+    """
+                      
+    def getMatch(self):
+        return [] # what should be the key for match? match title? match id? should there even be a key?
 
 if __name__ == "__main__":
-    Match(107542811, "Kusudama")
+    multipliers = {"EZ": 1.8}
+    m = Match(107542811, "hiyah", multipliers)
+    print(m.getMatch())
