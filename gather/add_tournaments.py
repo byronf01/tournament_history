@@ -1,6 +1,16 @@
 from get_tournament_data import sheet_data
+import Tournament
 
-def construct_tourn
+# Tournaments with known issues (ex: VNDB had two acronyms)
+ISSUES = {"Visual Novel Duo Brackets": 1}
+
+def construct_tourn(tourn: dict) -> Tournament:
+    if tourn['tourn_name'] in ISSUES:
+        print(f"Warning: Tournament {tourn['tourn_name']} has issue {ISSUES[ tourn['tourn_name'] ]}")
+        t = Tournament(tourn, ISSUES[tourn['tourn_name']])
+    else:
+        t = Tournament(tourn, 0)
+    return t
 
 # note that if there are any fields that cant be filled they should be filled manually
 
@@ -31,4 +41,13 @@ def construct_tourn
 # return tournament obj 
 
 if __name__ == "__main__":
+    data = sheet_data()
+    for _, v in data.items():
+        
+        # Begin constructing tournament object
+        t = construct_tourn(v)
+
+        # Add tournament object to database
+
+    
     # classify tournaments by acronym??
