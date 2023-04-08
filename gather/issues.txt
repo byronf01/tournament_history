@@ -1,0 +1,4 @@
+# File that classifies tournaments with issues according to their issue. Manually updated.
+# Issue Key: 
+# 1 - multiple acronyms
+Visual Novel Duo Brackets: 1
