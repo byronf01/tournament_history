@@ -20,7 +20,7 @@ def str_to_date(s: str):
 
 class Tournament:
 
-    def __init__(self, data, issue):
+    def __init__(self, data, issues):
 
         # Tourney start date 
         self.__date = str_to_date(data['date']) 
@@ -81,7 +81,7 @@ class Tournament:
         # collection of Stage objects with keys representing the round ex. QF, SF, RO16, etc.
         self.__stages = {} 
 
-        if issue == 1:
+        if 1 in issues:
             next_acr = "placeholder"
             all_acronyms = [self.__acronym] 
             while next_acr != "":

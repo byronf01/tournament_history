@@ -1,4 +1,4 @@
-# File that classifies tournaments with issues according to their issue. Manually updated.
+# File that classifies tournaments with issues according to their issue(s) . Manually updated.
 # Issue Key: 
 # 0 - No issue
 # 1 - multiple acronyms

@@ -8,12 +8,12 @@ with open("issues.txt", "r") as f:
 t = t.split('\n')
 for line in t:
     if line[0] == '#': continue
-    tourn, issue = line.split(":")
-    ISSUES[tourn] = int(issue)
+    tourn, issues = line.split(":")
+    ISSUES[tourn] = [int(issue) for issue in issues.split(",")]
 
 def construct_tourn(tourn: dict) -> Tournament:
     if tourn['tourn_name'] in ISSUES:
-        print(f"Warning: Tournament {tourn['tourn_name']} has issue {ISSUES[ tourn['tourn_name'] ]}")
+        print(f"Warning: Tournament {tourn['tourn_name']} has issue(s) {ISSUES[ tourn['tourn_name'] ]}")
         t = Tournament(tourn, ISSUES[tourn['tourn_name']])
     else:
         t = Tournament(tourn, 0)
