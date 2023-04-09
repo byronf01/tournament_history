@@ -8,7 +8,7 @@ CLIENT_SECRET = os.getenv('client-secret')
 
 class Match:
 
-    def __init__(self, id: int, teamName: str, multipliers: dict):
+    def __init__(self, id: str, teamName: str, multipliers: dict):
         
         # API data
         self.__apiData = {
@@ -32,7 +32,7 @@ class Match:
         self.__multipliers = multipliers
 
         # outcome of the match, blue - red
-        self.__result = (0, 0)
+        self.__result = [0, 0]
 
         # team type of the match
         self.__teamType = ""
@@ -138,7 +138,15 @@ class Match:
     """
                       
     def getMatch(self):
-        return [] # what should be the key for match? match title? match id? should there even be a key?
+        return {self.__id: {
+                "match_name": self.__name,
+                "team-type": self.__teamType,
+                "multipliers": self.__multipliers,
+                "result": self.__result,
+                "matchcosts": [{}, {}], # TO-DO
+                "events": {}
+            }
+        } # what should be the key for match? match title? match id? should there even be a key?
 
 if __name__ == "__main__":
     multipliers = {"EZ": 1.8}

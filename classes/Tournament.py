@@ -71,6 +71,9 @@ class Tournament:
         # player's comments about tournament 
         self.__comments = data['notes']
 
+        # TO-DO: FM rules or mod multiplier rules for the tournament
+        self.__multipliers = {} 
+
         # player's teammates for the tournament
         ct = 1
         tmp = []
@@ -100,12 +103,10 @@ class Tournament:
         # TO-DO: figure out this part
         self.__stages = {} 
         while len(self.__mps) != 0:
-            round = input("enter round for now")
+            round = input("enter round for now: ")
             next_mp = self.__mps[0]
             self.__mps.pop(0)
-            s = Stage(round, next_mp)
-            self.__stages[]
-
+            self.__stages[round] = Stage(round, [next_mp], self.__teamName, self.__multipliers)
     
     def __guess_tourn_acronym(self, tourn_title: str) -> str:
         """
@@ -219,6 +220,8 @@ class Tournament:
 
         print(self.__mps)
 
+        return self.__mps
+
 
     def getTournament(self):
         return {self.__acronym: {
@@ -236,5 +239,5 @@ class Tournament:
             "notes": self.__notes,
             "comments": self.__comments,
             "teammates": self.__teammates,
-            "stages": self.__stages # not sure about this one
+            "stages": {r: s.getStage() for r, s in self.__stages.items()} # not sure about this one
         }} # stub
