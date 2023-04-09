@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../classes')
 from get_tournament_data import sheet_data
 from Tournament import Tournament
 
@@ -49,7 +51,7 @@ def construct_tourn(tourn: dict) -> Tournament:
 
 if __name__ == "__main__":
     data = sheet_data()
-    data = {"50": data[34]} # for testing
+    data = {"8": data[8]} # for testing
     for _, v in data.items():
         
         # Begin constructing tournament object
