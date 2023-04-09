@@ -2,4 +2,6 @@
 # Issue Key: 
 # 0 - No issue
 # 1 - multiple acronyms
+# 2 - changing format
 Visual Novel Duo Brackets:1
+Tayuno's Standout Cup:2
