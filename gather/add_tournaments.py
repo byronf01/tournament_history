@@ -49,7 +49,7 @@ def construct_tourn(tourn: dict) -> Tournament:
 
 if __name__ == "__main__":
     data = sheet_data()
-    data = {"50": data[50]} # for testing
+    data = {"50": data[34]} # for testing
     for _, v in data.items():
         
         # Begin constructing tournament object

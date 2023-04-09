@@ -67,7 +67,7 @@ class Tournament:
         ct = 1
         tmp = []
         while ct <= 16:
-            if data[f'p{ct}'] != "":
+            if data[f'p{ct}'] != "\n":
                 tmp.append(data[f'p{ct}'])
             else:
                 break
@@ -82,11 +82,11 @@ class Tournament:
         self.__stages = {} 
 
         if issue == 1:
-            next = "placeholder"
+            next_acr = "placeholder"
             all_acronyms = [self.__acronym] 
-            while next != "":
+            while next_acr != "":
                 next_acr = input("Enter additional acronym: ")
-                all_acronyms.append(next_acr)
+                if next_acr != "": all_acronyms.append(next_acr)
             self.__mps = self.__get_mps(all_acronyms)
         else: self.__mps = self.__get_mps([self.__acronym])
 
@@ -138,7 +138,8 @@ class Tournament:
             match_info = resp.json()
             try:
                 match_name = match_info['match']['name'] 
-                if self.__acronym in match_name.split(" ")[0]: # surely no acronyms have spaces in them
+                mp_acr = match_name.split(" ")[0].replace(":", "")
+                if mp_acr in acronyms: # surely no acronyms have spaces in them
                     self.__mps.append(all_mps[old])
 
                     # Keep checking mps after this until 15 mps have passed that are not from this tournament, then terminate early.
@@ -152,7 +153,8 @@ class Tournament:
                         match_info = resp.json()
                         try:
                             match_name = match_info['match']['name'] 
-                            if self.__acronym in match_name.split(" ")[0]: 
+                            acr = match_name.split(" ")[0].replace(":", "")
+                            if acr in acronyms: 
                                 condition = 0
                                 self.__mps.append(all_mps[old])
                         except Exception as e:
@@ -170,7 +172,8 @@ class Tournament:
             match_info = resp.json()
             try:
                 match_name = match_info['match']['name'] 
-                if self.__acronym in match_name.split(" ")[0]: 
+                mp_acr = match_name.split(" ")[0].replace(":", "")
+                if mp_acr in acronyms: 
                     self.__mps.insert(0, all_mps[new]) # insert at front of list since goign backwards
 
                     condition = 0
@@ -178,11 +181,12 @@ class Tournament:
                     while condition < 15 and new >= old:
                         condition += 1
                         resp = requests.get(f'{API_BASE_URL}matches/{all_mps[new]}', headers=headers)
-                        print("Parsing match " + all_mps[new])
+                        # print("Parsing match " + all_mps[new])
                         match_info = resp.json()
                         try:
                             match_name = match_info['match']['name'] 
-                            if self.__acronym in match_name.split(" ")[0]: 
+                            acr = match_name.split(" ")[0].replace(":", "")
+                            if acr in acronyms: 
                                 condition = 0
                                 self.__mps.insert(0, all_mps[new])
                         except Exception as e:
