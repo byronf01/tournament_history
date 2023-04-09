@@ -18,7 +18,7 @@ def construct_tourn(tourn: dict) -> Tournament:
         print(f"Warning: Tournament {tourn['tourn_name']} has issue(s) {ISSUES[ tourn['tourn_name'] ]}")
         t = Tournament(tourn, ISSUES[tourn['tourn_name']])
     else:
-        t = Tournament(tourn, 0)
+        t = Tournament(tourn, [0])
     return t
 
 # note that if there are any fields that cant be filled they should be filled manually
@@ -51,7 +51,7 @@ def construct_tourn(tourn: dict) -> Tournament:
 
 if __name__ == "__main__":
     data = sheet_data()
-    data = {"8": data[8]} # for testing
+    data = {"9": data[9]} # for testing
     for _, v in data.items():
         
         # Begin constructing tournament object

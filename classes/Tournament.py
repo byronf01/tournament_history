@@ -28,19 +28,26 @@ class Tournament:
         # Tournament name
         self.__tournName = data['tourn_name']
 
-        # Tourney acronym
-        guess = self.__guess_tourn_acronym(data['tourn_name'])
-        correct = input(f"Default Acronym -> [{guess}] / Enter correct if wrong: ")
-        self.__acronym = guess if correct == "" else correct 
+        # forum post
+        self.__forum = data['forum']
+
+        # Tournament sheet
+        self.__tournSheet = data['tourn_sheet']
 
         # Link to a Challonge Bracket
         self.__bracket = data['bracket'] 
 
+        # Tourney acronym
+        guess = self.__guess_tourn_acronym(data['tourn_name']) # TO-DO: ADD LINK TO FORUM HERE
+        if self.__forum: print(self.__forum) 
+        elif self.__tournSheet: print(self.__tournSheet)
+        elif self.__bracket: print(self.__bracket)
+        else: print("No supporting tournament data")
+        correct = input(f"Default Acronym -> [{guess}] / Enter correct if wrong: ")
+        self.__acronym = guess if correct == "" else correct 
+
         # Player's team name for the tournament
         self.__teamName = data['team_name'] if data['team_name'] != "" else PLAYER_NAME
-
-        # Tournament sheet
-        self.__tournSheet = data['tourn_sheet']
 
         # Rank range
         self.__rankRange = data['rank_range']
@@ -99,7 +106,7 @@ class Tournament:
             words = tourn_title.split(" ")
             tourn_title = ""
             for w in words:
-                tourn_title += w[0]
+                tourn_title += w[0] if w != "" else ""
             return tourn_title
         except:
             return ""
@@ -149,7 +156,7 @@ class Tournament:
                     while condition < 15 and old <= new:
                         condition += 1
                         resp = requests.get(f'{API_BASE_URL}matches/{all_mps[old]}', headers=headers)
-                        print("Parsing match " + all_mps[old])
+                        # print("Parsing match " + all_mps[old])
                         match_info = resp.json()
                         try:
                             match_name = match_info['match']['name'] 
