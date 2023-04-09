@@ -1,6 +1,7 @@
 import datetime, os, requests
 from pathlib import Path
 from dotenv import load_dotenv
+from Stage import Stage
 
 load_dotenv()
 
@@ -74,7 +75,7 @@ class Tournament:
         ct = 1
         tmp = []
         while ct <= 16:
-            if data[f'p{ct}'] != "\n":
+            if data[f'p{ct}'] != '':
                 tmp.append(data[f'p{ct}'])
             else:
                 break
@@ -85,9 +86,7 @@ class Tournament:
         # stores ascending list of all mps for the tournament
         self.__mps = [] 
 
-        # collection of Stage objects with keys representing the round ex. QF, SF, RO16, etc.
-        self.__stages = {} 
-
+        # handle issue 1 where a tournament can use multiple acronyms
         if 1 in issues:
             next_acr = "placeholder"
             all_acronyms = [self.__acronym] 
@@ -96,6 +95,16 @@ class Tournament:
                 if next_acr != "": all_acronyms.append(next_acr)
             self.__mps = self.__get_mps(all_acronyms)
         else: self.__mps = self.__get_mps([self.__acronym])
+
+        # collection of Stage objects with keys representing the round ex. QF, SF, RO16, etc.
+        # TO-DO: figure out this part
+        self.__stages = {} 
+        while len(self.__mps) != 0:
+            round = input("enter round for now")
+            next_mp = self.__mps[0]
+            self.__mps.pop(0)
+            s = Stage(round, next_mp)
+            self.__stages[]
 
     
     def __guess_tourn_acronym(self, tourn_title: str) -> str:
@@ -215,6 +224,7 @@ class Tournament:
         return {self.__acronym: {
             "date": self.__date,
             "tourn_name": self.__tournName,
+            "forum": self.__forum,
             "bracket": self.__bracket,
             "team_name": self.__teamName,
             "tourn_sheet": self.__tournSheet,
