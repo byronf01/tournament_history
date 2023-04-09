@@ -1,8 +1,15 @@
 from get_tournament_data import sheet_data
-import Tournament
+from Tournament import Tournament
 
 # Tournaments with known issues (ex: VNDB had two acronyms)
-ISSUES = {"Visual Novel Duo Brackets": 1}
+ISSUES = {}
+with open("issues.txt", "r") as f:
+    t = f.read()
+t = t.split('\n')
+for line in t:
+    if line[0] == '#': continue
+    tourn, issue = line.split(":")
+    ISSUES[tourn] = int(issue)
 
 def construct_tourn(tourn: dict) -> Tournament:
     if tourn['tourn_name'] in ISSUES:
@@ -42,11 +49,12 @@ def construct_tourn(tourn: dict) -> Tournament:
 
 if __name__ == "__main__":
     data = sheet_data()
+    data = {"55": data[55]} # for testing
     for _, v in data.items():
         
         # Begin constructing tournament object
         t = construct_tourn(v)
-
+        print(t.getTournament())
         # Add tournament object to database
 
     
