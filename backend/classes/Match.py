@@ -261,7 +261,7 @@ class Match:
 
                 self.__events.append(new_event)
 
-        self.__calculateTeams()
+        self.__calculateTeams(team_check)
 
                       
     def getMatch(self):
@@ -270,6 +270,7 @@ class Match:
                 "team-type": self.__teamType,
                 "multipliers": self.__multipliers,
                 "result": self.__result,
+                "teams": self.__teams,
                 "matchcosts": [{}, {}], # TO-DO
                 "events": self.__events
             }
