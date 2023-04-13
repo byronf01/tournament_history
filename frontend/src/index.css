@@ -12,8 +12,18 @@ code {
     monospace;
 }
 
-.responsive {
+.responsive1 {
   width: 20%;
+  height: auto;
+}
+
+.responsive2 {
+  width: 47%;
+  height: auto;
+}
+
+.responsive3 {
+  width: 23%;
   height: auto;
 }
 
@@ -24,6 +34,38 @@ code {
   height: 5em;
   font-family: trebuchet ms;
   font-size: 3em;
-  border: 2px solid #4CAF50;
 }
 
+.b2 {
+  background-color: rgb(175, 59, 119);
+  color: rgb(212, 212, 212);
+  width: 18%;
+  height: 5em;
+  font-family: trebuchet ms;
+  font-size: 3em;
+}
+
+.b3 {
+  background-color: rgb(195, 20, 46);
+  color: rgb(212, 212, 212);
+  width: 18%;
+  height: 5em;
+  font-family: trebuchet ms;
+  font-size: 3em;
+}
+
+.buttons {
+  width: 50%;
+  margin: 0 auto;
+  display: inline;
+}
+
+.action {
+  width: 20%;
+  margin: 0 auto;
+  display: inline;
+}
+
+#something span {
+  margin: 0 2em
+}

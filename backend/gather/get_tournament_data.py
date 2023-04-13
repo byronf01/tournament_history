@@ -16,7 +16,7 @@ def sheet_data(sheet=DEFAULT_SPREADSHEET, page=DEFAULT_PAGE):
     creds = None
     data = {}
     try:  
-        creds_file = Path('../google_application_credentials.json')
+        creds_file = Path('../../google_application_credentials.json')
         if creds_file and os.path.exists(creds_file):
             creds = service_account.Credentials.from_service_account_file(creds_file)
     except Exception as e:
