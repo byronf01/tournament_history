@@ -46,23 +46,20 @@ class Match:
         # stores collection of match costs per player
         self.__matchcosts = {} 
         
-        """
-        print("Review mp manually (None if no irregularities) ")
+        
+        print("Review mp manually (blank if no irregularities) ")
+        print(f'https://osu.ppy.sh/community/matches/{self.__id}')
         a = input("# warmups:  ")
         b = input("# extraneous maps at end: ")
-        c = input("map number of aborts separated by commas:")
         self.__warmups = 2 if a == "" else int(a)
         self.__end = 0 if b == "" else int(b)
-        self.__aborts = [] if c == "" else [int(foo) for foo in c.split(",")]
         
         self.__events = self.__process()
-        """
 
-    """
-    def __process(self):
-        
-        Main function that proccesses the mp. Returns a dictionary of maps that were played in the match and details of each map. 
-        
+    def __apiCall(self):
+        """
+        function makes an API call to the osu API for details of a match
+        """
         try:
             response = requests.post('https://osu.ppy.sh/oauth/token', data=self.__apiData)
             token = response.json().get('access_token')
@@ -78,25 +75,53 @@ class Match:
         except:
             print("API failure")
             raise ValueError()
-        
-        # print(info)
-
-        self.__name = info['match']['name'] # finds and enters match name 
-
-        # keeps track of which matches to ignore with ignore, and the team type of the match
+        return info
+    
+    def __preprocess(self, info: dict) -> list[int]:
+        """
+        Determines the team type of the match by taking the team type that was used throughout the majority of the match.
+        Also returns a list of events to be ignored, in ascending order and with each number representing the # event to
+        be ignored.
+        """
         team_type_counts = {"head-to-head": 0, "team-vs": 0}
-        total = 0
+        event_ct = 0
+        aborts = []
+        prev_id = 0
         for event in info['events']:
             if event['detail']['type'] == 'other':
-                total += 1
+                event_ct += 1
                 team_type_counts[ event['game']['team_type'] ] += 1
+
+                # If the same map as the previous event is being played at this event, means first instance was 
+                # an abort and should be ignored
+                if event['game']['beatmap']['beatmapset_id'] == prev_id:
+                    aborts.append(event_ct - 1)
+                event_ct += 1
+                prev_id = event['game']['beatmap']['beatmapset_id']
+
         ignore = []
         for i in range(1, self.__warmups + 1):
             ignore.append(i)
-        ignore.extend(self.__aborts)
-        for i in range(total, total - self.__end, -1):
+        ignore.extend(aborts)
+        for i in range(event_ct, event_ct - self.__end, -1):
             ignore.extend(i)
         self.__teamType = 'team-vs' if team_type_counts['team-vs'] >= team_type_counts['head-to-head'] else 'head-to-head'
+        return ignore
+    
+    def __process(self):
+        """
+        Main function that proccesses the mp. Returns a dictionary of maps that were played in the match and details of each map. 
+        """
+        info = self.__apiCall()
+        
+        # print(info)
+
+        # finds and enters match name 
+        self.__name = info['match']['name'] 
+
+        # keeps track of which matches to ignore with ignore, and the team type of the match
+        ignore = self.__preprocess(info)
+        print(ignore)
         
         maps_played = 0
         index = 0
@@ -119,23 +144,34 @@ class Match:
                 # Process list of scores
                 if self.__teamType == 'team-vs':
 
+                    # Filter out events that are not team-vs
+                    if event['game']['team_type'] != 'team-vs': continue
+
                     blue_score = 0
                     red_score = 0
                     blue_team = set()
                     red_team = set()
                     for s in scores:
-
+                        
+                        # Process score with multipliers, use default multipliers if none specified
+                        
                         # Determine team that the score belongs to
                         pass
+                        
+                        
                         # Determine team of the player and add to set
 
                     
                     # Compare red - blue scores, add 1 to match result for winning team
+
+                    # add players to team check
                         
 
                 elif self.__teamType == 'head-to-head':
+
+                    # Filter out events that are not head-to-head
+                    if event['game']['team_type'] != 'team-vs': continue
                     pass
-    """
                       
     def getMatch(self):
         return {self.__id: {
@@ -150,5 +186,5 @@ class Match:
 
 if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
-    m = Match(107542811, "hiyah", multipliers)
+    m = Match('103526237', "hiyah", multipliers)
     print(m.getMatch())
