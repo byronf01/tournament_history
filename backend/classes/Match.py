@@ -96,7 +96,6 @@ class Match:
                 # an abort and should be ignored
                 if event['game']['beatmap']['beatmapset_id'] == prev_id:
                     aborts.append(event_ct - 1)
-                event_ct += 1
                 prev_id = event['game']['beatmap']['beatmapset_id']
 
         ignore = []
@@ -114,7 +113,7 @@ class Match:
         """
         info = self.__apiCall()
         
-        # print(info)
+        print(info)
 
         # finds and enters match name 
         self.__name = info['match']['name'] 
@@ -154,7 +153,7 @@ class Match:
                     for s in scores:
                         
                         # Process score with multipliers, use default multipliers if none specified
-                        
+
                         # Determine team that the score belongs to
                         pass
                         
@@ -186,5 +185,5 @@ class Match:
 
 if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
-    m = Match('103526237', "hiyah", multipliers)
+    m = Match('107542811', "hiyah", multipliers)
     print(m.getMatch())
