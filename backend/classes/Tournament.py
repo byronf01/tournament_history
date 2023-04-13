@@ -218,6 +218,7 @@ class Tournament:
             old += 1
             new -= 1
 
+        print("mps found: ")
         print(self.__mps)
 
         return self.__mps
