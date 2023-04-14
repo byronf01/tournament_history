@@ -102,11 +102,12 @@ class Tournament:
         # collection of Stage objects with keys representing the round ex. QF, SF, RO16, etc.
         # TO-DO: figure out this part
         self.__stages = {} 
+        ct = 1
         while len(self.__mps) != 0:
-            round = input("enter round for now: ")
             next_mp = self.__mps[0]
             self.__mps.pop(0)
-            self.__stages[round] = Stage(round, [next_mp], self.__teamName, self.__multipliers)
+            self.__stages[round] = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers)
+            ct += 1
     
     def __guess_tourn_acronym(self, tourn_title: str) -> str:
         """

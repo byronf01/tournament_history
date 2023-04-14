@@ -45,8 +45,8 @@ class Match:
         # Stores players on each team. If teamType is head-to-head, default {team_blue: your_user, team_red: opponent}
         self.__teams = {}
 
-        # stores collection of match costs per player
-        self.__matchcosts = {} 
+        # stores collection of match costs per player, split by team. Winning team is first.
+        self.__matchcosts = [{}, {}]
         
         
         print("Review mp manually (blank if no irregularities) ")
@@ -126,6 +126,32 @@ class Match:
             elif teams['blue'] > teams['red']:
                 self.__teams['team_blue'].append(user)
 
+    def __calculateMatchcosts(self, average_map_score, player_scores):
+        """
+        Calculates the matchcosts of each player, then splits up the information by team.
+        """
+        blue, red = (None, None)
+        if self.__result[0] > self.__result[1]:
+            self.__matchcosts[0]['blue_team'] = {}
+            self.__matchcosts[1]['red_team'] = {}
+            blue, red = (0, 1)
+        elif self.__result[1] > self.__result[0]:
+            self.__matchcosts[0]['red_team'] = {}
+            self.__matchcosts[1]['blue_team'] = {}
+            blue, red = (1, 0)
+        
+        # Calculate each player's individual matchcost, then assign player/matchcost pair to the appropriate 
+        # matchcost collection
+        for player, scores in player_scores.items():
+            mc_sum = 0
+            for map, score in scores.items():
+                mc_sum += (score / average_map_score[map])
+            cost = (2 / (len(scores) + 2) ) * mc_sum
+
+            if player in self.__teams['team_blue']:
+                self.__matchcosts[blue]['blue_team'][player] = cost
+            elif player in self.__teams['team_red']:
+                self.__matchcosts[red]['red_team'][player] = cost
     
     def __process(self):
         """
@@ -143,6 +169,8 @@ class Match:
         maps_played = 0
         index = 0
         team_check = {} # form {player: {blue: x, red: y}}
+        average_map_score = {} # {map #: average score across lobby}
+        player_scores = {} # {player: {map # played: score, 2nd map # played: score, ...}}
         for event in info['events']:
             if event['detail']['type'] == 'other':
                 maps_played += 1
@@ -164,19 +192,28 @@ class Match:
                     # Filter out events that are not team-vs
                     if event['game']['team_type'] != 'team-vs': continue
 
+                    # handle special case where map was aborted before any player started
+                    if scores == []: continue 
+
+                    # Team calculations
                     blue_total = 0
                     red_total = 0
                     blue_scores = {}
                     red_scores = {}
-                    
+
                     for s in scores:
                         
                         new_score = Score(s)
 
                         # Process score with multipliers, use default multipliers if none specified
                         for mod in new_score.mods:
-                            if mod in multipliers:
-                                new_score.value *= multipliers[mod]
+                            if mod in self.__multipliers:
+                                new_score.value *= self.__multipliers[mod]
+
+                        # add player's score to player_scores dict
+                        if new_score.player not in player_scores:
+                            player_scores[new_score.player] = {}
+                        player_scores[new_score.player][index] = new_score.value
 
                         # Add player to team_check dict if this is their first map
                         if new_score.player not in team_check:
@@ -195,6 +232,7 @@ class Match:
                         
                         # determine team of the player and add to team_check
                         team_check[new_score.player][team] += 1
+
                         
                     # Compare red - blue scores, add 1 to match result for winning team
                     if blue_total > red_total:
@@ -202,67 +240,84 @@ class Match:
                     elif red_total > blue_total:
                         self.__result[1] += 1
 
-                # Add entire event to self.events
-                new_event = {
-                    "map-background": map_background,
-                    "map-title": map_title,
-                    "map-link": map_link,
-                    "red_scores": red_scores,
-                    "blue_scores": blue_scores,
-                    "red_total": red_total,
-                    "blue_total": blue_total
-                }
+                    # Calculate average_scores
+                    average_score = (blue_total + red_total) / len(scores)
+                    average_map_score[index] = average_score
 
-                self.__events.append(new_event)
+                    # Add entire event to self.events
+                    new_event = {
+                        "map-background": map_background,
+                        "map-title": map_title,
+                        "map-link": map_link,
+                        "red_scores": red_scores,
+                        "blue_scores": blue_scores,
+                        "red_total": red_total,
+                        "blue_total": blue_total
+                    }
 
-            elif self.__teamType == 'head-to-head':
+                    self.__events.append(new_event)
 
-                # Filter out events that are not head-to-head
-                if event['game']['team_type'] != 'team-vs': continue
-                
-                user_score = 0
-                opponent_score = 0
-                blue_scores = {}
-                red_scores = {}
-                for s in scores:
+                elif self.__teamType == 'head-to-head':
 
-                    new_score = Score(s)
+                    # Filter out events that are not head-to-head
+                    if event['game']['team_type'] != 'head-to-head': continue
 
-                    # Process score with multipliers, use default multipliers if none specified
-                    for mod in new_score.mods:
-                        if mod in multipliers:
-                            new_score.value *= multipliers[mod]
+                    # handle special case where map was aborted before any player started
+                    if scores == []: continue 
                     
-                    if new_score.player == DEFAULT_USER:
-                        user_score += new_score.value
-                        formatted_score = new_score.getScore()
-                        blue_scores[formatted_score[0]] = formatted_score[1]
-                        team_check[new_score.player] = {'blue': 1, 'red': 0}
+                    user_score = 0
+                    opponent_score = 0
+                    blue_scores = {}
+                    red_scores = {}
+
+                    for s in scores:
+
+                        new_score = Score(s)
+
+                        # Process score with multipliers, use default multipliers if none specified
+                        for mod in new_score.mods:
+                            if mod in self.__multipliers:
+                                new_score.value *= self.__multipliers[mod]
+
+                        # add player's score to player_scores dict
+                        if new_score.player not in player_scores:
+                            player_scores[new_score.player] = {}
+                        player_scores[new_score.player][index] = new_score.value
+                        
+                        if new_score.player == DEFAULT_USER:
+                            user_score += new_score.value
+                            formatted_score = new_score.getScore()
+                            blue_scores[formatted_score[0]] = formatted_score[1]
+                            team_check[new_score.player] = {'blue': 1, 'red': 0}
+                        else:
+                            opponent_score += new_score.value
+                            formatted_score = new_score.getScore()
+                            red_scores[formatted_score[0]] = formatted_score[1]
+                            team_check[new_score.player] = {'blue': 0, 'red': 1}
+
+                    # Calculate average_scores
+                    average_score = (user_score + opponent_score) / len(scores)
+                    average_map_score[index] = average_score
+
+                    if user_score > opponent_score:
+                        self.__result[0] += 1
                     else:
-                        opponent_score += new_score.value
-                        formatted_score = new_score.getScore()
-                        red_scores[formatted_score[0]] = formatted_score[1]
-                        team_check[new_score.player] = {'blue': 0, 'red': 1}
+                        self.__result[1] += 1
 
-                if user_score > opponent_score:
-                    self.__result[0] += 1
-                else:
-                    self.__result[1] += 1
+                    new_event = {
+                        "map-background": map_background,
+                        "map-title": map_title,
+                        "map-link": map_link,
+                        "red_scores": red_scores,
+                        "blue_scores": user_score,
+                        "red_total": opponent_score,
+                        "blue_total": user_score
+                    }
 
-                new_event = {
-                    "map-background": map_background,
-                    "map-title": map_title,
-                    "map-link": map_link,
-                    "red_scores": red_scores,
-                    "blue_scores": user_score,
-                    "red_total": opponent_score,
-                    "blue_total": user_score
-                }
-
-                self.__events.append(new_event)
+                    self.__events.append(new_event)
 
         self.__calculateTeams(team_check)
-
+        self.__calculateMatchcosts(average_map_score, player_scores)
                       
     def getMatch(self):
         return {self.__id: {
@@ -271,12 +326,14 @@ class Match:
                 "multipliers": self.__multipliers,
                 "result": self.__result,
                 "teams": self.__teams,
-                "matchcosts": [{}, {}], # TO-DO
+                "matchcosts": self.__matchcosts,
                 "events": self.__events
             }
-        } # what should be the key for match? match title? match id? should there even be a key?
+        } 
 
 if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
-    m = Match('103526237', "hiyah", multipliers)
+    # 103526237
+    # 107542811
+    m = Match('107542811', "hiyah", multipliers) 
     print(m.getMatch())
