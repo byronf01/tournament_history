@@ -42,35 +42,36 @@ if __name__ == "__main__":
         # Select a database and collection
         db = client['tournament_history']
         collection = db['tournament_history']
+
+        data = sheet_data()
+        data = {"55": data[55]} # stub for testing
+        
+        for _, v in data.items():
+
+            # Add tournament object to database if it is not already in 
+            query = { v['tourn_name']: {"$exists": True} }
+            dup = collection.count_documents(query)
+            if dup > 0:
+                print("Tournament already in database ")
+                continue 
+            
+            # Begin constructing mew tournament object
+            try:
+                t = construct_tourn(v)
+                # print(t.getTournament())
+                collection.insert_one(t.getTournament())
+                print("New tournament added! ")
+            except Exception as e:
+                print(e)
+                foo = input("Continue? (Y/N) ")
+                if foo == 'N':
+                    break
     except Exception as e:
         print(e)
-        exit()
-
-    data = sheet_data()
-    data = {"55": data[55]} # stub for testing
+    finally:
+        client.close()
+        
     
-    for _, v in data.items():
-
-        # Add tournament object to database if it is not already in 
-        query = v['tourn_name']
-        print(query)
-        if collection.find( {query: {'$exists': True}} ) == True:
-            print("Tournament already in database ")
-            continue 
-        
-        # Begin constructing mew tournament object
-        try:
-            t = construct_tourn(v)
-            # print(t.getTournament())
-            collection.insert_one(t.getTournament())
-            print("New tournament added! ")
-        except Exception as e:
-            print(e)
-            foo = input("Continue? (Y/N) ")
-            if foo == 'N':
-                exit()
-        
-        
 
         
     
