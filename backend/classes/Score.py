@@ -18,7 +18,7 @@ class Score:
         """
         Returns 2-tuple of the player who set the score and the score details
         """
-        return (self.player, {
+        return (str(self.player), {
                 "acc": self.acc,
                 "combo": self.combo,
                 "mods": self.mods,

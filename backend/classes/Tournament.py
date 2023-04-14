@@ -14,10 +14,9 @@ CLIENT_SECRET = os.getenv('client-secret')
 def str_to_date(s: str):
     
     mth, day, yr = s.split(" ")
-    yr = int(yr)
-    mth = MONTHS[mth]
-    day = int(day.replace(",", ""))
-    return datetime.date(yr, mth, day)
+    mth = str(MONTHS[mth])
+    day = day.replace(",", "")
+    return f"{yr}-{mth}-{day}"
 
 class Tournament:
 
@@ -106,7 +105,7 @@ class Tournament:
         while len(self.__mps) != 0:
             next_mp = self.__mps[0]
             self.__mps.pop(0)
-            self.__stages[ct] = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers)
+            self.__stages[f'Match {ct}'] = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers)
             ct += 1
     
     def __guess_tourn_acronym(self, tourn_title: str) -> str:
@@ -226,7 +225,7 @@ class Tournament:
 
 
     def getTournament(self):
-        return {self.____tournName: {
+        return {self.__tournName: {
             "date": self.__date,
             "acronym": self.__acronym,
             "forum": self.__forum,

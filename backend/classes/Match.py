@@ -149,9 +149,9 @@ class Match:
             cost = (2 / (len(scores) + 2) ) * mc_sum
 
             if player in self.__teams['team_blue']:
-                self.__matchcosts[blue]['blue_team'][player] = cost
+                self.__matchcosts[blue]['blue_team'][str(player)] = cost
             elif player in self.__teams['team_red']:
-                self.__matchcosts[red]['red_team'][player] = cost
+                self.__matchcosts[red]['red_team'][str(player)] = cost
     
     def __process(self):
         """
@@ -183,7 +183,7 @@ class Match:
                 artist = event['game']['beatmap']['beatmapset']['artist']
                 title = event['game']['beatmap']['beatmapset']['title']
                 difficulty = event['game']['beatmap']['version']
-                map_title = f'{artist} - {title} [{difficulty}]'
+                map_title = json.dumps(f'{artist} - {title} [{difficulty}]')
 
                 scores = event['game']['scores']
                 # Process list of scores
