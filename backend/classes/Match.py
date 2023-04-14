@@ -159,6 +159,7 @@ class Match:
         Adds to self.__events in the order that the maps were played.
         """
         info = self.__apiCall()
+        print(info)
 
         # finds and enters match name 
         self.__name = info['match']['name'] 
@@ -335,5 +336,5 @@ if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
     # 103526237
     # 107542811
-    m = Match('107542811', "hiyah", multipliers) 
-    print(m.getMatch())
+    m = Match('107175286', "hiyah", multipliers) 
+    # print(m.getMatch())
