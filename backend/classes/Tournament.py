@@ -226,9 +226,9 @@ class Tournament:
 
 
     def getTournament(self):
-        return {self.__acronym: {
+        return {self.____tournName: {
             "date": self.__date,
-            "tourn_name": self.__tournName,
+            "acronym": self.__acronym,
             "forum": self.__forum,
             "bracket": self.__bracket,
             "team_name": self.__teamName,
