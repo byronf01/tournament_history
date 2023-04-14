@@ -60,7 +60,9 @@ class Match:
 
     def __apiCall(self):
         """
-        function makes an API call to the osu API for details of a match
+        function makes multiple API calls to the osu API for details of a match, including match name. Filters out aby \
+        events in a match that are not maps that are being played. Returns a list of events of matches being played 
+        in chronological order. 
         """
         try:
             response = requests.post('https://osu.ppy.sh/oauth/token', data=self.__apiData)
@@ -74,12 +76,37 @@ class Match:
 
             score_info = requests.get(f'{API_BASE_URL}matches/{str(self.__id)}', headers=headers)
             info = score_info.json()
+
+            # finds and enters match name from first call 
+            self.__name = info['match']['name'] 
+
         except:
             print("API failure")
             raise ValueError()
-        return info
+        
+        all_events = []
+        
+        # grr no do while loop grr
+        while True: 
+            for event in range(len(info['events']) - 1, -1, -1):
+                if info['events'][event]['detail']['type'] == 'other':
+                    all_events.insert(0, info['events'][event])
+
+            if info['events'][0]['detail']['type'] == "match-created":
+                # If there are no more events left to process, end
+                break 
+            else:
+                try:
+                    last_event_id = info['events'][0]['id']
+                    score_info = requests.get(f'{API_BASE_URL}matches/{str(self.__id)}?before={str(last_event_id)}', headers=headers)
+                    info = score_info.json()
+                except Exception as e:
+                    print(e)
+                    raise ValueError()
+
+        return all_events
     
-    def __preprocess(self, info: dict) -> list[int]:
+    def __preprocess(self, events: list) -> list[int]:
         """
         Determines the team type of the match by taking the team type that was used throughout the majority of the match.
         Also returns a list of events to be ignored, in ascending order and with each number representing the # event to
@@ -89,20 +116,20 @@ class Match:
         event_ct = 0
         aborts = []
         prev_id = 0
-        for event in info['events']:
-            if event['detail']['type'] == 'other':
-                # If scores is empty, map was aborted early and does not show up in mp. 
-                if event['game']['scores'] == []:
-                    continue 
+        for event in events:
+            
+            # If scores is empty, map was aborted early and does not show up in mp. 
+            if event['game']['scores'] == []:
+                continue 
 
-                event_ct += 1
-                team_type_counts[ event['game']['team_type'] ] += 1
+            event_ct += 1
+            team_type_counts[ event['game']['team_type'] ] += 1
 
-                # If the same map as the previous event is being played at this event, means first instance was 
-                # an abort and should be ignored
-                if event['game']['beatmap']['beatmapset_id'] == prev_id:
-                    aborts.append(event_ct - 1)
-                prev_id = event['game']['beatmap']['beatmapset_id']
+            # If the same map as the previous event is being played at this event, means first instance was 
+            # an abort and should be ignored
+            if event['game']['beatmap']['beatmapset_id'] == prev_id:
+                aborts.append(event_ct - 1)
+            prev_id = event['game']['beatmap']['beatmapset_id']
 
         ignore = []
         for i in range(1, self.__warmups + 1):
@@ -158,164 +185,160 @@ class Match:
         Main function that proccesses the mp. Parses maps that were played in the match and details of each map. 
         Adds to self.__events in the order that the maps were played.
         """
-        info = self.__apiCall()
-        print(info)
-
-        # finds and enters match name 
-        self.__name = info['match']['name'] 
+        events = self.__apiCall()
 
         # keeps track of which matches to ignore with ignore, and the team type of the match
-        ignore = self.__preprocess(info)
-        
+        ignore = self.__preprocess(events)
+
         maps_played = 0
         index = 0
         team_check = {} # form {player: {blue: x, red: y}}
         average_map_score = {} # {map #: average score across lobby}
         player_scores = {} # {player: {map # played: score, 2nd map # played: score, ...}}
-        for event in info['events']:
-            if event['detail']['type'] == 'other':
-                maps_played += 1
-                if maps_played in ignore:
-                    continue
-                index += 1
+        for event in events:
+            
+            maps_played += 1
+            if maps_played in ignore:
+                continue
+            index += 1
 
-                map_link = "https://osu.ppy.sh/b/" + str(event['game']['beatmap']['id'])
-                map_background = event['game']['beatmap']['beatmapset']['covers']['cover']
-                artist = event['game']['beatmap']['beatmapset']['artist']
-                title = event['game']['beatmap']['beatmapset']['title']
-                difficulty = event['game']['beatmap']['version']
-                map_title = json.dumps(f'{artist} - {title} [{difficulty}]')
+            map_link = "https://osu.ppy.sh/b/" + str(event['game']['beatmap']['id'])
+            map_background = event['game']['beatmap']['beatmapset']['covers']['cover']
+            artist = event['game']['beatmap']['beatmapset']['artist']
+            title = event['game']['beatmap']['beatmapset']['title']
+            difficulty = event['game']['beatmap']['version']
+            map_title = json.dumps(f'{artist} - {title} [{difficulty}]')
 
-                scores = event['game']['scores']
-                # Process list of scores
-                if self.__teamType == 'team-vs':
+            scores = event['game']['scores']
+            # Process list of scores
+            if self.__teamType == 'team-vs':
 
-                    # Filter out events that are not team-vs
-                    if event['game']['team_type'] != 'team-vs': continue
+                # Filter out events that are not team-vs
+                if event['game']['team_type'] != 'team-vs': continue
 
-                    # handle special case where map was aborted before any player started
-                    if scores == []: continue 
+                # handle special case where map was aborted before any player started
+                if scores == []: continue 
 
-                    # Team calculations
-                    blue_total = 0
-                    red_total = 0
-                    blue_scores = {}
-                    red_scores = {}
+                # Team calculations
+                blue_total = 0
+                red_total = 0
+                blue_scores = {}
+                red_scores = {}
 
-                    for s in scores:
-                        
-                        new_score = Score(s)
-
-                        # Process score with multipliers, use default multipliers if none specified
-                        for mod in new_score.mods:
-                            if mod in self.__multipliers:
-                                new_score.value *= self.__multipliers[mod]
-
-                        # add player's score to player_scores dict
-                        if new_score.player not in player_scores:
-                            player_scores[new_score.player] = {}
-                        player_scores[new_score.player][index] = new_score.value
-
-                        # Add player to team_check dict if this is their first map
-                        if new_score.player not in team_check:
-                            team_check[new_score.player] = {'blue': 0, 'red': 0}
-
-                        # Determine team that the score belongs to
-                        team = new_score.team
-                        if team == 'red':
-                            red_total += new_score.value
-                            formatted_score = new_score.getScore()
-                            red_scores[formatted_score[0]] = formatted_score[1]
-                        elif team == 'blue':
-                            blue_total += new_score.value
-                            formatted_score = new_score.getScore()
-                            blue_scores[formatted_score[0]] = formatted_score[1]
-                        
-                        # determine team of the player and add to team_check
-                        team_check[new_score.player][team] += 1
-
-                        
-                    # Compare red - blue scores, add 1 to match result for winning team
-                    if blue_total > red_total:
-                        self.__result[0] += 1
-                    elif red_total > blue_total:
-                        self.__result[1] += 1
-
-                    # Calculate average_scores
-                    average_score = (blue_total + red_total) / len(scores)
-                    average_map_score[index] = average_score
-
-                    # Add entire event to self.events
-                    new_event = {
-                        "map-background": map_background,
-                        "map-title": map_title,
-                        "map-link": map_link,
-                        "red_scores": red_scores,
-                        "blue_scores": blue_scores,
-                        "red_total": red_total,
-                        "blue_total": blue_total
-                    }
-
-                    self.__events.append(new_event)
-
-                elif self.__teamType == 'head-to-head':
-
-                    # Filter out events that are not head-to-head
-                    if event['game']['team_type'] != 'head-to-head': continue
-
-                    # handle special case where map was aborted before any player started
-                    if scores == []: continue 
+                for s in scores:
                     
-                    user_score = 0
-                    opponent_score = 0
-                    blue_scores = {}
-                    red_scores = {}
+                    new_score = Score(s)
 
-                    for s in scores:
+                    # Process score with multipliers, use default multipliers if none specified
+                    for mod in new_score.mods:
+                        if mod in self.__multipliers:
+                            new_score.value *= self.__multipliers[mod]
 
-                        new_score = Score(s)
+                    # add player's score to player_scores dict
+                    if new_score.player not in player_scores:
+                        player_scores[new_score.player] = {}
+                    player_scores[new_score.player][index] = new_score.value
 
-                        # Process score with multipliers, use default multipliers if none specified
-                        for mod in new_score.mods:
-                            if mod in self.__multipliers:
-                                new_score.value *= self.__multipliers[mod]
+                    # Add player to team_check dict if this is their first map
+                    if new_score.player not in team_check:
+                        team_check[new_score.player] = {'blue': 0, 'red': 0}
 
-                        # add player's score to player_scores dict
-                        if new_score.player not in player_scores:
-                            player_scores[new_score.player] = {}
-                        player_scores[new_score.player][index] = new_score.value
-                        
-                        if new_score.player == DEFAULT_USER:
-                            user_score += new_score.value
-                            formatted_score = new_score.getScore()
-                            blue_scores[formatted_score[0]] = formatted_score[1]
-                            team_check[new_score.player] = {'blue': 1, 'red': 0}
-                        else:
-                            opponent_score += new_score.value
-                            formatted_score = new_score.getScore()
-                            red_scores[formatted_score[0]] = formatted_score[1]
-                            team_check[new_score.player] = {'blue': 0, 'red': 1}
+                    # Determine team that the score belongs to
+                    team = new_score.team
+                    if team == 'red':
+                        red_total += new_score.value
+                        formatted_score = new_score.getScore()
+                        red_scores[formatted_score[0]] = formatted_score[1]
+                    elif team == 'blue':
+                        blue_total += new_score.value
+                        formatted_score = new_score.getScore()
+                        blue_scores[formatted_score[0]] = formatted_score[1]
+                    
+                    # determine team of the player and add to team_check
+                    team_check[new_score.player][team] += 1
 
-                    # Calculate average_scores
-                    average_score = (user_score + opponent_score) / len(scores)
-                    average_map_score[index] = average_score
+                    
+                # Compare red - blue scores, add 1 to match result for winning team
+                if blue_total > red_total:
+                    self.__result[0] += 1
+                elif red_total > blue_total:
+                    self.__result[1] += 1
 
-                    if user_score > opponent_score:
-                        self.__result[0] += 1
+                # Calculate average_scores
+                average_score = (blue_total + red_total) / len(scores)
+                average_map_score[index] = average_score
+
+                # Add entire event to self.events
+                new_event = {
+                    "map-background": map_background,
+                    "map-title": map_title,
+                    "map-link": map_link,
+                    "red_scores": red_scores,
+                    "blue_scores": blue_scores,
+                    "red_total": red_total,
+                    "blue_total": blue_total
+                }
+
+                self.__events.append(new_event)
+
+            elif self.__teamType == 'head-to-head':
+
+                # Filter out events that are not head-to-head
+                if event['game']['team_type'] != 'head-to-head': continue
+
+                # handle special case where map was aborted before any player started
+                if scores == []: continue 
+                
+                user_score = 0
+                opponent_score = 0
+                blue_scores = {}
+                red_scores = {}
+
+                for s in scores:
+
+                    new_score = Score(s)
+
+                    # Process score with multipliers, use default multipliers if none specified
+                    for mod in new_score.mods:
+                        if mod in self.__multipliers:
+                            new_score.value *= self.__multipliers[mod]
+
+                    # add player's score to player_scores dict
+                    if new_score.player not in player_scores:
+                        player_scores[new_score.player] = {}
+                    player_scores[new_score.player][index] = new_score.value
+                    
+                    if new_score.player == DEFAULT_USER:
+                        user_score += new_score.value
+                        formatted_score = new_score.getScore()
+                        blue_scores[formatted_score[0]] = formatted_score[1]
+                        team_check[new_score.player] = {'blue': 1, 'red': 0}
                     else:
-                        self.__result[1] += 1
+                        opponent_score += new_score.value
+                        formatted_score = new_score.getScore()
+                        red_scores[formatted_score[0]] = formatted_score[1]
+                        team_check[new_score.player] = {'blue': 0, 'red': 1}
 
-                    new_event = {
-                        "map-background": map_background,
-                        "map-title": map_title,
-                        "map-link": map_link,
-                        "red_scores": red_scores,
-                        "blue_scores": user_score,
-                        "red_total": opponent_score,
-                        "blue_total": user_score
-                    }
+                # Calculate average_scores
+                average_score = (user_score + opponent_score) / len(scores)
+                average_map_score[index] = average_score
 
-                    self.__events.append(new_event)
+                if user_score > opponent_score:
+                    self.__result[0] += 1
+                else:
+                    self.__result[1] += 1
+
+                new_event = {
+                    "map-background": map_background,
+                    "map-title": map_title,
+                    "map-link": map_link,
+                    "red_scores": red_scores,
+                    "blue_scores": user_score,
+                    "red_total": opponent_score,
+                    "blue_total": user_score
+                }
+
+                self.__events.append(new_event)
 
         self.__calculateTeams(team_check)
         self.__calculateMatchcosts(average_map_score, player_scores)
@@ -336,5 +359,5 @@ if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
     # 103526237
     # 107542811
-    m = Match('107175286', "hiyah", multipliers) 
-    # print(m.getMatch())
+    m = Match('106914609', "hiyah", multipliers) 
+    print(m.getMatch())
