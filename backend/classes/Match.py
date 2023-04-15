@@ -228,9 +228,49 @@ class Match:
                 map_background = ""
                 map_title = "deleted beatmap"
 
+           
+            # Start processing list of scores
             scores = event['game']['scores']
-            # Process list of scores
-            if self.__teamType == 'team-vs':
+            if self.qualifiers: # Special case for qualifiers
+                if scores == []: continue 
+
+                lobby_scores = {}
+                for s in scores:
+                    
+                    new_score = Score(s)
+
+                    # Process score with multipliers, use default multipliers if none specified
+                    for mod in new_score.mods:
+                        if mod in self.__multipliers:
+                            new_score.value *= self.__multipliers[mod]
+
+                    # add player's score to player_scores dict
+                    if new_score.player not in player_scores:
+                        player_scores[new_score.player] = {}
+                    player_scores[new_score.player][index] = new_score.value
+
+                # Calculate average_scores
+                average_score = (blue_total + red_total) / len(scores)
+                average_map_score[index] = average_score
+
+                # add score to red_scores, team doesn't matter for qualifiers
+                formatted_score = new_score.getScore()
+                red_scores[formatted_score[0]] = formatted_score[1]
+
+                # Add entire event to self.events
+                new_event = {
+                    "map-background": map_background,
+                    "map-title": map_title,
+                    "map-link": map_link,
+                    "red_scores": lobby_scores,
+                    "blue_scores": {},
+                    "red_total": 0,
+                    "blue_total": 0
+                }
+
+                self.__events.append(new_event)
+
+            elif self.__teamType == 'team-vs':
 
                 # Filter out events that are not team-vs
                 if event['game']['team_type'] != 'team-vs': continue
@@ -352,7 +392,7 @@ class Match:
                     "map-title": map_title,
                     "map-link": map_link,
                     "red_scores": red_scores,
-                    "blue_scores": user_score,
+                    "blue_scores": blue_scores,
                     "red_total": opponent_score,
                     "blue_total": user_score
                 }
@@ -370,7 +410,8 @@ class Match:
                 "result": self.__result,
                 "teams": self.__teams,
                 "matchcosts": self.__matchcosts,
-                "events": self.__events
+                "events": self.__events,
+                "qualifiers": self.qualifiers
             }
         }
 
