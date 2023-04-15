@@ -234,6 +234,7 @@ class Match:
             if self.qualifiers: # Special case for qualifiers
                 if scores == []: continue 
 
+                lobby_total = 0
                 lobby_scores = {}
                 for s in scores:
                     
@@ -249,8 +250,11 @@ class Match:
                         player_scores[new_score.player] = {}
                     player_scores[new_score.player][index] = new_score.value
 
+                    # add player's score to the lobby's total score
+                    lobby_total += new_score.value 
+
                 # Calculate average_scores
-                average_score = (blue_total + red_total) / len(scores)
+                average_score = lobby_scores / len(scores)
                 average_map_score[index] = average_score
 
                 # add score to red_scores, team doesn't matter for qualifiers
