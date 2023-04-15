@@ -170,28 +170,44 @@ class Match:
         """
         Calculates the matchcosts of each player, then splits up the information by team.
         """
-        blue, red = (None, None)
-        if self.__result[0] > self.__result[1]:
-            self.__matchcosts[0]['blue_team'] = {}
-            self.__matchcosts[1]['red_team'] = {}
-            blue, red = (0, 1)
-        elif self.__result[1] > self.__result[0]:
+        # Special case for qualifiers: all players in red team
+        if self.qualifiers:
             self.__matchcosts[0]['red_team'] = {}
             self.__matchcosts[1]['blue_team'] = {}
-            blue, red = (1, 0)
-        
-        # Calculate each player's individual matchcost, then assign player/matchcost pair to the appropriate 
-        # matchcost collection
-        for player, scores in player_scores.items():
-            mc_sum = 0
-            for map, score in scores.items():
-                mc_sum += (score / average_map_score[map])
-            cost = (2 / (len(scores) + 2) ) * mc_sum
 
-            if player in self.__teams['team_blue']:
-                self.__matchcosts[blue]['blue_team'][str(player)] = cost
-            elif player in self.__teams['team_red']:
-                self.__matchcosts[red]['red_team'][str(player)] = cost
+             # Calculate each player's individual matchcost, then assign player/matchcost pair to the appropriate 
+            # matchcost collection
+            for player, scores in player_scores.items():
+                mc_sum = 0
+                for map, score in scores.items():
+                    mc_sum += (score / average_map_score[map])
+                cost = (2 / (len(scores) + 2) ) * mc_sum
+
+                self.__matchcosts[0]['red_team'][str(player)] = cost
+
+        else:
+            blue, red = (None, None)
+            if self.__result[0] > self.__result[1]:
+                self.__matchcosts[0]['blue_team'] = {}
+                self.__matchcosts[1]['red_team'] = {}
+                blue, red = (0, 1)
+            elif self.__result[1] > self.__result[0]:
+                self.__matchcosts[0]['red_team'] = {}
+                self.__matchcosts[1]['blue_team'] = {}
+                blue, red = (1, 0)
+            
+            # Calculate each player's individual matchcost, then assign player/matchcost pair to the appropriate 
+            # matchcost collection
+            for player, scores in player_scores.items():
+                mc_sum = 0
+                for map, score in scores.items():
+                    mc_sum += (score / average_map_score[map])
+                cost = (2 / (len(scores) + 2) ) * mc_sum
+
+                if player in self.__teams['team_blue']:
+                    self.__matchcosts[blue]['blue_team'][str(player)] = cost
+                elif player in self.__teams['team_red']:
+                    self.__matchcosts[red]['red_team'][str(player)] = cost
     
     def __process(self):
         """
@@ -245,6 +261,10 @@ class Match:
                         if mod in self.__multipliers:
                             new_score.value *= self.__multipliers[mod]
 
+                    # add any new players to the red team
+                    if new_score.player not in team_check:
+                        team_check[new_score.player] = {'blue': 0, 'red': 1}
+
                     # add player's score to player_scores dict
                     if new_score.player not in player_scores:
                         player_scores[new_score.player] = {}
@@ -253,13 +273,13 @@ class Match:
                     # add player's score to the lobby's total score
                     lobby_total += new_score.value 
 
+                    # add score to lobby_scores, team doesn't matter for qualifiers
+                    formatted_score = new_score.getScore()
+                    lobby_scores[formatted_score[0]] = formatted_score[1]
+
                 # Calculate average_scores
                 average_score = lobby_total / len(scores)
                 average_map_score[index] = average_score
-
-                # add score to lobby_scores, team doesn't matter for qualifiers
-                formatted_score = new_score.getScore()
-                lobby_scores[formatted_score[0]] = formatted_score[1]
 
                 # Add entire event to self.events
                 new_event = {
@@ -423,5 +443,5 @@ if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
     # 103526237
     # 107542811
-    m = Match('106914609', "hiyah", multipliers) 
+    m = Match('107060428', "hiyah", multipliers) 
     print(m.getMatch())
