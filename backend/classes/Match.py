@@ -254,12 +254,12 @@ class Match:
                     lobby_total += new_score.value 
 
                 # Calculate average_scores
-                average_score = lobby_scores / len(scores)
+                average_score = lobby_total / len(scores)
                 average_map_score[index] = average_score
 
-                # add score to red_scores, team doesn't matter for qualifiers
+                # add score to lobby_scores, team doesn't matter for qualifiers
                 formatted_score = new_score.getScore()
-                red_scores[formatted_score[0]] = formatted_score[1]
+                lobby_scores[formatted_score[0]] = formatted_score[1]
 
                 # Add entire event to self.events
                 new_event = {
