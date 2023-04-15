@@ -32,12 +32,16 @@ def construct_tourn(tourn: dict) -> Tournament:
 
 if __name__ == "__main__":
 
-    if len(sys.argv) > 1 and sys.argv[1] != 'debug':
+    if len(sys.argv) > 1 and sys.argv[1] == 'debug':
+        pass
+    else:
         # Connect to the local MongoDB server
         client = MongoClient(URI, server_api=ServerApi('1'))
 
     try:
-        if len(sys.argv) > 1 and sys.argv[1] != 'debug':
+        if len(sys.argv) > 1 and sys.argv[1] == 'debug':
+            pass
+        else:
             client.admin.command('ping')
             print("Successfully connected to MongoDB")
 
@@ -46,7 +50,7 @@ if __name__ == "__main__":
             collection = db['tournament_history']
 
         data = sheet_data()
-        data = {"54": data[54]} # stub for testing
+        # data = {"54": data[54]} # stub for testing
         
         for _, v in data.items():
 
@@ -55,7 +59,9 @@ if __name__ == "__main__":
                 print("Tournament " + v['tourn_name'] + " skipped")
                 continue
 
-            if len(sys.argv) > 1 and sys.argv[1] != 'debug':
+            if len(sys.argv) > 1 and sys.argv[1] == 'debug':
+                pass
+            else:
                 # Add tournament object to database if it is not already in 
                 query = { v['tourn_name']: {"$exists": True} }
                 dup = collection.count_documents(query)
@@ -80,8 +86,8 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
     finally:
-        if len(sys.argv) > 1 and sys.argv[1] != 'debug':
-            client.close()
+        if len(sys.argv) > 1 and sys.argv[1] == 'debug': pass
+        else: client.close()
         
     
 
