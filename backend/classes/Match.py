@@ -47,7 +47,9 @@ class Match:
 
         # stores collection of match costs per player, split by team. Winning team is first.
         self.__matchcosts = [{}, {}]
-        
+
+        # Boolean value, True if mp was a qualifier lobby
+        self.qualifiers = False
         
         print("Review mp manually (blank if no irregularities) ")
         print(f'https://osu.ppy.sh/community/matches/{self.__id}')
@@ -79,6 +81,11 @@ class Match:
 
             # finds and enters match name from first call 
             self.__name = info['match']['name'] 
+
+            # determine if qualifier lobby from match name
+            case = r'Qualifier'
+            match = re.search(case, self.__name)
+            if match: self.qualifiers = True
 
         except:
             print("API failure")
@@ -127,9 +134,15 @@ class Match:
 
             # If the same map as the previous event is being played at this event, means first instance was 
             # an abort and should be ignored
-            if event['game']['beatmap']['beatmapset_id'] == prev_id:
-                aborts.append(event_ct - 1)
-            prev_id = event['game']['beatmap']['beatmapset_id']
+            try:
+                if event['game']['beatmap']['beatmapset_id'] == prev_id:
+                    aborts.append(event_ct - 1)
+                prev_id = event['game']['beatmap']['beatmapset_id']
+            except KeyError:
+                # beatmap deleted, use beatmap id as last resort in case of replay of abort of a deleted map
+                if event['game']['beatmap_id'] == prev_id:
+                    aborts.append(event_ct - 1)
+                prev_id = event['game']['beatmap_id']
 
         ignore = []
         for i in range(1, self.__warmups + 1):
@@ -202,12 +215,18 @@ class Match:
                 continue
             index += 1
 
-            map_link = "https://osu.ppy.sh/b/" + str(event['game']['beatmap']['id'])
-            map_background = event['game']['beatmap']['beatmapset']['covers']['cover']
-            artist = event['game']['beatmap']['beatmapset']['artist']
-            title = event['game']['beatmap']['beatmapset']['title']
-            difficulty = event['game']['beatmap']['version']
-            map_title = json.dumps(f'{artist} - {title} [{difficulty}]')
+            try:
+                map_link = "https://osu.ppy.sh/b/" + str(event['game']['beatmap']['id'])
+                map_background = event['game']['beatmap']['beatmapset']['covers']['cover']
+                artist = event['game']['beatmap']['beatmapset']['artist']
+                title = event['game']['beatmap']['beatmapset']['title']
+                difficulty = event['game']['beatmap']['version']
+                map_title = json.dumps(f'{artist} - {title} [{difficulty}]')
+            except:
+                # Deleted beatmap
+                map_link = "https://osu.ppy.sh/b/" + str(event['game']['beatmap_id'])
+                map_background = ""
+                map_title = "deleted beatmap"
 
             scores = event['game']['scores']
             # Process list of scores
@@ -353,7 +372,7 @@ class Match:
                 "matchcosts": self.__matchcosts,
                 "events": self.__events
             }
-        } 
+        }
 
 if __name__ == "__main__":
     multipliers = {"EZ": 1.8}

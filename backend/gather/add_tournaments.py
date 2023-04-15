@@ -32,19 +32,21 @@ def construct_tourn(tourn: dict) -> Tournament:
 
 if __name__ == "__main__":
 
-    # Connect to the local MongoDB server
-    client = MongoClient(URI, server_api=ServerApi('1'))
+    if len(sys.argv) > 1 and sys.argv[1] != 'debug':
+        # Connect to the local MongoDB server
+        client = MongoClient(URI, server_api=ServerApi('1'))
 
     try:
-        client.admin.command('ping')
-        print("Successfully connected to MongoDB")
+        if len(sys.argv) > 1 and sys.argv[1] != 'debug':
+            client.admin.command('ping')
+            print("Successfully connected to MongoDB")
 
-        # Select a database and collection
-        db = client['tournament_history']
-        collection = db['tournament_history']
+            # Select a database and collection
+            db = client['tournament_history']
+            collection = db['tournament_history']
 
         data = sheet_data()
-        data = {"8": data[8]} # stub for testing
+        data = {"54": data[54]} # stub for testing
         
         for _, v in data.items():
 
@@ -53,12 +55,13 @@ if __name__ == "__main__":
                 print("Tournament " + v['tourn_name'] + " skipped")
                 continue
 
-            # Add tournament object to database if it is not already in 
-            query = { v['tourn_name']: {"$exists": True} }
-            dup = collection.count_documents(query)
-            if dup > 0:
-                print("Tournament already in database ")
-                continue 
+            if len(sys.argv) > 1 and sys.argv[1] != 'debug':
+                # Add tournament object to database if it is not already in 
+                query = { v['tourn_name']: {"$exists": True} }
+                dup = collection.count_documents(query)
+                if dup > 0:
+                    print("Tournament already in database ")
+                    continue 
             
             # Begin constructing mew tournament object
             try:
@@ -77,7 +80,8 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
     finally:
-        client.close()
+        if len(sys.argv) > 1 and sys.argv[1] != 'debug':
+            client.close()
         
     
 

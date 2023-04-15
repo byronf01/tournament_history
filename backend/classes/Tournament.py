@@ -103,13 +103,21 @@ class Tournament:
 
         # collection of Stage objects with keys representing the round ex. QF, SF, RO16, etc.
         # TO-DO: figure out this part
-        self.__stages = {} 
+        self.__stages = [] 
         ct = 1
+        qualifiersHappened = False
         while len(self.__mps) != 0:
             next_mp = self.__mps[0]
             self.__mps.pop(0)
-            self.__stages[f'Match {ct}'] = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers)
-            ct += 1
+
+            # Check if mp is a qualifier lobby
+            s = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers, qualifiersHappened)
+            if s.qualifiers == True:
+                self.__stages.append({'Qualifiers': s})
+                qualifiersHappened = True
+            else: 
+                self.__stages.append({f'Match {ct}': s})
+                ct += 1
     
     def __guess_tourn_acronym(self, tourn_title: str) -> str:
         """
@@ -248,6 +256,11 @@ class Tournament:
 
 
     def getTournament(self):
+        stages_txt = []
+        for stage in self.__stages:
+            for round, stage_data in stage.items():
+                stages_txt.append({round: stage_data.getStage()})
+
         return {self.__tournName: {
             "date": self.__date,
             "acronym": self.__acronym,
@@ -263,5 +276,5 @@ class Tournament:
             "notes": self.__notes,
             "comments": self.__comments,
             "teammates": self.__teammates,
-            "stages": {round: stage.getStage() for round, stage in self.__stages.items()} # not sure about this one
+            "stages": stages_txt
         }} # stub
