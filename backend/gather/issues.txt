@@ -3,5 +3,11 @@
 # 0 - No issue
 # 1 - multiple acronyms
 # 2 - changing format
+# 3 - multiple tournaments with same acronym
+# 4 - matches in scorev1, ignore completely (for now)
 Visual Novel Duo Brackets:1
 Tayuno's Standout Cup:2
+Rapid Monthly Osu Tournament 54:3,4
+Rapid Monthly osu! Tournament #58:3,4
+RMoT Invitational #14:3
+RMoT Invitational #15:3
