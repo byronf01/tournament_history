@@ -93,6 +93,7 @@ if __name__ == "__main__":
             data = sheet_data()
     else:
         # enter manually
+        # UNFINISHED 
         pass
     
     if "write" in sys.argv:

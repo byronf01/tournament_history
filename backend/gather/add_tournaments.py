@@ -18,7 +18,7 @@ with open("issues.txt", "r") as f:
 t = t.split('\n')
 for line in t:
     if line[0] == '#': continue
-    tourn, issues = line.split(":")
+    tourn, issues = line.rsplit(":", 1)
     ISSUES[tourn] = [int(issue) for issue in issues.split(",")]
 
 def construct_tourn(tourn: dict) -> Tournament:
@@ -44,9 +44,14 @@ if __name__ == "__main__":
         collection = db['tournament_history']
 
         data = sheet_data()
-        data = {"55": data[55]} # stub for testing
+        data = {"8": data[8]} # stub for testing
         
         for _, v in data.items():
+
+            # Error handling for issue 4 - ignore tournament
+            if v['tourn_name'] in ISSUES and 4 in ISSUES[v['tourn_name']]:
+                print("Tournament " + v['tourn_name'] + " skipped")
+                continue
 
             # Add tournament object to database if it is not already in 
             query = { v['tourn_name']: {"$exists": True} }
@@ -58,9 +63,12 @@ if __name__ == "__main__":
             # Begin constructing mew tournament object
             try:
                 t = construct_tourn(v)
-                # print(t.getTournament())
-                collection.insert_one(t.getTournament())
-                print("New tournament added! ")
+                # DEBUG MODE: do not add tournament to database 
+                if len(sys.argv) > 1 and sys.argv[1] == 'debug':
+                    print(t.getTournament())
+                else:
+                    collection.insert_one(t.getTournament())
+                    print("New tournament added! ")
             except Exception as e:
                 print(e)
                 foo = input("Continue? (Y/N) ")

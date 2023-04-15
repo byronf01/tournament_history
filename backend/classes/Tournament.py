@@ -22,6 +22,9 @@ class Tournament:
 
     def __init__(self, data, issues):
 
+        # known tournament issues (refer to issues.txt)
+        self.ISSUES = issues
+
         # Tourney start date 
         self.__date = str_to_date(data['date']) 
 
@@ -123,7 +126,7 @@ class Tournament:
         
     def __get_mps(self, acronyms: list[str]) -> list[int]:
         """
-        Looks through all known tournamentm matches and finds matches with the corresponding acronym.
+        Looks through all known tournament matches and finds matches with the corresponding acronym.
         Returns list in ascending order.
         """
         matches_file = Path('../match_parser/matches.txt')
@@ -220,6 +223,26 @@ class Tournament:
 
         print("mps found: ")
         print(self.__mps)
+
+        # Handling for issue 3 - same acronym used by multiple tournaments
+        if 3 in self.ISSUES: 
+            
+            # Determine range of mps to process for this tournament
+            # Hopefully there are no tournaments using the same acronym that run at the same time.
+            first_mp = input("First mp to start from (empty if from start): ")
+            last_mp = input("Enter last mp to cut off from mps (empty if last): ")
+            remaining_mps = []
+            add = True if first_mp == "" else False
+            for mp in self.__mps:
+                if str(mp) == last_mp:
+                    break # Done iterating
+                elif str(mp) == first_mp:
+                    add = True
+                if add: 
+                    remaining_mps.append(mp)
+            
+            # Replace list of mps
+            self.__mps = remaining_mps 
 
         return self.__mps
 
