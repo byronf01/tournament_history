@@ -149,7 +149,7 @@ class Match:
             ignore.append(i)
         ignore.extend(aborts)
         for i in range(event_ct, event_ct - self.__end, -1):
-            ignore.extend(i)
+            ignore.append(i+1)
         self.__teamType = 'team-vs' if team_type_counts['team-vs'] >= team_type_counts['head-to-head'] else 'head-to-head'
         return ignore
     
@@ -195,6 +195,8 @@ class Match:
                 self.__matchcosts[0]['red_team'] = {}
                 self.__matchcosts[1]['blue_team'] = {}
                 blue, red = (1, 0)
+            else:
+                raise ValueError("match was a tie")
             
             # Calculate each player's individual matchcost, then assign player/matchcost pair to the appropriate 
             # matchcost collection
@@ -443,5 +445,5 @@ if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
     # 103526237
     # 107542811
-    m = Match('107060428', "hiyah", multipliers) 
+    m = Match('84511618', "hiyah", multipliers) 
     print(m.getMatch())

@@ -66,7 +66,7 @@ if __name__ == "__main__":
                 query = { v['tourn_name']: {"$exists": True} }
                 dup = collection.count_documents(query)
                 if dup > 0:
-                    print("Tournament already in database ")
+                    print(f"Tournament {v['tourn_name']} already in database ")
                     continue 
             
             # Begin constructing mew tournament object
