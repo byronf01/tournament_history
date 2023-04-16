@@ -88,7 +88,7 @@ class Match:
             self.__name = info['match']['name'] 
 
             # determine if qualifier lobby from match name
-            case = r'Qualifier'
+            case = r'Qual'
             match = re.search(case, self.__name)
             if match: self.qualifiers = True
 
