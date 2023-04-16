@@ -106,12 +106,13 @@ class Tournament:
         self.__stages = [] 
         ct = 1
         qualifiersHappened = False
+        if 5 in self.ISSUES: qualifiersHappened = True
         while len(self.__mps) != 0:
             next_mp = self.__mps[0]
             self.__mps.pop(0)
 
             # Check if mp is a qualifier lobby
-            s = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers, qualifiersHappened)
+            s = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers, qualifiersHappened, self.ISSUES)
             if s.qualifiers == True:
                 self.__stages.append({'Qualifiers': s})
                 qualifiersHappened = True

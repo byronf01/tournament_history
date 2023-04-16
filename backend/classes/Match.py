@@ -10,8 +10,10 @@ DEFAULT_USER = 16626263
 
 class Match:
 
-    def __init__(self, id: str, teamName: str, multipliers: dict):
+    def __init__(self, id: str, teamName: str, multipliers: dict, issues: list):
         
+        self.ISSUES = issues 
+
         # API data
         self.__apiData = {
             'client_id': 21309,
@@ -50,6 +52,9 @@ class Match:
 
         # Boolean value, True if mp was a qualifier lobby
         self.qualifiers = False
+        
+        # Handling for issue 5 - treat every match has a qualifier lobby
+        if 5 in self.ISSUES: self.qualifiers = True
         
         print("Review mp manually (blank if no irregularities) ")
         print(f'https://osu.ppy.sh/community/matches/{self.__id}')

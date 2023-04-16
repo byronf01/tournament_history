@@ -5,13 +5,13 @@ class Stage:
     Largely unfinished class, may add support for tournament mappools and the like 
     """
 
-    def __init__(self, round: str, mps: list[str], tn: str, mult: dict, qualifiersHappened: bool):
+    def __init__(self, round: str, mps: list[str], tn: str, mult: dict, qualifiersHappened: bool, issues: list):
         
         # Name of the round
         self.__round = round
 
         # Follows schema { "Round": [Match1(), Match2()] }. Match1 and Match2 are both optional.
-        self.__matches = [Match(mp, tn, mult) for mp in mps]
+        self.__matches = [Match(mp, tn, mult, issues) for mp in mps]
 
         # boolean representing if qualifiers happened for this stage
         self.qualifiers = False
