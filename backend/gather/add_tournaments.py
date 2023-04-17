@@ -50,19 +50,6 @@ if __name__ == "__main__":
             db = client['tournament_history']
             collection = db['tournament_history']
 
-            collection.insert_one({"char": None})
-            q = "Baku's Spring Festival 🌻"
-            for c in collection.find():
-                for k in c.keys():
-                    if k == q:
-                        print(f"{k} found in the database")
-            if collection.count_documents({ q: {"$exists": True} }) > 0:
-                print("awesome")
-            else:
-                print("ok so why isnt this working")
-            exit()
-            
-
 
         data = sheet_data()
         # data = {"54": data[54]} # stub for testing
