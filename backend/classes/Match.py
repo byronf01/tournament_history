@@ -451,5 +451,5 @@ class Match:
 
 if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
-    m = Match('97209104', "hiyah", multipliers, []) 
+    m = Match('106250328', "hiyah", multipliers, []) 
     print(m.getMatch())
