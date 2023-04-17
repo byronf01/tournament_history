@@ -130,9 +130,11 @@ class Match:
         prev_id = 0
         for event in events:
             
+            """
             # If scores is empty, map was aborted early and does not show up in mp. 
             if event['game']['scores'] == []:
                 continue 
+            """
 
             event_ct += 1
             team_type_counts[ event['game']['team_type'] ] += 1
@@ -154,7 +156,7 @@ class Match:
             ignore.append(i)
         ignore.extend(aborts)
         for i in range(event_ct, event_ct - self.__end, -1):
-            ignore.append(i+1)
+            ignore.append(i)
         self.__teamType = 'team-vs' if team_type_counts['team-vs'] >= team_type_counts['head-to-head'] else 'head-to-head'
         return ignore
     
@@ -222,6 +224,7 @@ class Match:
         Adds to self.__events in the order that the maps were played.
         """
         events = self.__apiCall()
+        # print(events)
 
         # keeps track of which matches to ignore with ignore, and the team type of the match
         ignore = self.__preprocess(events)
@@ -448,7 +451,5 @@ class Match:
 
 if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
-    # 103526237
-    # 107542811
-    m = Match('92162366', "hiyah", multipliers, []) 
+    m = Match('97209104', "hiyah", multipliers, []) 
     print(m.getMatch())
