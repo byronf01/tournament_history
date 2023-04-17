@@ -184,7 +184,7 @@ class Tournament:
                     # Assumption that the player does not play 15 other tournament matches between this and the next match.
                     condition = 0
                     old += 1
-                    while condition < 15 and old <= new:
+                    while condition < 25 and old <= new:
                         condition += 1
                         resp = requests.get(f'{API_BASE_URL}matches/{all_mps[old]}', headers=headers)
                         # print("Parsing match " + all_mps[old])
@@ -216,7 +216,7 @@ class Tournament:
 
                     condition = 0
                     new -= 1
-                    while condition < 15 and new >= old:
+                    while condition < 25 and new >= old:
                         condition += 1
                         resp = requests.get(f'{API_BASE_URL}matches/{all_mps[new]}', headers=headers)
                         # print("Parsing match " + all_mps[new])
