@@ -180,8 +180,8 @@ class Tournament:
                 if mp_acr in acronyms: # surely no acronyms have spaces in them
                     self.__mps.append(all_mps[old])
 
-                    # Keep checking mps after this until 15 mps have passed that are not from this tournament, then terminate early.
-                    # Assumption that the player does not play 15 other tournament matches between this and the next match.
+                    # Keep checking mps after this until 25 mps have passed that are not from this tournament, then terminate early.
+                    # Assumption that the player does not play 25 other tournament matches between this and the next match.
                     condition = 0
                     old += 1
                     while condition < 25 and old <= new:

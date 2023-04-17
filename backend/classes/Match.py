@@ -129,12 +129,6 @@ class Match:
         aborts = []
         prev_id = 0
         for event in events:
-            
-            """
-            # If scores is empty, map was aborted early and does not show up in mp. 
-            if event['game']['scores'] == []:
-                continue 
-            """
 
             event_ct += 1
             team_type_counts[ event['game']['team_type'] ] += 1
@@ -154,7 +148,11 @@ class Match:
         ignore = []
         for i in range(1, self.__warmups + 1):
             ignore.append(i)
-        ignore.extend(aborts)
+        for a in aborts:
+            # Handle case where warm ups can be aborted
+            while a in ignore:
+                a += 1
+            ignore.append(a)
         for i in range(event_ct, event_ct - self.__end, -1):
             ignore.append(i)
         self.__teamType = 'team-vs' if team_type_counts['team-vs'] >= team_type_counts['head-to-head'] else 'head-to-head'
@@ -451,5 +449,5 @@ class Match:
 
 if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
-    m = Match('106250328', "hiyah", multipliers, []) 
+    m = Match('101244342', "hiyah", multipliers, []) 
     print(m.getMatch())
