@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, re, json
 sys.path.append('../classes')
 from get_tournament_data import sheet_data
 from Tournament import Tournament
@@ -10,6 +10,7 @@ load_dotenv()
 
 PASSWORD = os.getenv('mongo-password')
 URI = f"mongodb+srv://byronfong:{PASSWORD}@tournament-history.qp41sza.mongodb.net/?retryWrites=true&w=majority"
+ESCAPE = ["\\", "$", ".", "*", "+", "?", "|", "(", ")", "[", "]", "{", "}"]
 
 # Tournaments with known issues (ex: VNDB had two acronyms)
 ISSUES = {}
@@ -49,6 +50,20 @@ if __name__ == "__main__":
             db = client['tournament_history']
             collection = db['tournament_history']
 
+            collection.insert_one({"char": None})
+            q = "Baku's Spring Festival 🌻"
+            for c in collection.find():
+                for k in c.keys():
+                    if k == q:
+                        print(f"{k} found in the database")
+            if collection.count_documents({ q: {"$exists": True} }) > 0:
+                print("awesome")
+            else:
+                print("ok so why isnt this working")
+            exit()
+            
+
+
         data = sheet_data()
         # data = {"54": data[54]} # stub for testing
         
@@ -63,11 +78,13 @@ if __name__ == "__main__":
                 pass
             else:
                 # Add tournament object to database if it is not already in 
-                query = { v['tourn_name']: {"$exists": True} }
-                dup = collection.count_documents(query)
+                query1 = { v['tourn_name']: {"$exists": True} }
+
+                dup = collection.count_documents(query1)
                 if dup > 0:
                     print(f"Tournament {v['tourn_name']} already in database ")
                     continue 
+                
             
             # Begin constructing mew tournament object
             try:

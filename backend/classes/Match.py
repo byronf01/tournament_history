@@ -88,7 +88,7 @@ class Match:
             self.__name = info['match']['name'] 
 
             # determine if qualifier lobby from match name
-            case = r'Qual'
+            case = r'[( ]Qual'
             match = re.search(case, self.__name)
             if match: self.qualifiers = True
 
@@ -450,5 +450,5 @@ if __name__ == "__main__":
     multipliers = {"EZ": 1.8}
     # 103526237
     # 107542811
-    m = Match('84511618', "hiyah", multipliers) 
+    m = Match('92162366', "hiyah", multipliers, []) 
     print(m.getMatch())
