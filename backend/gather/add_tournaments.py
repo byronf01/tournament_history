@@ -23,6 +23,14 @@ for line in t:
     ISSUES[tourn] = [int(issue) for issue in issues.split(",")]
 
 def construct_tourn(tourn: dict) -> Tournament:
+    issue_6 = False
+    for char in ESCAPE:
+        if char in tourn['tourn_name']: 
+            if tourn['tourn_name'] not in ISSUES:
+                ISSUES[tourn['tourn_name']] = []
+            ISSUES[tourn['tourn_name']].append(6)
+            break
+
     if tourn['tourn_name'] in ISSUES:
         print(f"Warning: Tournament {tourn['tourn_name']} has issue(s) {ISSUES[ tourn['tourn_name'] ]}")
         t = Tournament(tourn, ISSUES[tourn['tourn_name']])
@@ -66,8 +74,12 @@ if __name__ == "__main__":
             else:
                 # Add tournament object to database if it is not already in 
                 query1 = { v['tourn_name']: {"$exists": True} }
+                modified = v['tourn_name']
+                for char in ESCAPE:
+                    modified = modified.replace(char, "")
+                query2 = { modified: {"$exists": True} }
 
-                dup = collection.count_documents(query1)
+                dup = collection.count_documents(query1) + collection.count_documents(query2)
                 if dup > 0:
                     print(f"Tournament {v['tourn_name']} already in database ")
                     continue 

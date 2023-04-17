@@ -10,6 +10,7 @@ MONTHS = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June":
 PLAYER_NAME = "hiyah"
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
 CLIENT_SECRET = os.getenv('client-secret')
+ESCAPE = ["\\", "$", ".", "*", "+", "?", "|", "(", ")", "[", "]", "{", "}"]
 
 def str_to_date(s: str):
     
@@ -28,8 +29,16 @@ class Tournament:
         # Tourney start date 
         self.__date = str_to_date(data['date']) 
 
-        # Tournament name
+        # Valid tournament name
         self.__tournName = data['tourn_name']
+
+        # handling for issue 6 - Alternate tournament name holding the real name if former had invalid chars, change
+        # self.__tournName to be formatted correctly 
+        self.__altName = ""
+        if 6 in self.ISSUES:
+            self.__altName = self.__tournName
+            for c in ESCAPE:
+                self.__tournName = self.__tournName.replace(c, "")
 
         # forum post
         self.__forum = data['forum']
@@ -277,5 +286,6 @@ class Tournament:
             "notes": self.__notes,
             "comments": self.__comments,
             "teammates": self.__teammates,
-            "stages": stages_txt
+            "stages": stages_txt,
+            "alt_name": self.__altName
         }} # stub
