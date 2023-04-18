@@ -131,6 +131,9 @@ class Match:
         for event in events:
 
             event_ct += 1
+            if event['game']['team_type'] not in team_type_counts.keys():
+                aborts.append(event_ct)
+                continue
             team_type_counts[ event['game']['team_type'] ] += 1
 
             # If the same map as the previous event is being played at this event, means first instance was 
@@ -232,6 +235,15 @@ class Match:
         team_check = {} # form {player: {blue: x, red: y}}
         average_map_score = {} # {map #: average score across lobby}
         player_scores = {} # {player: {map # played: score, 2nd map # played: score, ...}}
+
+        # Handling for issue 7 - some maps are acc win con
+        acc = []
+        if 7 in self.ISSUES:
+            foo = input("Enter map IDs for accuracy win condition: ")
+            while foo != "":
+                acc.append(int(foo))
+                foo = input("Enter map IDs for accuracy win condition: ")
+
         for event in events:
             
             maps_played += 1
@@ -316,6 +328,10 @@ class Match:
                 blue_scores = {}
                 red_scores = {}
 
+                if 7 in self.ISSUES and event['game']['beatmap']['id'] in acc:
+                    blue_acc = 0
+                    red_acc = 0
+
                 for s in scores:
                     
                     new_score = Score(s)
@@ -340,20 +356,29 @@ class Match:
                         red_total += new_score.value
                         formatted_score = new_score.getScore()
                         red_scores[formatted_score[0]] = formatted_score[1]
+                        if 7 in self.ISSUES and event['game']['beatmap']['id'] in acc: red_acc += new_score.acc
                     elif team == 'blue':
                         blue_total += new_score.value
                         formatted_score = new_score.getScore()
                         blue_scores[formatted_score[0]] = formatted_score[1]
+                        if 7 in self.ISSUES and event['game']['beatmap']['id'] in acc: blue_acc += new_score.acc
                     
                     # determine team of the player and add to team_check
                     team_check[new_score.player][team] += 1
 
                     
                 # Compare red - blue scores, add 1 to match result for winning team
-                if blue_total > red_total:
-                    self.__result[0] += 1
-                elif red_total > blue_total:
-                    self.__result[1] += 1
+                if 7 in self.ISSUES and event['game']['beatmap']['id'] in acc:
+                    if blue_acc > red_acc:
+                        self.__result[0] += 1
+                    elif red_acc > blue_acc:
+                        self.__result[1] += 1
+                else:
+                    if blue_total > red_total:
+                        self.__result[0] += 1
+                    elif red_total > blue_total:
+                        self.__result[1] += 1
+                    
 
                 # Calculate average_scores
                 average_score = (blue_total + red_total) / len(scores)
@@ -385,6 +410,10 @@ class Match:
                 blue_scores = {}
                 red_scores = {}
 
+                if 7 in self.ISSUES and event['game']['beatmap']['id'] in acc:
+                    user_acc = 0
+                    opp_acc = 0
+
                 for s in scores:
 
                     new_score = Score(s)
@@ -404,20 +433,28 @@ class Match:
                         formatted_score = new_score.getScore()
                         blue_scores[formatted_score[0]] = formatted_score[1]
                         team_check[new_score.player] = {'blue': 1, 'red': 0}
+                        if 7 in self.ISSUES and event['game']['beatmap']['id'] in acc: user_acc += new_score.acc
                     else:
                         opponent_score += new_score.value
                         formatted_score = new_score.getScore()
                         red_scores[formatted_score[0]] = formatted_score[1]
                         team_check[new_score.player] = {'blue': 0, 'red': 1}
+                        if 7 in self.ISSUES and event['game']['beatmap']['id'] in acc: opp_acc += new_score.acc
 
                 # Calculate average_scores
                 average_score = (user_score + opponent_score) / len(scores)
                 average_map_score[index] = average_score
 
-                if user_score > opponent_score:
-                    self.__result[0] += 1
+                if 7 in self.ISSUES and event['game']['beatmap']['id'] in acc:
+                    if user_acc > opp_acc:
+                        self.__result[0] += 1
+                    elif opp_acc > user_acc:
+                        self.__result[1] += 1
                 else:
-                    self.__result[1] += 1
+                    if user_score > opponent_score:
+                        self.__result[0] += 1
+                    else:
+                        self.__result[1] += 1
 
                 new_event = {
                     "map-background": map_background,
@@ -448,6 +485,7 @@ class Match:
         }
 
 if __name__ == "__main__":
-    multipliers = {"EZ": 1.8}
-    m = Match('101244342', "hiyah", multipliers, []) 
+    # Testing
+    multipliers = {}
+    m = Match('107078495', "hiyah", multipliers, []) 
     print(m.getMatch())

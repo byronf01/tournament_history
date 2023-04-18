@@ -7,6 +7,7 @@
 # 4 - matches in scorev1, ignore completely (for now)
 # 5 - tournament is battle royale format
 # 6 - tournament name has special character, issue can be automatically checked
+# 7 - some matches have acc win con
 Visual Novel Duo Brackets:1
 Tayuno's Standout Cup:2
 Rapid Monthly Osu Tournament 54:3,4
@@ -16,3 +17,4 @@ RMoT Invitational #15:3
 Free-For-All osu! Tournament #4:5
 osu! Collegiate League Fall 2021:3
 osu! Collegiate League Standard:3
+pilk all rounder tournament:7

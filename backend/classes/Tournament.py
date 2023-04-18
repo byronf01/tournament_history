@@ -101,7 +101,7 @@ class Tournament:
         self.__mps = [] 
 
         # handle issue 1 where a tournament can use multiple acronyms
-        if 1 in issues:
+        if 1 in self.ISSUES:
             next_acr = "placeholder"
             all_acronyms = [self.__acronym] 
             while next_acr != "":
@@ -109,6 +109,14 @@ class Tournament:
                 if next_acr != "": all_acronyms.append(next_acr)
             self.__mps = self.__get_mps(all_acronyms)
         else: self.__mps = self.__get_mps([self.__acronym])
+
+        # handle issue 7 where some matches may have acc win con 
+        acc_mps = []
+        if 7 in self.ISSUES:
+            foo = input("Enter match IDs that have accuracy as a win condition: ")
+            while foo != "":
+                acc_mps.append(foo)
+                foo = input("Enter match IDs that have accuracy as a win condition: ")
 
         # collection of Stage objects with keys representing the round ex. QF, SF, RO16, etc.
         # TO-DO: figure out this part
@@ -121,7 +129,7 @@ class Tournament:
             self.__mps.pop(0)
 
             # Check if mp is a qualifier lobby
-            s = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers, qualifiersHappened, self.ISSUES)
+            s = Stage(f'Match {str(ct)}', [next_mp], self.__teamName, self.__multipliers, qualifiersHappened, self.ISSUES, acc_mps)
             if s.qualifiers == True:
                 self.__stages.append({'Qualifiers': s})
                 qualifiersHappened = True
