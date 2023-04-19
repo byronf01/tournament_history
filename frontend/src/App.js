@@ -2,6 +2,7 @@ import tourn from './trophy.png';
 import match from './match.png';
 import stats from './stats.png';
 import './App.css';
+import {Routes, Route, useNavigate} from 'react-router-dom';
 
 function Tag() {
   return (
@@ -11,7 +12,7 @@ function Tag() {
       height: '18em',
       border: 'hidden',
     }}>
-      <img src='https://a.ppy.sh/16626263?1677187336.png' class="responsive1"></img>
+      <img src='https://a.ppy.sh/16626263?1677187336.png' style={{width: "20%", height: "auto"}}></img>
       <p style={{
         color: 'white',
         fontFamily: 'trebuchet ms',
@@ -33,63 +34,65 @@ function HomeLine() {
 
 function TournamentsButton() {
   return (
-    <button class="b1">
-      Tournaments<br></br>
-      <img src={tourn} alt="trophy" class="responsive1"></img>
-    </button>
+    <div>
+      <button class="b1">
+        Tournaments<br></br>
+        <img src={tourn} alt="trophy" style={{width: "20%", height: "auto"}}></img>
+      </button>
+    </div>
   )
 }
 
 function MatchesButton() {
   return (
-    <button class="b2">
+    <button class="b1">
       Matches<br></br>
-      <img src={match} alt="matches" class="responsive2"></img>
+      <img src={match} alt="matches" style={{width: "47%", height: "auto"}}></img>
     </button>
   )
 }
 
 function StatsButton() {
   return (
-    <button class="b3">
+    <button class="b1">
       Stats<br></br>
-      <img src={stats} alt="stats" class="responsive3"></img>
+      <img src={stats} alt="stats" style={{width: "23%", height: "auto"}}></img>
     </button>
   )
 }
 
 function Panel() {
   return (
-    <div class="buttons">
-
-      <div class="action">
-        <div id="something">
-
-          <TournamentsButton />
-          <span></span>
-          <MatchesButton />
-          <span></span>
-          <StatsButton />
-
-        </div>
-      
-
-      </div>
-
+    <div style={{ display: "flex", gap: "5%", padding: "10%", alignItems: "center", justifyContent: "center" }}>
+      <TournamentsButton />
+      <MatchesButton />
+      <StatsButton />
     </div>
   )
 }
 
+function Tournaments() {
+  return <h2>Home</h2>;
+}
+
 function App() {
+
+  const navigate = useNavigate();
+  
   document.body.style = 'background: #617285;';
+
   return (
     <div className="App">
-      <div style={{height: '3pm'}}></div>
+      <div style={{height: '5em'}}></div>
       <Tag />
       <div style={{height: '8em'}}></div>
       <HomeLine />
-      <div style={{height: '3em'}}></div>
       <Panel />
+
+      <Routes>
+        <Route exact path="/tournaments" element={<Tournaments/>}/>
+      </Routes>
+      
     </div>
     
   );

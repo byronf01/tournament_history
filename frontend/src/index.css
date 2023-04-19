@@ -12,60 +12,12 @@ code {
     monospace;
 }
 
-.responsive1 {
-  width: 20%;
-  height: auto;
-}
-
-.responsive2 {
-  width: 47%;
-  height: auto;
-}
-
-.responsive3 {
-  width: 23%;
-  height: auto;
-}
-
 .b1 {
   background-color: rgb(59, 66, 175);
   color: rgb(212, 212, 212);
-  width: 18%;
-  height: 5em;
+  width: 28%;
+  height: 4em;
   font-family: trebuchet ms;
   font-size: 3em;
-}
-
-.b2 {
-  background-color: rgb(175, 59, 119);
-  color: rgb(212, 212, 212);
-  width: 18%;
-  height: 5em;
-  font-family: trebuchet ms;
-  font-size: 3em;
-}
-
-.b3 {
-  background-color: rgb(195, 20, 46);
-  color: rgb(212, 212, 212);
-  width: 18%;
-  height: 5em;
-  font-family: trebuchet ms;
-  font-size: 3em;
-}
-
-.buttons {
-  width: 50%;
-  margin: 0 auto;
   display: inline;
-}
-
-.action {
-  width: 20%;
-  margin: 0 auto;
-  display: inline;
-}
-
-#something span {
-  margin: 0 2em
 }
