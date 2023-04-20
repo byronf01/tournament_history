@@ -1,6 +1,5 @@
 
 import './HomePage.css';
-import {Routes, Route, useNavigate} from 'react-router-dom';
 import React from 'react';
 import { Component } from 'react';
 import { Panel } from '../components/Panel.js'
