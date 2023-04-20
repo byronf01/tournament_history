@@ -5,6 +5,7 @@ import './App.css';
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import React from 'react';
 import {Component} from 'react';
+import {Link} from "react-router-dom";
 
 function Tag() {
   return (
@@ -36,15 +37,6 @@ function HomeLine() {
 
 function TournamentsButton() {
 
-  const navigate = useNavigate();
-  const navigateToTournaments = () => {
-    navigate('/tournaments');
-  }
-
-  function componentWillUnmount() {
-    document.querySelectorAll('body > *').forEach(node => node.remove());
-  }
-
   function handleClick() {
     document.querySelectorAll('body > *').forEach(node => node.remove());
     window.location.href = '/tournaments';
@@ -52,8 +44,10 @@ function TournamentsButton() {
 
   return (
     <button class="b1" onClick={handleClick}>
+      
       Tournaments<br></br>
       <img src={tourn} alt="trophy" style={{width: "20%", height: "auto"}}></img>
+      
     </button>
   )
 }
@@ -86,8 +80,7 @@ function Panel() {
   )
 }
 
-
-class HomePageChild extends React.Component {
+class HomePageChild extends Component {
   render() {
     return (
       <span>
@@ -110,20 +103,20 @@ class HomePage extends Component {
 
   componentWillUnmount() {
     this.setState({show: false});
+    console.log(this.state)
   }
     
   render() {
     let myHomePage;
-    if (this.state.show) {
-      myHomePage = <HomePageChild />
-    } else {
-      myHomePage = (null)
-    }
+  
     return (
       <div>
-        {myHomePage}
+        {this.state.show ? (
+          <HomePageChild />
+        ): (
+          null
+        )}
       </div>
-      
     )
   }
 }
@@ -139,9 +132,10 @@ function App() {
 
   return (
     <div className="App">
-      <HomePage />
+      
 
       <Routes>
+      <Route exact path="/" element={<HomePage/>}/>
         <Route exact path="/tournaments" element={<Tournaments/>}/>
       </Routes>
       
