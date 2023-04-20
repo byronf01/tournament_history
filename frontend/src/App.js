@@ -1,10 +1,11 @@
-import './App.css';
-import {Routes, Route, useNavigate} from 'react-router-dom';
 import React from 'react';
+import './App.css';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { HomePage } from './pages/HomePage'
 import { TournamentsPage } from './pages/TournamentsPage'
 import { MatchesPage } from './pages/MatchesPage'
 import { StatsPage } from './pages/StatsPage'
+import Navbar from './components/Navbar'
 
 function PageNotFound() {
   return (
@@ -19,8 +20,8 @@ function App() {
   document.body.style = 'background: #617285;';
 
   return (
-    <div className="App">
-      
+    <Router>
+      <Navbar />
       <Routes>
         <Route exact path="/" element={<HomePage/>}/>
         <Route exact path="/tournaments" element={<TournamentsPage/>}/>
@@ -29,7 +30,7 @@ function App() {
         <Route exact path="*" element={<PageNotFound />}/>
       </Routes>
       
-    </div>
+    </Router>
     
   );
 }

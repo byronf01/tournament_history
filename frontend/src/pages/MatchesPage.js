@@ -10,7 +10,7 @@ import { Component } from 'react';
     render() {
       
       return (
-        <p>Tournamnets</p>
+        <p>Coming Soon</p>
       )
     }
   }

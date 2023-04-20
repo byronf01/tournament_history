@@ -10,7 +10,7 @@ import { Component } from 'react';
     render() {
       
       return (
-        <p>Stats</p>
+        <p>Coming Soon</p>
       )
     }
   }

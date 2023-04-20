@@ -11,7 +11,6 @@ function TournamentsButton() {
   
     return (
       <button class="b1" onClick={handleClick}>
-        
         Tournaments<br></br>
         <img src={tourn} alt="trophy" style={{width: "20%", height: "auto"}}></img>
         
@@ -20,8 +19,14 @@ function TournamentsButton() {
   }
   
   function MatchesButton() {
+
+    function handleClick() {
+      document.querySelectorAll('body > *').forEach(node => node.remove());
+      window.location.href = '/matches';
+    }
+
     return (
-      <button class="b1">
+      <button class="b1" onClick={handleClick}>
         Matches<br></br>
         <img src={match} alt="matches" style={{width: "47%", height: "auto"}}></img>
       </button>
@@ -29,8 +34,14 @@ function TournamentsButton() {
   }
   
   function StatsButton() {
+
+    function handleClick() {
+      document.querySelectorAll('body > *').forEach(node => node.remove());
+      window.location.href = '/stats';
+    }
+
     return (
-      <button class="b1">
+      <button class="b1" onClick={handleClick}>
         Stats<br></br>
         <img src={stats} alt="stats" style={{width: "23%", height: "auto"}}></img>
       </button>
