@@ -3,6 +3,8 @@ import match from './match.png';
 import stats from './stats.png';
 import './App.css';
 import {Routes, Route, useNavigate} from 'react-router-dom';
+import React from 'react';
+import {Component} from 'react';
 
 function Tag() {
   return (
@@ -33,13 +35,26 @@ function HomeLine() {
 }
 
 function TournamentsButton() {
+
+  const navigate = useNavigate();
+  const navigateToTournaments = () => {
+    navigate('/tournaments');
+  }
+
+  function componentWillUnmount() {
+    document.querySelectorAll('body > *').forEach(node => node.remove());
+  }
+
+  function handleClick() {
+    document.querySelectorAll('body > *').forEach(node => node.remove());
+    window.location.href = '/tournaments';
+  }
+
   return (
-    <div>
-      <button class="b1">
-        Tournaments<br></br>
-        <img src={tourn} alt="trophy" style={{width: "20%", height: "auto"}}></img>
-      </button>
-    </div>
+    <button class="b1" onClick={handleClick}>
+      Tournaments<br></br>
+      <img src={tourn} alt="trophy" style={{width: "20%", height: "auto"}}></img>
+    </button>
   )
 }
 
@@ -63,7 +78,7 @@ function StatsButton() {
 
 function Panel() {
   return (
-    <div style={{ display: "flex", gap: "5%", padding: "10%", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ display: "flex", gap: "5%", padding: "5%", alignItems: "center", justifyContent: "center" }}>
       <TournamentsButton />
       <MatchesButton />
       <StatsButton />
@@ -71,23 +86,60 @@ function Panel() {
   )
 }
 
+
+class HomePageChild extends React.Component {
+  render() {
+    return (
+      <span>
+        <div style={{height: '5em'}}></div>
+        <Tag />
+        <div style={{height: '8em'}}></div>
+        <HomeLine />
+        <Panel />
+      </span>
+      
+    )
+  }
+}
+
+class HomePage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {show: true};
+  }
+
+  componentWillUnmount() {
+    this.setState({show: false});
+  }
+    
+  render() {
+    let myHomePage;
+    if (this.state.show) {
+      myHomePage = <HomePageChild />
+    } else {
+      myHomePage = (null)
+    }
+    return (
+      <div>
+        {myHomePage}
+      </div>
+      
+    )
+  }
+}
+
+
 function Tournaments() {
   return <h2>Home</h2>;
 }
 
 function App() {
 
-  const navigate = useNavigate();
-  
   document.body.style = 'background: #617285;';
 
   return (
     <div className="App">
-      <div style={{height: '5em'}}></div>
-      <Tag />
-      <div style={{height: '8em'}}></div>
-      <HomeLine />
-      <Panel />
+      <HomePage />
 
       <Routes>
         <Route exact path="/tournaments" element={<Tournaments/>}/>
