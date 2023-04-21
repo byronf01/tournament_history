@@ -5,7 +5,7 @@ import { HomePage } from './pages/HomePage'
 import { TournamentsPage } from './pages/TournamentsPage'
 import { MatchesPage } from './pages/MatchesPage'
 import { StatsPage } from './pages/StatsPage'
-import Navbar from './components/Navbar'
+
 
 function PageNotFound() {
   return (
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
+      
       <Routes>
         <Route exact path="/" element={<HomePage/>}/>
         <Route exact path="/tournaments" element={<TournamentsPage/>}/>
