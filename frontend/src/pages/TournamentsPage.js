@@ -3,6 +3,7 @@ import './HomePage.css';
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import React from 'react';
 import { Component } from 'react';
+import Navbar from '../components/Navbar'
 
   
   class TournamentsPage extends Component {
@@ -10,7 +11,11 @@ import { Component } from 'react';
     render() {
       
       return (
-        <p>Tournamnets</p>
+        <div>
+            <Navbar />
+            <p>Tournamnets</p>
+        </div>
+        
       )
     }
   }

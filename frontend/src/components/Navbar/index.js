@@ -15,29 +15,30 @@ const Navbar = () => {
         <Bars />
   
         <NavMenu>
-          <NavLink to='/about' activeStyle>
-            About
+          <NavLink to='/' activeStyle>
+            Home
           </NavLink>
-          <NavLink to='/events' activeStyle>
-            Events
+          <NavLink to='/tournaments' activeStyle>
+            Tournaments
           </NavLink>
-          <NavLink to='/annual' activeStyle>
-            Annual Report
+          <NavLink to='/matches' activeStyle>
+            Matches
           </NavLink>
-          <NavLink to='/team' activeStyle>
+          <NavLink to='/stats' activeStyle>
             Teams
           </NavLink>
-          <NavLink to='/blogs' activeStyle>
-            Blogs
-          </NavLink>
-          <NavLink to='/sign-up' activeStyle>
-            Sign Up
-          </NavLink>
-          {/* Second Nav */}
-          {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
+    
         </NavMenu>
         <NavBtn>
-          <NavBtnLink to='/signin'>Sign In</NavBtnLink>
+          <NavBtnLink to='https://osu.ppy.sh/users/16626263' style={{
+            lineHeight: "0.3em"
+          }}>
+            <div style={{display: "flex", alignItems: "center"}}>
+                <img src='https://a.ppy.sh/16626263?1677187336.png' style={{width: "15%", height: "auto", borderRadius: "50%"}} />
+                <span style={{padding: "4%"}}>My Profile</span>
+            </div>
+          </NavBtnLink>
+          
         </NavBtn>
       </Nav>
     </>
