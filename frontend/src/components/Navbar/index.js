@@ -25,16 +25,18 @@ const Navbar = () => {
             Matches
           </NavLink>
           <NavLink to='/stats' activeStyle>
-            Teams
+            Stats
           </NavLink>
     
         </NavMenu>
         <NavBtn>
           <NavBtnLink to='https://osu.ppy.sh/users/16626263' style={{
-            lineHeight: "0.3em"
+            paddingLeft: "0%", paddingRight: "0%"
           }}>
-            <div style={{display: "flex", alignItems: "center"}}>
-                <img src='https://a.ppy.sh/16626263?1677187336.png' style={{width: "15%", height: "auto", borderRadius: "50%"}} />
+            <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                <img src='https://a.ppy.sh/16626263?1677187336.png' style={{
+                    width: "15%", height: "auto", borderRadius: "50%"
+                    }} />
                 <span style={{padding: "4%"}}>My Profile</span>
             </div>
           </NavBtnLink>
