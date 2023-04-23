@@ -1,7 +1,7 @@
 
 import './HomePage.css';
 import {Routes, Route, useNavigate} from 'react-router-dom';
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Component } from 'react';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
@@ -49,6 +49,8 @@ render() {
 }
 }
 */
+let data = Array(100)
+
 function TournamentsPage() {
     const [currentPage, setCurrentPage] = useState(1);
         

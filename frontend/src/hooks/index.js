@@ -1,3 +1,3 @@
 import usePagination from './usePagination'
 
-export { usePagination, DOTS }
+export { usePagination }

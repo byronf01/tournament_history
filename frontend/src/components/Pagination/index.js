@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { usePagination, DOTS } from '../../hooks';
+import { usePagination } from '../../hooks';
 import './pagination.scss';
 
 
@@ -51,7 +51,7 @@ const Pagination = props => {
       {paginationRange.map(pageNumber => {
          
         // If the pageItem is a DOT, render the DOTS unicode character
-        if (pageNumber === DOTS) {
+        if (pageNumber === "...") {
           return <li className="pagination-item dots">&#8230;</li>;
         }
 		
