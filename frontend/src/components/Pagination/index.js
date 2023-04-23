@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import { usePagination } from '../../hooks';
 import './pagination.scss';
+import connect from '../../server'
 
+async function access() {
+  let data;
+  
+  data = await connect()
+
+  return data;
+
+}
 
 const Pagination = props => {
   const {
@@ -11,6 +20,8 @@ const Pagination = props => {
     siblingCount = 1,
     currentPage,
     pageSize,
+    data,
+    setData,
     className
   } = props;
 
@@ -18,8 +29,23 @@ const Pagination = props => {
     currentPage,
     totalCount,
     siblingCount,
-    pageSize
+    pageSize,
+    data,
+    setData
   });
+
+  // calculate new total Count here?
+  // Should we also change the data field with newly fetched data?
+  useEffect ( () => {
+    const fetchData = async () => {
+      const returnedData = await access()
+      setData(data => (data))
+      totalCount = returnedData.length
+    }
+    fetchData().catch(console.error)
+  })
+
+
 
   // If there are less than 2 times in pagination range we shall not render the component
   if (currentPage === 0 || paginationRange.length < 2) {
