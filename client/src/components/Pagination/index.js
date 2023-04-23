@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import { usePagination } from '../../hooks';
 import './pagination.scss';
-import connect from '../../server'
 
 async function access() {
   let data;
@@ -36,6 +35,7 @@ const Pagination = props => {
 
   // calculate new total Count here?
   // Should we also change the data field with newly fetched data?
+  /*
   useEffect ( () => {
     const fetchData = async () => {
       const returnedData = await access()
@@ -44,6 +44,7 @@ const Pagination = props => {
     }
     fetchData().catch(console.error)
   })
+  */
 
 
 
