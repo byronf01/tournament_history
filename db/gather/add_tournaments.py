@@ -8,7 +8,7 @@ from pymongo.server_api import ServerApi
 
 load_dotenv()
 
-PASSWORD = os.getenv('mongo-password')
+PASSWORD = os.getenv('mongo_password')
 URI = f"mongodb+srv://byronfong:{PASSWORD}@tournament-history.qp41sza.mongodb.net/?retryWrites=true&w=majority"
 ESCAPE = ["\\", "$", ".", "*", "+", "?", "|", "(", ")", "[", "]", "{", "}"]
 
