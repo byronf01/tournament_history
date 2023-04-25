@@ -5,12 +5,12 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 const tournSchema = new mongoose.Schema({ });
-const Tourn = mongoose.model('tournament_history', tournSchema);
+const Tourn = mongoose.model('tournament_history', tournSchema, 'tournament_history');
+require('dotenv').config({path:__dirname+'../../.env'});
+const PASSWORD = process.env.mongo_password
 
 app.get("/api/data", (req, res) => {
 
-    const PASSWORD = process.env.mongo-password
-    console.log(PASSWORD)
     const URI = "mongodb+srv://byronfong:" + PASSWORD + "@tournament-history.qp41sza.mongodb.net/?retryWrites=true&w=majority"
     connect(URI).catch(err => console.log(err));
 
