@@ -22,8 +22,12 @@ app.get("/api/data", (req, res) => {
 })
 
 async function getItems() {
-    const docs = await Tourn.find({});
-    return docs;
+    const res = await Tourn.find({}).
+        then(tourn => {
+            console.log(tourn);
+            return tourn;
+        })
+    return res;
 }
 
 async function connect(URI) {
