@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const express = require('express');
 const cors = require('cors');
 
+// npm run dev to start
 const app = express();
 app.use(cors());
 const TournSchema = mongoose.Schema({ any: {} }, { collection: "tournament_history" });
@@ -19,8 +20,6 @@ app.get("/api/data", async (req, res) => {
         res.json(foundItems);
     });
 
-    
-    
 })
 
 async function getItems() {

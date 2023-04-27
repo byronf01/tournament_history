@@ -1,27 +1,32 @@
-import React, { useEffect } from 'react';
-import Tournament from '../Tournament'
+import React, { useEffect, useState } from 'react';
+import TournamentPreview from '../TournamentPreview'
 
 function TournamentsBlock( {tourns} ) {
-    console.log(tourns)
-    let empty = false;
-    const block = [];
-    // Test for default null value, 
-    if (tourns.includes()) {
-        empty = true;
-    } else {
-        // Displays Tournament components from tourns
-        for (let i = 0; i < tourns.length; i++) {
-            block.push(<Tournament key={Object.keys(tourns[i])[0]} data={tourns[i]} />)
+    const [current, setCurrent] = useState("");
+    const [empty, setEmpty] = useState(true);
+
+    useEffect ( () => {
+        if (tourns.includes()) {
+            setEmpty(true)
+        } else {
+            let block = []
+            for (let i = 0; i < tourns.length; i++) {
+                block.push(<TournamentPreview new_key={Object.keys(tourns[i])[0]} new_data={tourns[i]} />)
+            }
+            setCurrent(block)
+            setEmpty(false)
         }
-        console.log(block)
-    }
+    }, [tourns])
 
     return (
         <div>
             <p>----</p>
             {
                 empty == false && 
-                    <ul>{block}</ul>
+                    <div>
+                        <p>Tournaments Block Displayed! </p>
+                        <ul>{current}</ul>
+                    </div>
             }
             
         </div>
