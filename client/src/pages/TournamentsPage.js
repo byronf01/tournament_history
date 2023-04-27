@@ -36,8 +36,9 @@ function TournamentsPage() {
                 }
                 // get list of Tournaments alphabetically sorted
                 let key = Object.keys(dict).sort((k1, k2) => {
-                    if (k1 < k2) return -1;
-                    else if (k1 > k2) return 1;
+
+                    if (k1.toLowerCase() < k2.toLowerCase()) return -1;
+                    else if (k1.toLowerCase() > k2.toLowerCase()) return 1;
                     else return 0;
                 });
                 let tmp = Array(key.length)
