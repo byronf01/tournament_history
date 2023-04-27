@@ -51,11 +51,9 @@ function TournamentsBlock( {tourns} ) {
 
     return (
         <div>
-            <p>----</p>
             {
                 empty == false && 
                     <div>
-                        <p>Tournaments Block Displayed! </p>
                         <ul>{currentData}</ul>
                     </div>
             }

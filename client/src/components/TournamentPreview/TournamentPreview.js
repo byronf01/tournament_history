@@ -33,12 +33,16 @@ function TournamentPreview( {new_key, new_data} ) {
     
 
     return (
-        <div style={{border: "1px solid black", borderStyle: "solid", borderRadius: "3%"}}>
-            <h1>{name}</h1>
-            <p>{start}</p>
-            <p>{info}</p>
-        </div>
-    )
+        <a href={data[name]['forum']} style={{textDecoration: "none"}}>
+          <div style={{border: "1px solid black", borderStyle: "solid", margin: "10px 0"}}>
+            <div style={{padding: "3%"}}>
+              <h1 style={{userSelect: "none", color: "black"}}>{name}</h1>
+              <p style={{userSelect: "none", color: "black"}}>{start}</p>
+              <p style={{userSelect: "none", color: "black"}}>{info}</p>
+            </div>
+          </div>
+        </a>
+      );
 }
 
 export default TournamentPreview;
