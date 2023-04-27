@@ -4,12 +4,13 @@ import TournamentPreview from '../TournamentPreview'
 function TournamentsBlock( {tourns} ) {
     const [current, setCurrent] = useState("");
     const [empty, setEmpty] = useState(true);
+    let block = [];
 
     useEffect ( () => {
         if (tourns.includes()) {
             setEmpty(true)
         } else {
-            let block = []
+            block.length = 0
             for (let i = 0; i < tourns.length; i++) {
                 block.push(<TournamentPreview new_key={Object.keys(tourns[i])[0]} new_data={tourns[i]} />)
             }

@@ -46,7 +46,6 @@ function TournamentsPage() {
                     foo[key[i]] = dict[key[i]]
                     tmp[i] = foo;
                 }
-                
                 setData(tmp);
                 
             })
