@@ -34,31 +34,35 @@ function TournamentPreview( {new_key, new_data} ) {
     }
     
     return (
-        <a href={data[name]['forum']} style={{textDecoration: "none"}}>
-          <div class="background" style={{background: {img}}}>
-            <div class="inner" style={{border: "1px solid black", borderStyle: "solid", 
-                        margin: "30px 0", borderRadius: "30px",
-                        width: "97%", backgroundColor: "#BEC5AD",
-                        display: "flex", maxHeight: "200px",
-                        boxShadow: "5px 10px #1a1d21"}}>
-              <div style={{width: "40%", height: "100%", display: "block", 
-                          overflow: "auto", objectFit: "cover"}}>
-                
-                <img src={img} style={{maxWidth: "100%", 
-                                      maxHeight: "100%",
-                                      objectFit: "cover"
-                                      }}/>
-              </div>
-              <div style={{}}>
-                <div style={{}}>
-                  <h1 style={{userSelect: "none", color: "black"}}>{name}</h1>
-                  <p style={{userSelect: "none", color: "black"}}>{start}</p>
-                  <p style={{userSelect: "none", color: "black"}}>{info}</p>
+        
+        <div>
+          <div class="inner" style={{border: "1px solid black", borderStyle: "solid", 
+                      margin: "30px 0", borderRadius: "30px",
+                      width: "97%", backgroundColor: "#BEC5AD",
+                      display: "flex", maxHeight: "200px",
+                      boxShadow: "5px 10px #1a1d21", overflow: "hidden"}}>
+            <div style={{width: "50%", height: "100%", display: "flex", 
+                        overflow: "hidden", objectFit: "fill", justifyContent: "center",
+                        }}>
+              <img src={img} style={{maxWidth: "100%", 
+                                    maxHeight: "100%",
+                                    objectFit: "fill",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                 
+                                    }}/>
+            </div>
+            <a href={data[name]['forum']} style={{textDecoration: "none", width: "50%"}}>
+              <div style={{paddingLeft: "7%", width: "90%", height: "100%", display: "flex", justifyContent: "center", paddingTop: "10px"}}>
+                <div style={{width: "100%", height: "100%", wordWrap: "break-word", marginRight: "2%", marginBottom: "10px", top: "50%"}}>
+                  <h1 style={{userSelect: "none", color: "black", fontSize: "200%", margin: "0"}}>{name}</h1>
+                  <p style={{userSelect: "none", color: "black", fontSize: "100%", margin: "0"}}>{start}<br></br>{info}</p>
                 </div>
               </div>
-            </div>
+            </a>
           </div>
-        </a>
+        </div>
+       
       );
 }
 
