@@ -75,7 +75,8 @@ function TournamentsPage() {
                     pageSize={PageSize}
                     onPageChange={page => setCurrentPage(page)}
                     dataInfo={data}
-                    setData={setData}/>
+                    setData={setData} 
+                    style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>
                     
             
         </div>

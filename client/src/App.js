@@ -28,6 +28,7 @@ function App() {
         <Route exact path="/matches" element={<MatchesPage/>}/>
         <Route exact path="/stats" element={<StatsPage/>}/>
         <Route exact path="*" element={<PageNotFound />}/>
+        <Route exact path="/tournaments/*" element={<HomePage/>}/>
       </Routes>
       
     </Router>
