@@ -29,7 +29,7 @@ function App() {
         <Route exact path="/matches" element={<MatchesPage/>}/>
         <Route exact path="/stats" element={<StatsPage/>}/>
         <Route exact path="*" element={<PageNotFound />}/>
-        {<Route exact path="/tournaments/:id" component={<TournamentDetails/>}/>}
+        {<Route exact path="/tournaments/:id" element={<TournamentDetails/>}/>}
       </Routes>
       
     </Router>
