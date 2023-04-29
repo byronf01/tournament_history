@@ -11,16 +11,7 @@ function TournamentPreview( {new_key, new_data} ) {
         setData(new_data)
     }, [new_key, new_data])
 
-    // Things needed:
 
-    // Banner (get from forum post) // TO-DO
-
-    // Tournament name
-
-    // Start date 
-
-    // Forum post
-    // console.log(data)
     let start = data[name]['date_f'].split("T")[0]
     let img = data[name]['banner']
     let info = ""
@@ -52,7 +43,7 @@ function TournamentPreview( {new_key, new_data} ) {
                                  
                                     }}/>
             </div>
-            <a href={data[name]['forum']} style={{textDecoration: "none", width: "50%"}}>
+            <a href={`/tournaments/${data[name]['acronym']}`} style={{textDecoration: "none", width: "50%"}}>
               <div style={{paddingLeft: "7%", width: "90%", height: "100%", display: "flex", justifyContent: "center", paddingTop: "10px"}}>
                 <div style={{width: "100%", height: "100%", wordWrap: "break-word", marginRight: "2%", marginBottom: "10px", top: "50%"}}>
                   <h1 style={{userSelect: "none", color: "black", fontSize: "200%", margin: "0"}}>{name}</h1>

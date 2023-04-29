@@ -22,11 +22,37 @@ app.get("/api/data", async (req, res) => {
 
 })
 
+app.get("/api/data/:id", async (req, res) => {
+    const id = req.params.id;
+    const URI = `mongodb+srv://byronfong:${PASSWORD}@tournament-history.qp41sza.mongodb.net/tournament_history`
+    await connect(URI).catch(err => console.log(err));
+
+    getTourn(id).then( (foundItems) => {
+        let tourn;
+        for (const [, i] of Object.entries(foundItems)) {
+            doc = i.toJSON()
+            const keys = Object.keys(doc).filter(e => e !== '_id');
+            const k = keys[0];
+            if (doc[k]['acronym'] == id) {
+                tourn = i
+                break;
+            } 
+        }
+        res.json(tourn);
+        })  
+    
+})
+
+async function getTourn(id) {
+    const query = await tournament_history.find()
+    
+    return query;
+}
+
 async function getItems() {
     const query = await tournament_history.find()
-    query instanceof mongoose.Query;
-    const docs = await query
-    return docs    
+    
+    return query    
 }
 
 async function connect(URI) {

@@ -12,7 +12,6 @@ let PageSize = 10;
 function TournamentsPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(Array(1));
-    // const [currentTableData, setcurrentTableData] = useState(Array(10));
 
     const currentTableData = useMemo(() => {
         
@@ -25,6 +24,7 @@ function TournamentsPage() {
     
     
     useEffect ( () => {
+        
         fetch('http://localhost:5000/api/data').then( resp => resp.json())
             .then( (result) => {
             
@@ -50,7 +50,10 @@ function TournamentsPage() {
                 setData(tmp);
                 
             })
+           
+
         }, []);
+
 
     
     return (

@@ -25,7 +25,6 @@ import { Tag } from '../components/Tag.js'
   
     componentWillUnmount() {
       this.setState({show: false});
-      console.log(this.state)
     }
       
     render() {
