@@ -1,4 +1,7 @@
 # tournament_history
 Project unfinished
+
 Demo:
-https://cdn.discordapp.com/attachments/975823343368417383/1102467884480999494/2023-04-30_22-31-07.mp4
+
+https://user-images.githubusercontent.com/89189391/235412584-47162d97-9088-46a3-b4d2-5b0d3dc6ec10.mov
+
