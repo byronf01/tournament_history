@@ -38,32 +38,45 @@ function TournamentDetails(props) {
                             <p style={{fontSize: "2em"}}>Gimmick: {data['notes'] ? data['notes'] : "None"}</p>
                             <i style={{fontSize: "1.7em"}}>"{data['comments']}"</i>
                         </div>
-                        <u style={{fontSize: "2em"}}>Start Date</u>
+                        <h2 style={{fontSize: "3em"}}><u>Start Date</u></h2>
                         <p>{data['date']}</p>
-                        <div style={{display: "flex"}}>
+                        <div style={{display: "flex", paddingLeft: "20%", paddingRight: "20%", gap: "10px",}}>
                             { data['forum'] != false && 
-                                <div>
+                                <div style={{marginRight: "0",}}>
                                     <a href={data['forum']}>
-                                    <img src={} alt="osu logo"></img>
+                                    <img src={osu_logo} alt="osu logo" style={{maxWidth: "30%"}}></img>
                                     </a>
-                                    
                                     <p>Forum Post</p> 
                                 </div>
-                                
                             }
                             { data['tourn_sheet'] != false && 
-                                <p>Spreadsheet: {data['tourn_sheet']}</p>
+                                <div>
+                                    <a href={data['tourn_sheet']}>
+                                    <img src={sheets_logo} alt="sheets logo" style={{maxWidth: "30%"}}></img>
+                                    </a>
+                                    <p>Spreadsheet</p> 
+                                </div>
                             }
                             { data['bracket'] != false && 
-                                <p>Forum Post: {data['forum']}</p> 
+                                <div>
+                                    <a href={data['bracket']}>
+                                    <img src={challonge_logo} alt="challonge logo" style={{maxWidth: "100%"}}></img>
+                                    </a>
+                                    <p>Bracket</p> 
+                                </div>
                             }
                     
                         </div>
                         
                         { data['bracket'] != false && <iframe src={url} width="100%" height="500" frameborder="0" scrolling="auto" allowtransparency="true"></iframe>}
                         
+                        <h2 style={{fontSize: "3em"}}><u>Rank Range</u></h2>
+                        <p>{data['rank_range']}</p>
+
                         
                     </div>
+
+                    
             }
         </div>
 
