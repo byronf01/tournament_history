@@ -66,6 +66,7 @@ app.get("/api/name/:id", async (req, res) => {
 
         axios.get(`https://osu.ppy.sh/api/v2/users/${id}`, { headers })
         .then( (resp2) => {
+            console.log('Data requested from osu apiv2')
             res.json({"username": resp2['data']['username'], 
                         "discord": resp2['data']['discord']})
         })

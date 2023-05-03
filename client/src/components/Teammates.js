@@ -1,18 +1,40 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Member(props) {
     const id = props.id;
     const pfp = `https://a.ppy.sh/${id}?1677187336.png`
     const profile = `https://osu.ppy.sh/users/${id}`;
-    const [username, setUsername] = useState('')
-    const [discord, setDiscord] = useState('')
-
+    const [username, setUsername] = useState('Loading...')
+    const [discord, setDiscord] = useState('Loading...')
+    const [fetchCount, setFetchCount] = useState(0);
+    /*
     useEffect( () => {
         fetch(`http://localhost:5000/api/name/${id}`).then( (resp) => {
             setUsername(resp['username'])
             setDiscord(resp['discord'])
         })
     }, [])
+    */
+    useEffect( () => {
+        async function fetchData() {
+            const resp = await fetch(`http://localhost:5000/api/name/${id}`);
+            const data = await resp.json();
+            setUsername(data['username'])
+            setDiscord(data['discord'])
+            setFetchCount(fetchCount => fetchCount+1)
+        }
+        // fetchData();
+        const intervalId = setInterval( () => {
+            fetchData();
+        }, 4000);
+
+        if (fetchCount >= 1) {
+            clearInterval(intervalId);
+        }
+        return () => clearInterval(intervalId);
+    }, [fetchCount])
+
+    
 
     return (
         <div style={{display: "inline", marginRight: "10px"}}>
@@ -26,6 +48,7 @@ function Member(props) {
     )
     
 }
+
 
 function Teammates(props) {
     const members = props.members;

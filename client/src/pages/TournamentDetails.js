@@ -96,10 +96,7 @@ function TournamentDetails(props) {
                             <h2 style={{fontSize: "2em", marginRight: "10%"}}>Team Name: </h2>
                             <p style={{textAlign: "bottom"}}>{data['team_name']}</p>
                         </div>
-                        <div style={{}}>
-                            <h2 style={{fontSize: "2em", marginRight: "10%"}}>Team Size: </h2>
-                            <p style={{textAlign: "bottom"}}>{data['team_size']}</p>
-                        </div>
+                     
 
                         <div style={{}}>
                             <h2 style={{fontSize: "2em", marginRight: "10%"}}>Team Members: </h2>
