@@ -5,7 +5,7 @@ from Score import Score
 load_dotenv()
 
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
-CLIENT_SECRET = os.getenv('client-secret')
+CLIENT_SECRET = os.getenv('client_secret')
 DEFAULT_USER = 16626263
 
 class Match:

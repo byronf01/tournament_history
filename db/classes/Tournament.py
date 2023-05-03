@@ -9,7 +9,7 @@ MONTHS = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June":
           "September": 9, "October": 10, "November": 11, "December": 12}
 PLAYER_NAME = "hiyah"
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
-CLIENT_SECRET = os.getenv('client-secret')
+CLIENT_SECRET = os.getenv('client_secret')
 ESCAPE = ["\\", "$", ".", "*", "+", "?", "|", "(", ")", "[", "]", "{", "}"]
 
 def str_to_date(s: str):

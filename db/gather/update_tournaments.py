@@ -9,7 +9,7 @@ load_dotenv()
 PASSWORD = os.getenv('mongo_password')
 URI = f"mongodb+srv://byronfong:{PASSWORD}@tournament-history.qp41sza.mongodb.net/?retryWrites=true&w=majority"
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
-CLIENT_SECRET = os.getenv('client-secret')
+CLIENT_SECRET = os.getenv('client_secret')
 DEFAULT_BANNER = 'https://assets.ppy.sh/contests/74/header@2x.jpg?20190116'
 
 """

@@ -13,7 +13,7 @@ newest_fallback = 110000000
 ignore = ["o!mm Private", "ETX", "o!mm Ranked", "o!mm Team Private", "RMoT", "RMOT"]
 MATCH_BASE_URL = "osu.ppy.sh/community/matches/"
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
-CLIENT_SECRET = os.getenv('client-secret')
+CLIENT_SECRET = os.getenv('client_secret')
 
 def add_ignore(mp: int):
     """
