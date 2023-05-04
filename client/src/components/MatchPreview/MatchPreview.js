@@ -1,57 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import './index.css';
 
-function MatchPreview( {new_key, new_data} ) {
+function MatchPreview( {round_name, new_data} ) {
     // Data should be an Obj
-    const [name, setName] = useState(new_key);
-    const [data, setData] = useState(new_data);
+    const [round, setRound] = useState(round_name);
+    const [data, setData] = useState(new_data[0]);
 
-    useEffect ( () => {
-        setName(new_key)
-        setData(new_data)
-    }, [new_key, new_data])
-
-
-    let start = data[name]['date_f'].split("T")[0]
-    let img = data[name]['banner']
-    let info = ""
+    // Get the match title
     
-    if (data[name]['forum'] != "") {
-        info = data[name]['forum'];
-    } else if (data[name]['tourn_sheet']) {
-        info = data[name]['tourn_sheet'];
-    } else {
-        info = "No Preview";
-    }
+    const mp = Object.keys(data)[0]
+    const match_name = data[mp]['match_name']
+    
     
     return (
         
         <div>
-          <div class="inner" style={{border: "1px solid black", borderStyle: "solid", 
-                      margin: "30px 0", borderRadius: "30px",
-                      width: "97%", backgroundColor: "#BEC5AD",
-                      display: "flex", maxHeight: "200px",
-                      boxShadow: "5px 10px #1a1d21", overflow: "hidden"}}>
-            <div style={{width: "50%", height: "100%", display: "flex", 
-                        overflow: "hidden", objectFit: "fill", justifyContent: "center",
-                        }}>
-              <img src={img} style={{maxWidth: "100%", 
-                                    maxHeight: "100%",
-                                    objectFit: "fill",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                 
-                                    }}/>
-            </div>
-            <a href={`/tournaments/${data[name]['acronym']}`} style={{textDecoration: "none", width: "50%"}}>
-              <div style={{paddingLeft: "7%", width: "90%", height: "100%", display: "flex", justifyContent: "center", paddingTop: "10px"}}>
-                <div style={{width: "100%", height: "100%", wordWrap: "break-word", marginRight: "2%", marginBottom: "10px", top: "50%"}}>
-                  <h1 style={{userSelect: "none", color: "black", fontSize: "200%", margin: "0"}}>{name}</h1>
-                  <p style={{userSelect: "none", color: "black", fontSize: "100%", margin: "0"}}>{start}<br></br>{info}</p>
+            <a href={`/matches/${mp}`} style={{textDecoration: "none"}}>
+            <div style={{display: "flex", border: "1px solid black", width: "90%", height: "100px",
+                        justifyContent: "space-between", alignItems: "center"}}>
+                <div style={{display: "flex", marginLeft: "10%", paddingRight: "10%", borderRight: "1px dotted black", width: "20%", height: "100%"}}>
+                    <div style={{display: "flex", alignItems: "center", justifyContent: "center", color: "black"}}>{round}</div>
                 </div>
-              </div>
+                <div style={{display: "flex", marginRight: "10%", height: "100%", width: "50%"}}>
+                    <div style={{display: "flex", alignItems: "center", justifyContent: "center", color: "black"}}>{match_name}</div>
+                </div>
+            </div>
             </a>
-          </div>
         </div>
        
       );

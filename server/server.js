@@ -14,6 +14,7 @@ const CLIENT_SECRET = process.env.client_secret;
 console.log(tournament_history)
 
 app.get("/api/data", async (req, res) => {
+    // Return all db items
 
     const URI = `mongodb+srv://byronfong:${PASSWORD}@tournament-history.qp41sza.mongodb.net/tournament_history`
     await connect(URI).catch(err => console.log(err));
@@ -25,6 +26,8 @@ app.get("/api/data", async (req, res) => {
 })
 
 app.get("/api/data/:id", async (req, res) => {
+    // Return db item by acronym
+
     const id = req.params.id;
     const URI = `mongodb+srv://byronfong:${PASSWORD}@tournament-history.qp41sza.mongodb.net/tournament_history`
     await connect(URI).catch(err => console.log(err));
@@ -46,6 +49,8 @@ app.get("/api/data/:id", async (req, res) => {
 })
 
 app.get("/api/name/:id", async (req, res) => {
+    // Get name and disc tag from osu id
+
     const id = req.params.id;
 
     const cunt = {
@@ -73,14 +78,32 @@ app.get("/api/name/:id", async (req, res) => {
         .catch(error => {
             console.error(error);
         });
-
-
     })
-    
-    
+})
 
-    
 
+app.get("/api/match/:id", async (req, res) => {
+    console.log(req.query)
+    // THINK ABT OTHER QUERIES IN BODY HOW TO MAKE THIS EASIER?
+    // return match object given by key, and its stage
+    const id = req.params.id;
+    const URI = `mongodb+srv://byronfong:${PASSWORD}@tournament-history.qp41sza.mongodb.net/tournament_history`
+    await connect(URI).catch(err => console.log(err));
+
+    res.json({})
+
+    /*
+    getTourn(id).then( (foundItems) => {
+        // Its Algorithm time.
+
+
+
+        // put all matches into dict with 
+        // mp: stage
+        res.json({});
+        })  
+    */
+    
 })
 
 async function getTourn(id) {

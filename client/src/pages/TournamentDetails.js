@@ -8,13 +8,14 @@ import sheets_logo from '../assets/sheets_logo.png';
 import challonge_logo from '../assets/challonge_logo.png';
 import { RangeSlider } from '../components/RangeSlider'
 import { Teammates } from '../components/Teammates';
-
+import MatchPreview from '../components/MatchPreview';
 
 
 function TournamentDetails(props) {
     const { id } = useParams();
     const [name, setName] = useState("")
     const [data, setData] = useState(false)
+    const [matches, setMatches] = useState(false)
     
 
     useEffect ( () => {
@@ -24,7 +25,15 @@ function TournamentDetails(props) {
                 const k = Object.keys(result).filter(e => e !== '_id')[0]
                 setName(k)
                 setData(result[k])
-                
+                const all_stages = []
+                // Iterate over all stages which are in result[k]['stages']
+                for (const stage in result[k]['stages']) {
+                    let stage_name = `${stage}`
+                    for (const match in result[k]['stages'][`${stage}`]) {
+                        all_stages.push(<MatchPreview round_name={match} new_data={result[k]['stages'][`${stage}`][match]}/>);
+                    }
+                }
+                setMatches(all_stages);
             })
            
     }, []);
@@ -105,7 +114,8 @@ function TournamentDetails(props) {
                         <Teammates members={data['teammates']} />
                         
                         <hr style={{width: "100%", height: "0.7em", backgroundColor: "#FFFFFF", borderRadius: "30px"}}></hr>
-
+                        
+                        <ul>{matches}</ul>
                     </div>
 
                     

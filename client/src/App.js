@@ -6,11 +6,13 @@ import { TournamentsPage } from './pages/TournamentsPage'
 import { MatchesPage } from './pages/MatchesPage'
 import { StatsPage } from './pages/StatsPage'
 import { TournamentDetails } from './pages/TournamentDetails'
-
+import { MatchDetails } from './pages/MatchDetails'
+import Navbar from './components/Navbar'
 
 function PageNotFound() {
   return (
     <div>
+      <Navbar />
       <p>404 Page not found</p>
     </div>
   )
@@ -29,7 +31,8 @@ function App() {
         <Route exact path="/matches" element={<MatchesPage/>}/>
         <Route exact path="/stats" element={<StatsPage/>}/>
         <Route exact path="*" element={<PageNotFound />}/>
-        {<Route exact path="/tournaments/:id" element={<TournamentDetails/>}/>}
+        <Route exact path="/tournaments/:id" element={<TournamentDetails/>}/>
+        
       </Routes>
       
     </Router>
