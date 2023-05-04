@@ -81,7 +81,19 @@ app.get("/api/name/:id", async (req, res) => {
     })
 })
 
+app.get("/api/matches", async (req, res) => {
+    // Return all matches in the db
 
+    const URI = `mongodb+srv://byronfong:${PASSWORD}@tournament-history.qp41sza.mongodb.net/tournament_history`
+    await connect(URI).catch(err => console.log(err));
+
+    getMatches().then( (foundItems) => {
+        res.json(foundItems);
+    });
+
+})
+
+/* ???
 app.get("/api/match/:id", async (req, res) => {
     console.log(req.query)
     // THINK ABT OTHER QUERIES IN BODY HOW TO MAKE THIS EASIER?
@@ -92,7 +104,7 @@ app.get("/api/match/:id", async (req, res) => {
 
     res.json({})
 
-    /*
+    
     getTourn(id).then( (foundItems) => {
         // Its Algorithm time.
 
@@ -102,10 +114,11 @@ app.get("/api/match/:id", async (req, res) => {
         // mp: stage
         res.json({});
         })  
-    */
+    
     
 })
 
+*/
 async function getTourn(id) {
     const query = await tournament_history.find()
     
@@ -118,10 +131,40 @@ async function getItems() {
     return query    
 }
 
-async function getName(id) {
+async function getMatches() {
+    // Return a collection of Objects, with keys 
+    // { acronym: "", mp: "", stage: "", Match: {Match obj} }
+    // Note there can be multiple objects with the same acronym
+    const all_data = []
+    const query = await tournament_history.find()
+    const doc_ct = Object.keys(query);
     
-
+    for (let i = 0; i < doc_ct.length; i++) {
+        const doc = query[doc_ct[i]].toJSON()
+        const t_key = Object.keys(doc).filter(e => e !== '_id')[0];
+        const acronym = doc[t_key]["acronym"]
+        const all_stages = doc[t_key]["stages"];
+        for (let j = 0; j < all_stages.length; j++) {
+            const stage_name = Object.keys(all_stages[j])[0]
+            const stage_data = all_stages[j][stage_name];
+            // Type of stage_data: array of dicts
+            for (let k = 0; k < stage_data.length; k++) {
+                const all_matches = Object.keys(stage_data[k])
+                for (let match_key = 0; match_key < all_matches.length; match_key++) {
+                    const match_details = all_matches[match_key];
+                    const match_ret = { "acronym": acronym,
+                                        "mp": all_matches[match_key],
+                                        "stage": stage_name,
+                                        "match": stage_data[k][match_details]};
+                    all_data.push(match_ret);
+                }
+            }
+        }
+    }
+    
+    return all_data;  
 }
+
 
 async function connect(URI) {
     const connection = await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
