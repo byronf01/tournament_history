@@ -15,6 +15,7 @@ function MatchDetails() {
     
     return (
         <div>
+            <Navbar />
             <p>kys</p>
         </div>
     )

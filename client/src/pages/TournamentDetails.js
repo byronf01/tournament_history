@@ -30,7 +30,7 @@ function TournamentDetails(props) {
                 for (const stage in result[k]['stages']) {
                     let stage_name = `${stage}`
                     for (const match in result[k]['stages'][`${stage}`]) {
-                        all_stages.push(<MatchPreview round_name={match} new_data={result[k]['stages'][`${stage}`][match]}/>);
+                        all_stages.push(<MatchPreview round_name={match} new_data={result[k]['stages'][`${stage}`][match]} tourn_name={k} extra={result[k]}/>);
                     }
                 }
                 setMatches(all_stages);

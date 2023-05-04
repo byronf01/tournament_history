@@ -32,7 +32,7 @@ function App() {
         <Route exact path="/stats" element={<StatsPage/>}/>
         <Route exact path="*" element={<PageNotFound />}/>
         <Route exact path="/tournaments/:id" element={<TournamentDetails/>}/>
-        
+        <Route exact path="/matches/:id1/:id2" element={<MatchDetails/>}/>
       </Routes>
       
     </Router>
