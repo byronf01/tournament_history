@@ -132,8 +132,8 @@ async function getItems() {
 }
 
 async function getMatches() {
-    // Return a collection of Objects, with keys 
-    // { acronym: "", mp: "", stage: "", Match: {Match obj} }
+    // Return a collection of Objects for previewing matches, with keys 
+    // { acronym: "", mp: "", stage: "", match_name: "" }
     // Note there can be multiple objects with the same acronym
     const all_data = []
     const query = await tournament_history.find()
@@ -155,7 +155,7 @@ async function getMatches() {
                     const match_ret = { "acronym": acronym,
                                         "mp": all_matches[match_key],
                                         "stage": stage_name,
-                                        "match": stage_data[k][match_details]};
+                                        "match_name": stage_data[k][match_details]["match_name"]};
                     all_data.push(match_ret);
                 }
             }

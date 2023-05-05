@@ -3,8 +3,9 @@ import './HomePage.css';
 import React, { useState, useMemo, useEffect} from 'react';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
+import MatchesBlock from '../components/MatchesBlock'
 
-let PageSize = 10;
+let PageSize = 20;
 
 function MatchesPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,31 +22,26 @@ function MatchesPage() {
 
   useEffect ( () => {
         
-    fetch('http://localhost:5000/api/data').then( resp => resp.json())
-        .then( (result) => {
+    fetch('http://localhost:5000/api/matches').then( resp => resp.json())
+        .then( (res) => {
 
-          /*
-            let dict = {};
-            for (let i = 0; i < result.length; i++) {
-                const name = Object.keys(result[i])[1]
-                const vals = result[i][name]
-                dict[name] = vals
-            }
-            // get list of Tournaments alphabetically sorted
-            let key = Object.keys(dict).sort((k1, k2) => {
-
-                if (k1.toLowerCase() < k2.toLowerCase()) return -1;
-                else if (k1.toLowerCase() > k2.toLowerCase()) return 1;
+            // get list of Matches alphabetically sorted by acronym value
+            let sorted = res.sort((m1, m2) => {
+                if (m1["acronym"].toLowerCase() <= m2["acronym"].toLowerCase()) return -1;
                 else return 0;
             });
+            console.log(sorted)
+
+            /*
             let tmp = Array(key.length)
             for (let i = 0; i < key.length; i++) {
                 const foo = {}
                 foo[key[i]] = dict[key[i]]
                 tmp[i] = foo;
             }
-            setData(tmp);
-          */
+            */
+            setData(sorted);
+          
             
         })
        
@@ -55,7 +51,8 @@ function MatchesPage() {
   return (
     <div>
       <Navbar />
-      <p>Coming Soon</p>
+      
+      <MatchesBlock matches={currentTableData} />
 
       <Pagination 
         className="pagination-bar"
