@@ -93,32 +93,18 @@ app.get("/api/matches", async (req, res) => {
 
 })
 
-/* ???
-app.get("/api/match/:id", async (req, res) => {
-    console.log(req.query)
-    // THINK ABT OTHER QUERIES IN BODY HOW TO MAKE THIS EASIER?
-    // return match object given by key, and its stage
-    const id = req.params.id;
+app.get("/api/matches/:acr/:id", async (req, res) => {
+    // Return a specific match given tournament acronym and mp link id
+
     const URI = `mongodb+srv://byronfong:${PASSWORD}@tournament-history.qp41sza.mongodb.net/tournament_history`
     await connect(URI).catch(err => console.log(err));
 
-    res.json({})
+    getMatch(req.params.acr, req.params.id).then( (foundItems) => {
+        res.json(foundItems);
+    });
 
-    
-    getTourn(id).then( (foundItems) => {
-        // Its Algorithm time.
-
-
-
-        // put all matches into dict with 
-        // mp: stage
-        res.json({});
-        })  
-    
-    
 })
 
-*/
 async function getTourn(id) {
     const query = await tournament_history.find()
     
@@ -165,6 +151,40 @@ async function getMatches() {
     return all_data;  
 }
 
+async function getMatch(acr, id) {
+    const query = await tournament_history.find()
+
+    // Do a sequential search of all documents to find one with matching acronym :sob:
+    // Remember edge case with tournaments with the same acronym
+    const doc_ct = Object.keys(query);
+    
+    for (let i = 0; i < doc_ct.length; i++) {
+        const doc = query[doc_ct[i]].toJSON()
+        const t_key = Object.keys(doc).filter(e => e !== '_id')[0];
+        
+        if ( acr == doc[t_key]["acronym"]) {
+            // A tournament with the correct acronym found
+            
+            // Sequential search of all stages (binary search little advantage here)
+            const stages = doc[t_key]['stages'];
+            for (let i = 0; i < stages.length; i++) {
+                for (const [_, matches] of Object.entries(stages[i])) {
+                    for (let j in matches) {
+                        if (id == Object.keys(matches[j])[0]) {
+                            return matches[j][id];
+                        }
+                    }
+                }
+       
+            }
+           
+        }
+    }
+
+    // No match found
+    return {"Error": "Match Not Found"}
+
+}
 
 async function connect(URI) {
     const connection = await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });

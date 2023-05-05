@@ -11,15 +11,56 @@ import { Teammates } from '../components/Teammates';
 import MatchPreview from '../components/MatchPreview';
 
 
-function MatchDetails() {
-    
-    return (
-        <div>
-            <Navbar />
-            <p>kys</p>
-        </div>
-    )
+function MatchDetails(props) {
+    const { acr, mp } = useParams();
+    console.log(mp)
+    const [data, setData] = useState(false);
 
+    useEffect( () => {
+        fetch(`http://localhost:5000/api/matches/${acr}/${mp}`).then( resp => resp.json())
+            .then( (result) => {
+                
+                setData(result);
+            })
+    }, [])
+
+    
+    if (data == false) {
+        return (
+            <div>
+                <Navbar />
+                Loading...
+            
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Navbar />
+                {   
+                    data != false && 
+                        <div>
+                            <div>{data["match_name"]}</div>
+                            <hr></hr>
+                            <div style={{display: "flex", height: "100vh"}}>
+                                <div style={{flex: "1", overflowY: "hidden"}}>
+                                    <h3>Match Costs</h3>
+                                    
+                                </div>
+                                <div style={{flex: "1", overflowY: "auto"}}>
+                                    <h3>Match Procedure</h3>
+
+                                </div>
+                            </div>
+                        </div>
+                    
+                }
+                
+            </div>
+        )
+    
+    }
+    
 }
 
 export { MatchDetails };
