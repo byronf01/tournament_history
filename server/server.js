@@ -5,6 +5,8 @@ const axios = require('axios');
 
 // npm run dev to start
 const app = express();
+const bodyParser = require('body-parser')
+app.use(bodyParser.json());
 app.use(cors());
 const TournSchema = mongoose.Schema({ any: {} }, { collection: "tournament_history" });
 const tournament_history = mongoose.model("tournament_history", TournSchema, "tournament_history");
@@ -53,14 +55,14 @@ app.get("/api/name/:id", async (req, res) => {
 
     const id = req.params.id;
 
-    const cunt = {
+    const inf = {
         'client_id': 21309,
         'client_secret': CLIENT_SECRET,
         'grant_type': 'client_credentials',
         'scope': 'public',
     }
 
-    axios.post('https://osu.ppy.sh/oauth/token', data=cunt).then( (resp) => {
+    axios.post('https://osu.ppy.sh/oauth/token', data=inf).then( (resp) => {
         const token = resp['data']['access_token']
 
         const headers = {
@@ -74,6 +76,51 @@ app.get("/api/name/:id", async (req, res) => {
             console.log('Data requested from osu apiv2')
             res.json({"username": resp2['data']['username'], 
                         "discord": resp2['data']['discord']})
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    })
+})
+
+app.post("/api/name", async (req, res) => {
+    // Get osu usernames of a series of ids {id: username}
+    const ids = req.body;
+
+    const inf = {
+        'client_id': 21309,
+        'client_secret': CLIENT_SECRET,
+        'grant_type': 'client_credentials',
+        'scope': 'public',
+    }
+
+    axios.post('https://osu.ppy.sh/oauth/token', data=inf).then( (resp) => {
+        const token = resp['data']['access_token']
+
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json",
+        };
+
+        axios.get(`https://osu.ppy.sh/api/v2/users/`, { 
+            headers, 
+            params: {
+                ids
+            },
+        })
+        .then( (resp2) => {
+            console.log('Data requested from osu apiv2')
+            // console.log(resp2)
+            const users = resp2["data"]["users"];
+            let usermap = {};
+            for (let i in users) {
+                const id = users[i]["id"]
+                const username = users[i]["username"]
+                usermap[[id]] = username;
+            }
+
+            res.json(usermap)
         })
         .catch(error => {
             console.error(error);

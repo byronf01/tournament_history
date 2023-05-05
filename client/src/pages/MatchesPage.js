@@ -30,16 +30,8 @@ function MatchesPage() {
                 if (m1["acronym"].toLowerCase() <= m2["acronym"].toLowerCase()) return -1;
                 else return 0;
             });
-            console.log(sorted)
 
-            /*
-            let tmp = Array(key.length)
-            for (let i = 0; i < key.length; i++) {
-                const foo = {}
-                foo[key[i]] = dict[key[i]]
-                tmp[i] = foo;
-            }
-            */
+          
             setData(sorted);
           
             
