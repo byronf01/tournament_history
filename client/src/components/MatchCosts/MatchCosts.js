@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 
-function MatchCosts( {new_data} ) {
+function MatchCosts( {new_data, new_nameMap} ) {
     // new_data type: Array -> [Obj, Obj]
     const [team_win, setTeam_win] = useState(new_data[0]);
     const [team_lose, setTeam_lose] = useState(new_data[1]);
     const [win_names, setWin_names] = useState({});
     const [lose_names, setLose_names] = useState({});
+    const [nameMap, setNameMap] = useState(new_nameMap);
 
-    useEffect( () => {
-
-    }, [])
 
     // Edge case for qualifiers: team_lose may be empty
     if (Object.keys(team_lose).length === 0) {
@@ -19,7 +17,7 @@ function MatchCosts( {new_data} ) {
         let team = Object.keys(team_win);
         for (let id in team_win[team]) {
 
-            ordered.push({ [id] : team_win[team][id]});
+            ordered.push({ [nameMap[id]] : team_win[team][id]});
             
         }
         ordered = ordered.sort((obj1, obj2) => {
@@ -34,7 +32,7 @@ function MatchCosts( {new_data} ) {
                     <ol>
                         {ordered.map((ordered, index) => 
                             <li key={Object.keys(ordered)[0]}>
-                                {Object.keys(ordered)[0]} - {ordered[Object.keys(ordered)[0]].toString().substring(0, 5)}
+                                {Object.keys(ordered)[0]} - {ordered[Object.keys(ordered)[0]].toString().substring(0, 6)}
                                 {index === 0 ? ' 🥇' : index === 1 ? ' 🥈' : index === 2 ? ' 🥉' : ''}
                             </li>
                         )}

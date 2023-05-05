@@ -42,7 +42,7 @@ function MatchDetails(props) {
                     body: JSON.stringify(ids)
                     
                 }).then( resp => resp.json()).then( (result) => {
-                    console.log(result)
+                    setNameMap(result)
                 })
                 
             })
@@ -68,7 +68,7 @@ function MatchDetails(props) {
                             <hr></hr>
                             <div style={{display: "flex", height: "100vh"}}>
                                 <div style={{flex: "1", overflowY: "hidden"}}>
-                                    <MatchCosts new_data={data["matchcosts"]} />
+                                    <MatchCosts new_data={data["matchcosts"]} new_nameMap={nameMap} />
 
                                 </div>
                                 <div style={{flex: "1", overflowY: "auto"}}>
