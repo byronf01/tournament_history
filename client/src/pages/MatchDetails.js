@@ -10,6 +10,7 @@ import { RangeSlider } from '../components/RangeSlider'
 import { Teammates } from '../components/Teammates';
 import MatchPreview from '../components/MatchPreview';
 import MatchCosts from '../components/MatchCosts';
+import MapDetails from '../components/MapDetails';
 
 
 function MatchDetails(props) {
@@ -21,6 +22,7 @@ function MatchDetails(props) {
         fetch(`http://localhost:5000/api/matches/${acr}/${mp}`).then( resp => resp.json())
             .then( (result) => {
                 setData(result);
+
                 // Get a list of all users who played in the match by id
                 let ids = [];
                 for (let i in result["matchcosts"]) {
@@ -33,7 +35,6 @@ function MatchDetails(props) {
                     }  
                 }
                 
-                // console.log(JSON.stringify(ids))
                 fetch(`http://localhost:5000/api/name`, {
                     method: "POST",
                     headers: {
@@ -68,11 +69,15 @@ function MatchDetails(props) {
                             <hr></hr>
                             <div style={{display: "flex", height: "100vh"}}>
                                 <div style={{flex: "1", overflowY: "hidden"}}>
-                                    <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} />
-
+                                    <h2>Match Costs</h2>
+                                    <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} result={data["result"]} />
                                 </div>
                                 <div style={{flex: "1", overflowY: "auto"}}>
+                                    <h2>Match Procedure</h2>
                                     
+                                    {data["events"].map((event) => 
+                                        <MapDetails data={event} />
+                                    )}
 
                                 </div>
                             </div>

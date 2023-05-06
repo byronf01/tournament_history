@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 
-function MatchCosts( {new_data, nameMap} ) {
+function MatchCosts( {new_data, nameMap, result} ) {
     // new_data type: Array -> [Obj, Obj]
     const [team_win, setTeam_win] = useState(new_data[0]);
     const [team_lose, setTeam_lose] = useState(new_data[1]);
-    const [win_names, setWin_names] = useState({});
-    const [lose_names, setLose_names] = useState({});
-    
 
-
+    const s1 = result[0];
+    const s2 = result[1];
     // Edge case for qualifiers: team_lose may be empty
     if (Object.keys(team_lose).length === 0) {
         // Sort matchcosts reverse order 
@@ -57,7 +55,6 @@ function MatchCosts( {new_data, nameMap} ) {
         let winner_img;
         let top_mc = -1;
        
-        
         // Keep track of ids of top 3 performing players (edge case < 3 players)
         let mc1 = {"foo": -1};
         let mc2 = {"foo": -2};
@@ -115,9 +112,15 @@ function MatchCosts( {new_data, nameMap} ) {
         winner_img = `https://a.ppy.sh/${winner_img}?1677187336.png`
         return (
             <div>
-                <h2>Match Costs</h2>
+                
                 <div style={{border: "1px solid black"}}>
                     <img src={winner_img} ></img>
+                    <h6>Final Score:    
+                        {team1 == "blue_team" ? '   🔵 ' : team1 == "red_team" ? '   🔴 ' : ''}
+                        {s1} - {s2}
+                        {team2 == "blue_team" ? ' 🔵' : team2 == "red_team" ? ' 🔴' : ''}
+                    </h6>
+                    <h5>{team1 == "blue_team" ? 'Blue Team 🔵' : team1 == "red_team" ? 'Red Team 🔴' : ''}</h5>
                     <ol>
                         {win_ordered.map((win_ordered, index) => 
                             <li key={Object.keys(win_ordered)[0]}>
@@ -130,7 +133,8 @@ function MatchCosts( {new_data, nameMap} ) {
                             </li>
                         )}
                     </ol>
-
+                    
+                    <h5>{team2 == "blue_team" ? 'Blue Team 🔵' : team2 == "red_team" ? 'Red Team 🔴' : ''}</h5>
                     <ol>
                         {lose_ordered.map((lose_ordered, index) => 
                             <li key={Object.keys(lose_ordered)[0]}>
