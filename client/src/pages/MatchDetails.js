@@ -68,7 +68,7 @@ function MatchDetails(props) {
                             <hr></hr>
                             <div style={{display: "flex", height: "100vh"}}>
                                 <div style={{flex: "1", overflowY: "hidden"}}>
-                                    <MatchCosts new_data={data["matchcosts"]} new_nameMap={nameMap} />
+                                    <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} />
 
                                 </div>
                                 <div style={{flex: "1", overflowY: "auto"}}>
