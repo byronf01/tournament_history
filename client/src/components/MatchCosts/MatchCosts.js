@@ -31,7 +31,7 @@ function MatchCosts( {new_data, nameMap, result} ) {
         winner_img = `https://a.ppy.sh/${winner_img}?1677187336.png`
         return (
             <div>
-                <h2>Match Costs</h2>
+                
                 <div style={{border: "1px solid black"}}>
                     <img src={winner_img} ></img>
                     <ol>
@@ -116,9 +116,9 @@ function MatchCosts( {new_data, nameMap, result} ) {
                 <div style={{border: "1px solid black"}}>
                     <img src={winner_img} ></img>
                     <h6>Final Score:    
-                        {team1 == "blue_team" ? '   🔵 ' : team1 == "red_team" ? '   🔴 ' : ''}
+                        {'🔵 '} 
                         {s1} - {s2}
-                        {team2 == "blue_team" ? ' 🔵' : team2 == "red_team" ? ' 🔴' : ''}
+                        {' 🔴'}
                     </h6>
                     <h5>{team1 == "blue_team" ? 'Blue Team 🔵' : team1 == "red_team" ? 'Red Team 🔴' : ''}</h5>
                     <ol>

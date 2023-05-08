@@ -49,7 +49,6 @@ function MatchDetails(props) {
             })
     }, [])
 
-    
     if (data == false) {
         return (
             <div>
@@ -75,9 +74,11 @@ function MatchDetails(props) {
                                 <div style={{flex: "1", overflowY: "auto"}}>
                                     <h2>Match Procedure</h2>
                                     
-                                    {data["events"].map((event) => 
-                                        <MapDetails data={event} />
-                                    )}
+                                    <div style={{paddingBottom: "20px"}}>
+                                        {data["events"].map((event) => 
+                                            <MapDetails data={event} nameMap={nameMap} />
+                                        )}
+                                    </div>
 
                                 </div>
                             </div>
