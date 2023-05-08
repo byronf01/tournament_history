@@ -49,6 +49,8 @@ function MatchDetails(props) {
             })
     }, [])
 
+    console.log(data)
+
     if (data == false) {
         return (
             <div>
@@ -64,7 +66,7 @@ function MatchDetails(props) {
                 {   
                     data != false && 
                         <div>
-                            <div>{data["match_name"]}</div>
+                            <a href={`https://osu.ppy.sh/mp/${mp}`}><div>{data["match_name"]}</div></a>
                             <hr></hr>
                             <div style={{display: "flex", height: "100vh"}}>
                                 <div style={{flex: "1", overflowY: "hidden"}}>
