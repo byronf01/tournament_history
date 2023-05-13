@@ -4,6 +4,10 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from pathlib import Path
 
+"""
+SHEET_DATA METHOD DEPRECATED SINCE 5/13/2023
+(i dont have my cloud subscription anymore)
+"""
 
 
 DEFAULT_SPREADSHEET = "1rENiQjT6gFYL4a_t35ZtkDDLR5uaHMqn9b8oe9DC6SU"

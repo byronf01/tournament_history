@@ -12,16 +12,18 @@ API_BASE_URL = "https://osu.ppy.sh/api/v2/"
 CLIENT_SECRET = os.getenv('client_secret')
 DEFAULT_BANNER = 'https://assets.ppy.sh/contests/74/header@2x.jpg?20190116'
 
-"""
-code for adding dates 
-if "date_f" not in r[first_k].keys():
-                    prevDate = r[first_k]["date"]
-                    y, m, d = prevDate.split("-")
-                    date_f = datetime(int(y), int(m), int(d))
-                    new_field = {'$set': {f'{first_k}.date_f': date_f}}
-                    collection.update_one(query, new_field)
-                    print(f'{first_k} updated')
-"""
+def add_dates(): 
+    """
+    Code for adding date objects to documents
+
+    if "date_f" not in r[first_k].keys():
+        prevDate = r[first_k]["date"]
+        y, m, d = prevDate.split("-")
+        date_f = datetime(int(y), int(m), int(d))
+        new_field = {'$set': {f'{first_k}.date_f': date_f}}
+        collection.update_one(query, new_field)
+        print(f'{first_k} updated')
+    """
 def getBanner(forum: str) -> str:
     
     try:
@@ -59,19 +61,10 @@ def getBanner(forum: str) -> str:
     except:
         print("API failure")
         raise ValueError()
-    
 
-
-if __name__ == "__main__":
-    
-    client = MongoClient(URI, server_api=ServerApi('1'))
-
-    client.admin.command('ping')
-    print("Successfully connected to MongoDB")
-
-    # Select a database and collection
-    db = client['tournament_history']
-    collection = db['tournament_history']
+def add_banner():
+    """
+    Code for adding banners to documents
 
     for doc in collection.find():
         try:
@@ -97,8 +90,62 @@ if __name__ == "__main__":
             if cont != "":
                 pass
             else: exit()
-            
+    """
+
+def get_all_data():
+    client = MongoClient(URI, server_api=ServerApi('1'))
+
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB")
+
+    # Select a database and collection
+    db = client['tournament_history']
+    collection = db['tournament_history']
+
+    data_master = {}
+    for doc in collection.find():
+        for k in doc.keys():
+            if k != "_id":
+                data_master[k] = doc[k]
+
     client.close()
+
+    return data_master
+
+def convert(data: dict):
+    """
+    Restructures data in database as of 5/13/2023
+    """
+    client = MongoClient(URI, server_api=ServerApi('1'))
+
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB")
+
+    # Insert to new collection
+    db = client['tournament_history']
+    collection = db['tournament_historyV1.1']
+
+    for k, v in data.items():
+        # New schema
+        doc = v
+        doc["title"] = k
+
+        collection.insert_one(doc)
+        print(f'Tournament {doc["title"]} added to DB')
+
+    client.close()
+
+if __name__ == "__main__":
+    
+    data = get_all_data()
+    convert(data)
+   
+    """
+    
+    """
+
+    # 5/7 RESTRUCTURING DB
+            
 
 
     

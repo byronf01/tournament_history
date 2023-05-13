@@ -1,6 +1,6 @@
 import sys, os, re, json
 sys.path.append('../classes')
-from get_tournament_data import sheet_data
+from get_tournament_data import sheet_data # DEPRECATED
 from Tournament import Tournament
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
