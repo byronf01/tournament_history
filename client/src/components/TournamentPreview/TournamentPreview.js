@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
 
-function TournamentPreview( {new_key, new_data} ) {
+function TournamentPreview( {new_data} ) {
     // Data should be an Obj
-    const [name, setName] = useState(new_key);
     const [data, setData] = useState(new_data);
 
     useEffect ( () => {
-        setName(new_key)
         setData(new_data)
-    }, [new_key, new_data])
+    }, [new_data])
 
 
-    let start = data[name]['date_f'].split("T")[0]
-    let img = data[name]['banner']
+    let start = data['date_f'].split("T")[0]
+    let img = data['banner']
     let info = ""
     
-    if (data[name]['forum'] != "") {
-        info = data[name]['forum'];
-    } else if (data[name]['tourn_sheet']) {
-        info = data[name]['tourn_sheet'];
+    if (data['forum'] != "") {
+        info = data['forum'];
+    } else if (data['tourn_sheet']) {
+        info = data['tourn_sheet'];
     } else {
         info = "No Preview";
     }
@@ -43,10 +41,10 @@ function TournamentPreview( {new_key, new_data} ) {
                                  
                                     }}/>
             </div>
-            <a href={`/tournaments/${data[name]['acronym']}`} style={{textDecoration: "none", width: "50%"}}>
+            <a href={`/tournaments/${data['acronym']}`} style={{textDecoration: "none", width: "50%"}}>
               <div style={{paddingLeft: "7%", width: "90%", height: "100%", display: "flex", justifyContent: "center", paddingTop: "10px"}}>
                 <div style={{width: "100%", height: "100%", wordWrap: "break-word", marginRight: "2%", marginBottom: "10px", top: "50%"}}>
-                  <h1 style={{userSelect: "none", color: "black", fontSize: "200%", margin: "0"}}>{name}</h1>
+                  <h1 style={{userSelect: "none", color: "black", fontSize: "200%", margin: "0"}}>{data['title']}</h1>
                   <p style={{userSelect: "none", color: "black", fontSize: "100%", margin: "0"}}>{start}<br></br>{info}</p>
                 </div>
               </div>

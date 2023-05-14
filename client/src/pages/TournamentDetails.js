@@ -13,7 +13,6 @@ import MatchPreview from '../components/MatchPreview';
 
 function TournamentDetails(props) {
     const { id } = useParams();
-    const [name, setName] = useState("")
     const [data, setData] = useState(false)
     const [matches, setMatches] = useState(false)
     
@@ -22,18 +21,17 @@ function TournamentDetails(props) {
         
         fetch(`http://localhost:5000/api/data/${id}`).then( resp => resp.json())
             .then( (result) => {
-                const k = Object.keys(result).filter(e => e !== '_id')[0]
-                setName(k)
-                setData(result[k])
+               
+                setData(result[0])
                 const all_stages = []
-                // Iterate over all stages which are in result[k]['stages']
-                for (const j in result[k]['stages']) {
-                    const stage_name = Object.keys(result[k]['stages'][j])[0]
+                // Iterate over all stages 
+                for (const j in result[0]['stages']) {
+                    const stage_name = Object.keys(result[0]['stages'][j])[0]
                     // iterate over an array of size 0-2 per stage     
-                    const matches_arr = result[k]['stages'][j][stage_name]   
+                    const matches_arr = result[0]['stages'][j][stage_name]   
                     for (const i in matches_arr) {
                         const mp = Object.keys(matches_arr[i])
-                        all_stages.push(<MatchPreview acronym={result[k]['acronym']} mp={mp} stage={stage_name} match_name={matches_arr[i][mp]["match_name"]}/>);
+                        all_stages.push(<MatchPreview acronym={result[0]['acronym']} mp={mp} stage={stage_name} match_name={matches_arr[i][mp]["match_name"]}/>);
                     }
                 }
                 setMatches(all_stages);
@@ -50,7 +48,7 @@ function TournamentDetails(props) {
                 data != false && 
                     <div style={{paddingLeft: "5%", paddingRight: "5%"}}>
                         <div style={{textAlign: "center"}}>
-                            <h1 style={{fontSize: "4.5em"}}>{name}</h1>
+                            <h1 style={{fontSize: "4.5em"}}>{data["title"]}</h1>
                             <p style={{fontSize: "2em"}}>Gimmick: {data['notes'] ? data['notes'] : "No Gimmick"}</p>
                             <i style={{fontSize: "1.7em"}}>"{data['comments']}"</i>
                         </div>

@@ -4,7 +4,6 @@ import TournamentPreview from '../TournamentPreview'
 function TournamentsBlock( {tourns} ) {
     const [currentData, setcurrentData] = useState("");
     const [empty, setEmpty] = useState(true);
-    // const [block, setBlock] = useState("")
     let block = [];
 
     
@@ -14,7 +13,7 @@ function TournamentsBlock( {tourns} ) {
         } else {
             block.length = 0
             for (let i = 0; i < tourns.length; i++) {
-                block.push(<TournamentPreview new_key={Object.keys(tourns[i])[0]} new_data={tourns[i]} />)
+                block.push(<TournamentPreview new_data={tourns[i]} />)
             }
             setcurrentData(block)
             setEmpty(false)

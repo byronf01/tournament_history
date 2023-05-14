@@ -28,25 +28,17 @@ function TournamentsPage() {
         fetch('http://localhost:5000/api/data').then( resp => resp.json())
             .then( (result) => {
             
-                let dict = {};
-                for (let i = 0; i < result.length; i++) {
-                    const name = Object.keys(result[i])[1]
-                    const vals = result[i][name]
-                    dict[name] = vals
+                // sort array alphabetically by tournament title
+                let items = result;
+                items.sort( (a, b) => {
+                    if (a["title"].toLowerCase() <= b["title"].toLowerCase() ) return -1;
+                    else return 1
+                })
+                let tmp = Array(items.length);
+                for (let i = 0; i < items.length; i++) {
+                    tmp[i] = items[i]
                 }
-                // get list of Tournaments alphabetically sorted
-                let key = Object.keys(dict).sort((k1, k2) => {
-
-                    if (k1.toLowerCase() < k2.toLowerCase()) return -1;
-                    else if (k1.toLowerCase() > k2.toLowerCase()) return 1;
-                    else return 0;
-                });
-                let tmp = Array(key.length)
-                for (let i = 0; i < key.length; i++) {
-                    const foo = {}
-                    foo[key[i]] = dict[key[i]]
-                    tmp[i] = foo;
-                }
+                console.log(tmp)
                 setData(tmp);
                 
             })
