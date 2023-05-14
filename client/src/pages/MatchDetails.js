@@ -22,7 +22,7 @@ function MatchDetails(props) {
         fetch(`http://localhost:5000/api/matches/${acr}/${mp}`).then( resp => resp.json())
             .then( (result) => {
                 setData(result);
-
+                
                 // Get a list of all users who played in the match by id
                 let ids = [];
                 for (let i in result["matchcosts"]) {
