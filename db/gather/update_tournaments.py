@@ -135,14 +135,35 @@ def convert(data: dict):
 
     client.close()
 
+def fixGBD():
+    """
+    the tournament under the acronym GBD for some reason doesnt have the correct schema 
+    """
+    client = MongoClient(URI, server_api=ServerApi('1'))
+
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB")
+
+    # Insert to new collection
+    db = client['tournament_history']
+    collection = db['tournament_historyV1.1']
+
+    for doc in collection.find( {'acronym': "GBD" } ):
+        # stages is supposed to be an array not a dict
+        stages = doc['stages']
+        arr = []
+        foo = [{k: stages[k]} for k in sorted(stages)]
+        for i in foo:
+            arr.append(foo)
+        collection.update_one( {'acronym': "GBD" }, { "$set": { 'stages': foo } })
+        
+        print(f'Tournament {doc["title"]} modified')
+
+    client.close()
+
 if __name__ == "__main__":
+    fixGBD()
     
-    data = get_all_data()
-    convert(data)
-   
-    """
-    
-    """
 
     # 5/7 RESTRUCTURING DB
             
