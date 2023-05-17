@@ -46,6 +46,10 @@ function MatchesPage() {
       
       <MatchesBlock matches={currentTableData} />
 
+      { data.length > 1 && 
+        <p>{data.length} matches found</p>
+      }
+
       <Pagination 
         className="pagination-bar"
         currentPage={currentPage}
