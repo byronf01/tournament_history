@@ -216,8 +216,8 @@ app.get("/api/stats", async (req, res) => {
                 most_teamed[teammate] += 1;
             }
 
-            // Avg mc per tournament
-            let avg_mc = [];
+            // matches per tournament stat
+            avg_matches_per_tourn[doc['title']] = 0;
 
             // Find how long the tournament spanned
             let start_y, start_m, d;
@@ -243,6 +243,7 @@ app.get("/api/stats", async (req, res) => {
                     for (const m in stage) {
                         const matches = stage[m];
                         for (let j in matches) {
+                            avg_matches_per_tourn[doc['title']] += 1;
                             const match = matches[j];
                             for (let mp in match) {
                                 const details = match[mp];
@@ -268,6 +269,7 @@ app.get("/api/stats", async (req, res) => {
                         const rounds = stage[k];
 
                         for (const m in rounds) {
+                            avg_matches_per_tourn[doc['title']] += 1
                             const mp = Object.keys(rounds[m])[0]
                             const match = rounds[m][mp]
                             // find out which team i was on, 0 -> blue, 1 -> red
@@ -345,6 +347,14 @@ app.get("/api/stats", async (req, res) => {
             }
                 
         }
+
+        // Average out matches per tournament
+        let avg_matches = 0;
+        for (const i in avg_matches_per_tourn) {
+            avg_matches += avg_matches_per_tourn[i];
+        }
+        
+        avg_matches_per_tourn = avg_matches / Object.keys(avg_matches_per_tourn).length;
 
         // Calculate avg mc per tourn
         for (const i in avg_mc_per_tourn) {

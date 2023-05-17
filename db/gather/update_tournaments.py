@@ -161,8 +161,25 @@ def fixGBD():
 
     client.close()
 
+def fixBFB():
+    """
+    bfb wrong placement
+    """
+    client = MongoClient(URI, server_api=ServerApi('1'))
+
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB")
+
+    # Insert to new collection
+    db = client['tournament_history']
+    collection = db['tournament_historyV1.1']
+
+    collection.update_one( {'acronym': "BFB" }, { "$set": { 'placement': 'Quarterfinals' } })
+
+    client.close()
+
 if __name__ == "__main__":
-    fixGBD()
+    fixBFB()
     
 
     # 5/7 RESTRUCTURING DB
