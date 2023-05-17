@@ -256,6 +256,7 @@ app.get("/api/stats", async (req, res) => {
                                     avg_score_per_mod[mods].push(user_score['value']);
                                     
                                 }
+
                             }
                         }
                     }
@@ -293,14 +294,16 @@ app.get("/api/stats", async (req, res) => {
                             }
 
                             // Add average matchcost
-                            
+                            if (doc['title'] in avg_mc_per_tourn == false) avg_mc_per_tourn[doc['title']] = [];
                             let t1 = match['matchcosts'][0][Object.keys(match['matchcosts'][0])[0]];
                             let t2 = match['matchcosts'][1][Object.keys(match['matchcosts'][1])[0]];
                             if (SELF in t1) {
-                                avg_mc.push(t1[SELF])
+                                avg_mc_per_tourn[doc['title']].push(t1[SELF])
                             } else if (SELF in t2) {
-                                avg_mc.push(t2[SELF]) 
-                            } else throw new Error('matchcost error');
+                                avg_mc_per_tourn[doc['title']].push(t2[SELF]) 
+                            } else {
+                                ; // match that i didnt play in ??
+                            }
 
                             for (let j in match['events']) {
                                 
@@ -340,12 +343,21 @@ app.get("/api/stats", async (req, res) => {
 
                 }
             }
-
-            avg_mc_per_tourn[doc['title']] = avg_mc.reduce( (a,b) => a+b ) / avg_mc.length;
                 
         }
 
-
+        // Calculate avg mc per tourn
+        for (const i in avg_mc_per_tourn) {
+            avg_mc_per_tourn[i] = avg_mc_per_tourn[i].reduce( (a, b) => a + b) / avg_mc_per_tourn[i].length
+        }
+        // Sort avg mc per tourn descending
+        let foo = Object.keys(avg_mc_per_tourn).map( k => { return [k, avg_mc_per_tourn[k]] })
+        foo.sort( (a, b) => {
+            if (a[1] <= b[1]) return 1;
+            else return -1;
+        });
+        avg_mc_per_tourn = foo;
+    
         // take top 15 most teamed
         const TEAMED_CUTOFF = 15;
         let tmp = Object.keys(most_teamed).map( (k) => { return [k, most_teamed[k]]})
@@ -408,7 +420,6 @@ app.get("/api/stats", async (req, res) => {
                     const content = found[1].split(/\n/).filter( (l) => { return l != ""; } );
                     for (const l in content) {
                         const found2 = content[l].match(/\[img\](.*?)\[\/img\]/)
-                        console.log(found2[1]);
                         banners_won.push(found2[1]);
                     }
                 } 
