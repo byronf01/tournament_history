@@ -168,6 +168,7 @@ app.get("/api/stats", async (req, res) => {
         let win_rate_per_mod = {'NM': [0,0], 'HD': [0,0], 'HR': [0,0], 'DT': [0,0], 'EZ': [0,0], 'FL': [0,0], 'HDHR': [0,0], 'HDDT': [0,0], 'OTHER': [0,0]}
         // Avg. score per mod (after normalization) { HD: 504853, ...}
         let avg_score_per_mod = {'NM': [], 'HD': [], 'HR': [], 'DT': [], 'EZ': [], 'FL': [], 'HDHR': [], 'HDDT': [], 'OTHER': []}
+        const NORMALIZE = {'NM': 1.00, 'HD': 1.06, 'HR': 1.10, 'DT': 1.20, 'FL': 1.12, 'EZ': 0.5, 'HDHR': 1.16, 'HDDT': 1.26, 'OTHER': 1}
         // Most common team sizes/formats
         let most_common_team_size = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,'other':0};
         let most_common_format = {1:0,2:0,3:0,4:0,'other':0};
@@ -175,6 +176,8 @@ app.get("/api/stats", async (req, res) => {
             // note: if theres no way to get when the last match ended, just pretend every stage = 1 week of time
             // thank god all the dates are when quals started !!! thank you 2021 byron
         let tourns_over_time = {};
+
+        let weeks_per_tourn = {};
 
         // Times matches are played at, by hour
         // let match_times_by_hour = {};     ERR THIS DATA NOT STORED
@@ -194,6 +197,9 @@ app.get("/api/stats", async (req, res) => {
         
         const PLACEMENT_CHART = {'1st Place': 1, '2nd Place': 2, '3rd Place': 3, 'Finals': 4, 'Semifinals': 5, 'Quarterfinals': 6,
                                 'Round of 16': 7, 'Round of 32': 8, 'Round of 64': 9, 'Round of 128': 10, 'DNQ': 11};
+        const ROUNDS_CHART = [[128, 'Round of 128'], [64, 'Round of 64'], [32, 'Round of 32'], [16, 'Round of 16'], [8, 'Quarterfinals'],
+        [4, 'Semifinals'], [3, 'Finals'], [3, 'Grand Finals']] // ending values really shouldnt matter too much here
+        
 
         for (const i in foundItems) {
             const doc = foundItems[i].toJSON()
@@ -219,23 +225,55 @@ app.get("/api/stats", async (req, res) => {
             // matches per tournament stat
             avg_matches_per_tourn[doc['title']] = 0;
 
-            // Find how long the tournament spanned
-            let start_y, start_m, d;
-            [start_y, start_m, d] = doc['date'].split(/-/);
-            let years = [];
-            years.push(start_y);
-            let months = [];
-            months.push(start_m);
-            d = parseInt(d);
+            // Find weeks tournament spanned based on starting # competitors and round knocked out
+            let weeks;
+            let entrants;
+            if (doc['seed'].includes('/')) {
+                entrants = 32
+            } else entrants = parseInt(doc['seed'].split(/\//)[1])
+        
+            let start = 0;
+            let end = 0;
+            let inc_end = false;
+            let iter = 0;
+            while (iter < ROUNDS_CHART.length) {
+                if (ROUNDS_CHART[iter][0] == entrants) {
+                    inc_end = true; // do not increment start any more
+                } else if (ROUNDS_CHART[iter][1] == doc['placement']) {
+                    // placement has been reached, break
+                    end += 1;
+                    break
+                }
+                if (inc_end == false) {
+                    start += 1;
+                }
+                end += 1;
+                iter += 1
+            }
+            weeks = end - start;
             
-            // Stage stats
-            let weeks = -1;
+            // Date calculations
+            const date = doc['date'];
+            let [yr, mth, day] = date.split(/-/);
+            [yr, mth, day] = [parseInt(yr), parseInt(mth), parseInt(day)]
+            day += (weeks * 7);
+            const months_spanned = 1 + Math.floor(day / 30);
+
+            // Final processing of dates and add to tourns_over_time statistic
+            if (yr in tourns_over_time == false) {
+                tourns_over_time[yr] = Array(12).fill(0);
+            }
+            let counter = 0;
+            mth -= 1; // tourns_over_time 0-indexed
+            while (counter < months_spanned) {
+                if (mth + counter > 12) yr++; // December 2021 -> Jan 2022 case 
+                tourns_over_time[yr][(mth + counter) % 12] += 1;
+                counter++;
+            }
+            
             for (const i in doc['stages']) {
                 // stage stuff 
                 stage = doc['stages'][i]
-
-                // Add a week to the tournament for each stage passed
-                
 
                 // need to handle quals differently
                 if ('Qualifiers' in stage) {
@@ -392,7 +430,7 @@ app.get("/api/stats", async (req, res) => {
         for (const mod in avg_score_per_mod) {
             scores = avg_score_per_mod[mod];
             let avg = scores.reduce( (a, b) => a + b)
-            avg_score_per_mod[mod] = avg / scores.length;
+            avg_score_per_mod[mod] = (avg / scores.length) / NORMALIZE[mod];
         }
 
         
