@@ -7,14 +7,7 @@ function Member(props) {
     const [username, setUsername] = useState('Loading...')
     const [discord, setDiscord] = useState('Loading...')
     const [fetchCount, setFetchCount] = useState(0);
-    /*
-    useEffect( () => {
-        fetch(`http://localhost:5000/api/name/${id}`).then( (resp) => {
-            setUsername(resp['username'])
-            setDiscord(resp['discord'])
-        })
-    }, [])
-    */
+    
     useEffect( () => {
         async function fetchData() {
             const resp = await fetch(`http://localhost:5000/api/name/${id}`);

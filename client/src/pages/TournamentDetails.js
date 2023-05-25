@@ -111,7 +111,7 @@ function TournamentDetails(props) {
                         <div style={{}}>
                             <h2 style={{fontSize: "2em", marginRight: "10%"}}>Team Members: </h2>
                         </div>
-
+                        
                         <Teammates members={data['teammates']} />
                         
                         <hr style={{width: "100%", height: "0.7em", backgroundColor: "#FFFFFF", borderRadius: "30px"}}></hr>
