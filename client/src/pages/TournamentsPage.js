@@ -26,7 +26,6 @@ function TournamentsPage() {
         
     }, [currentPage, data]);
     
-    
     useEffect ( () => {
         
         fetch('http://localhost:5000/api/data').then( resp => resp.json())
@@ -44,10 +43,9 @@ function TournamentsPage() {
                 }
                 setData(tmp);
                 setDataMaster(tmp);
-                
+            
             })
-           
-
+        
         }, []);
     
     const changeQuery = (event) => {
@@ -65,10 +63,9 @@ function TournamentsPage() {
         setIsLoading(true);
     };
 
-
     const applyQueryFilter = (newQuery) => {
         if (newQuery !== "") {
-            const match = newQuery.toLowerCase();
+            const match = newQuery.toLowerCase().replace('\\','\\\\');
             const queriedData = dataMaster.filter((tourn) => (
             tourn['title'].toLowerCase().match(match) ||
             tourn['acronym'].toLowerCase().match(match) ||
@@ -81,6 +78,7 @@ function TournamentsPage() {
             setData(dataMaster);
         }
         setIsLoading(false);
+        setCurrentPage(1) // reset
     };
     
     return (
@@ -101,6 +99,8 @@ function TournamentsPage() {
                 <input type="text" value={query} onChange={changeQuery} placeholder='Search for a specific tournament...'/>
             }
             {isLoading && <p>Loading...</p>}
+            {data.length > 1 ? <p>{data.length} tournaments found</p> :
+            data.length == 1 && typeof(data[0]) != 'undefined' ? <p>{data.length} tournament found</p> : null }
             
             {data.length === 0 && !isLoading && <p>No Results Found</p>}
             {data.length != 0 && <TournamentsBlock tourns={currentTableData} />}
@@ -113,11 +113,7 @@ function TournamentsPage() {
                     dataInfo={data}
                     setData={setData} 
                     style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>}
-                    
-            
         </div>
-
-        
     )
 }
       
