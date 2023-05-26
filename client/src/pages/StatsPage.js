@@ -62,8 +62,6 @@ function StatsPage () {
               setUserOsuData(res2)
           })
 
-          
-
         })
     }, []);
 
@@ -153,8 +151,95 @@ const wrbyModOptions = (data == false ? null : {
       else return 0;
     })}]
   })
+
+  const mostCommonTeamSizeOptions = (data == false ? null : {
+    title: {
+      text: "Most Common Team Size"
+    },
+    data: [
+    {
+      type: "column",
+      dataPoints: Object.entries(data['most_common_team_size'])
+        .map(([label, y]) => ({ label: (label == 'other'? 'other' : `Teams of ${label}`), y }))
+    }
+    ]
+  })
+
+  const mostCommonFormatOptions = (data == false ? null : {
+    title: {
+      text: "Most Common Format"
+    },
+    data: [
+    {
+      type: "column",
+      dataPoints: Object.entries(data['most_common_format'])
+        .map(([label, y]) => ({ label: (label == 'other'? 'other' : `${label}v${label}`), y }))
+    }
+    ]
+  })
+
+  const tournsOverTimeOptions = (data == false ? null : {
+    title: {
+      text: "Tournaments Over Time"
+    },
+    data: [
+    {
+      type: "line",
+      dataPoints: Object.entries(data['tourns_over_time']).flatMap(([year, arr]) => {
+        if (year == Math.max(...Object.keys(data['tourns_over_time']).map( (k) => (parseInt(k)) ))) {
+          // Cut off trailing zeros
+          let lastZero = 11;
+          while (arr[lastZero] == 0) {
+            lastZero -= 1;
+          }
+          arr = arr.slice(0, lastZero + 1);
+          console.log(arr)
+        }
+        return arr.map((value, index) => ({ label: `${year}-${index + 1}`, y: value }));
+      })
+    }
+    ]
+  })
+
+  const bestMCOptions = (data == false ? null : {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Best Tournament Performances"
+    },
+    axisX: {
+      title: "Tournament",
+      reversed: true,
+    },
+    axisY: {
+      title: "Average Match Cost",
+      includeZero: true,
+    },
+    data: [{
+      type: "bar",
+      dataPoints: data['avg_mc_per_tourn'].map(([label, y]) => ({ label, y })).slice(0, 10)
+    }]
+  })
   
-  
+  const worstMCOptions = (data == false ? null : {
+    animationEnabled: true,
+    theme: "light1",
+    title: {
+      text: "Worst Tournament Performances"
+    },
+    axisX: {
+      title: "Tournament",
+      reversed: true,
+    },
+    axisY: {
+      title: "Average Match Cost",
+      includeZero: true,
+    },
+    data: [{
+      type: "bar",
+      dataPoints: data['avg_mc_per_tourn'].map(([label, y]) => ({ label, y })).slice(-11, -1)
+    }]
+  })
     
   return (
     <div>
@@ -173,15 +258,20 @@ const wrbyModOptions = (data == false ? null : {
               : 
                 <p>Lifetime Map Record {data['map_record'][0]} - <b>{data['map_record'][1]}</b></p>
             }
-
+            <p>Average matches per Tournament: {(Math.round(data['avg_matches_per_tourn'] * 100) / 100).toFixed(3)}</p>
             <GeneralChart options={placementOptions}/>
             <h3>Most Teamed</h3>
             <ul style={{display: "flex"}}>{most_teamed}</ul>
-            <h3>Banners Won</h3>
-            <ul>{bannerList}</ul>
             <GeneralChart options={mostPlayedModsOptions}/>
             <GeneralChart options={wrbyModOptions}/>
             <BarChart options={avgScoreByModOptions}/>
+            <GeneralChart options={mostCommonTeamSizeOptions}/>
+            <GeneralChart options={mostCommonFormatOptions}/>
+            <GeneralChart options={tournsOverTimeOptions}/>
+            <BarChart options={bestMCOptions}/>
+            <BarChart options={worstMCOptions}/>
+            <h3>Banners Won</h3>
+            <ul>{bannerList}</ul>
             
             
           </div>

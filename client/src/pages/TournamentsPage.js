@@ -12,6 +12,8 @@ let PageSize = 10;
 function TournamentsPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState(Array(1));
+    const [dataMaster, setDataMaster] = useState(Array(1));
+    const [query, setQuery] = useState("");
 
     const currentTableData = useMemo(() => {
         
@@ -38,15 +40,17 @@ function TournamentsPage() {
                 for (let i = 0; i < items.length; i++) {
                     tmp[i] = items[i]
                 }
-                console.log(tmp)
                 setData(tmp);
+                setDataMaster(tmp);
                 
             })
            
 
         }, []);
 
-
+    const changeQuery = (event) => {
+        setQuery(event.target.value)
+    }
     
     return (
         <div>
@@ -62,6 +66,9 @@ function TournamentsPage() {
     
             </div>
             {/* Display Data Here */}
+            
+            <input type="text" value={query} onChange={changeQuery} placeholder='Search for a specific tournament...'/>
+           
             <TournamentsBlock tourns={currentTableData} />
             <Pagination 
                     className="pagination-bar"
