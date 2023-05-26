@@ -14,6 +14,8 @@ function TournamentsPage() {
     const [data, setData] = useState(Array(1));
     const [dataMaster, setDataMaster] = useState(Array(1));
     const [query, setQuery] = useState("");
+    const [timerId, setTimerId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const currentTableData = useMemo(() => {
         
@@ -47,10 +49,39 @@ function TournamentsPage() {
            
 
         }, []);
-
+    
     const changeQuery = (event) => {
-        setQuery(event.target.value)
-    }
+        setQuery(event.target.value);
+        
+        if (timerId) {
+            clearTimeout(timerId); // Clear previous timer if it exists
+        }
+        
+        const newTimerId = setTimeout(() => {
+            applyQueryFilter(event.target.value);
+        }, 1000);
+        
+        setTimerId(newTimerId);
+        setIsLoading(true);
+    };
+
+
+    const applyQueryFilter = (newQuery) => {
+        if (newQuery !== "") {
+            const match = newQuery.toLowerCase();
+            const queriedData = dataMaster.filter((tourn) => (
+            tourn['title'].toLowerCase().match(match) ||
+            tourn['acronym'].toLowerCase().match(match) ||
+            tourn['team_name'].toLowerCase().match(match) ||
+            tourn['notes'].toLowerCase().match(match) ||
+            tourn['comments'].toLowerCase().match(match)
+            ));
+            setData(queriedData);
+        } else {
+            setData(dataMaster);
+        }
+        setIsLoading(false);
+    };
     
     return (
         <div>
@@ -65,12 +96,15 @@ function TournamentsPage() {
                 
     
             </div>
-            {/* Display Data Here */}
             
-            <input type="text" value={query} onChange={changeQuery} placeholder='Search for a specific tournament...'/>
-           
-            <TournamentsBlock tourns={currentTableData} />
-            <Pagination 
+            { dataMaster.length != 1 &&
+                <input type="text" value={query} onChange={changeQuery} placeholder='Search for a specific tournament...'/>
+            }
+            {isLoading && <p>Loading...</p>}
+            
+            {data.length === 0 && !isLoading && <p>No Results Found</p>}
+            {data.length != 0 && <TournamentsBlock tourns={currentTableData} />}
+            {data.length != 0 && <Pagination 
                     className="pagination-bar"
                     currentPage={currentPage}
                     totalCount={data.length}
@@ -78,7 +112,7 @@ function TournamentsPage() {
                     onPageChange={page => setCurrentPage(page)}
                     dataInfo={data}
                     setData={setData} 
-                    style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>
+                    style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>}
                     
             
         </div>
