@@ -1,8 +1,14 @@
+"""
+This module contains all the functions needed to update various items in
+the database. Some functions only needed to run once and have been commented out.
+"""
+
 import sys, os, re, json, requests, time
 from datetime import datetime
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from Tournament import Tournament
 
 load_dotenv()
 
@@ -11,6 +17,15 @@ URI = f"mongodb+srv://byronfong:{PASSWORD}@tournament-history.qp41sza.mongodb.ne
 API_BASE_URL = "https://osu.ppy.sh/api/v2/"
 CLIENT_SECRET = os.getenv('client_secret')
 DEFAULT_BANNER = 'https://assets.ppy.sh/contests/74/header@2x.jpg?20190116'
+
+ISSUES = {}
+with open("issues.txt", "r") as f:
+    t = f.read()
+t = t.split('\n')
+for line in t:
+    if line[0] == '#': continue
+    tourn, issues = line.rsplit(":", 1)
+    ISSUES[tourn] = [int(issue) for issue in issues.split(",")]
 
 def add_dates(): 
     """
@@ -23,7 +38,8 @@ def add_dates():
         new_field = {'$set': {f'{first_k}.date_f': date_f}}
         collection.update_one(query, new_field)
         print(f'{first_k} updated')
-    """
+   """
+    
 def getBanner(forum: str) -> str:
     
     try:
@@ -57,14 +73,14 @@ def getBanner(forum: str) -> str:
             print(f"Banner not found at {forum}")
             return DEFAULT_BANNER
         
-
     except:
         print("API failure")
         raise ValueError()
 
-def add_banner():
+def add_banner(collection):
     """
     Code for adding banners to documents
+    """
 
     for doc in collection.find():
         try:
@@ -90,7 +106,6 @@ def add_banner():
             if cont != "":
                 pass
             else: exit()
-    """
 
 def get_all_data():
     client = MongoClient(URI, server_api=ServerApi('1'))
@@ -135,54 +150,85 @@ def convert(data: dict):
 
     client.close()
 
-def fixGBD():
+def update_tournaments_main():
     """
-    the tournament under the acronym GBD for some reason doesnt have the correct schema 
+    Main function for updating tournaments. Adds newer matches to corresponding tournaments by
+    comparing master list of matches and every match in the database.
     """
-    client = MongoClient(URI, server_api=ServerApi('1'))
+    # Parse master list of matches
+    additional, table = parse_ebot()
 
+    # compare to all matches in database
+    existing = set()
+    client = MongoClient(URI, server_api=ServerApi('1'))
     client.admin.command('ping')
     print("Successfully connected to MongoDB")
-
-    # Insert to new collection
     db = client['tournament_history']
     collection = db['tournament_historyV1.1']
+    for doc in collection.find():
+        for stage in doc['stages']:
+            for _, matches in stage.items():
+                for match in matches:
+                    mp = match.keys()[0]
+                    existing.add(mp)
 
-    for doc in collection.find( {'acronym': "GBD" } ):
-        # stages is supposed to be an array not a dict
-        stages = doc['stages']
-        arr = []
-        foo = [{k: stages[k]} for k in sorted(stages)]
-        for i in foo:
-            arr.append(foo)
-        collection.update_one( {'acronym': "GBD" }, { "$set": { 'stages': foo } })
-        
-        print(f'Tournament {doc["title"]} modified')
+    # for each match not in database, keep track of what tournaments need to be updated based on acronym
+    fix = set()
+    for mp in additional:
+        if mp not in existing:
+            # get tournament acronym of mp
+            fix.add(table[mp])
+
+    # fix tournaments
+    for acr in fix:
+        res = collection.find({ 'acronym': acr })
+        for doc in res:
+            data = {}
+            for k, v in doc.items():
+                data[k] = v
+            
+            issues = ISSUES[doc['title']] if doc['title'] in ISSUES else [0]
+            updated_tournament = Tournament(data, issues)
+            print(updated_tournament.getTournament())
+            input('Commit to DB? (Ctrl+C to quit)')
+            collection.update_one({'title': data['title']}, updated_tournament.getTournament())
 
     client.close()
 
-def fixBFB():
+def parse_ebot():
     """
-    bfb wrong placement
+    Parses matches in the master list from elitebot and adds any new ones to matches.txt
     """
-    client = MongoClient(URI, server_api=ServerApi('1'))
+    target = set()
+    foo = {}
 
-    client.admin.command('ping')
-    print("Successfully connected to MongoDB")
+    with open("../match_parser/multi-matches-16626263.txt", "r") as f:
+        contents = f.read()
+    contents = contents.split('\n')
+    for line in contents:
+        exp = r'[0-9]{2}-[0-9]{4} - ([0-9a-zA-Z!\. ]+): \(.*\) ----- https://osu.ppy.sh/community/matches/([0-9]+)'
+        match = re.search(exp, line) 
+        if match:
+            if match.group(1) not in ["o!mm Private", "ETX", "o!mm Ranked", "o!mm Team Private"]:
+                target.add(match.group(2))
+                foo[match.group(2)] = match.group(1)
 
-    # Insert to new collection
-    db = client['tournament_history']
-    collection = db['tournament_historyV1.1']
+    existing_mps = set()
+    with open("../match_parser/matches.txt", 'r') as f:
+        for mp in f:
+            existing_mps.add(mp)
 
-    collection.update_one( {'acronym': "BFB" }, { "$set": { 'placement': 'Quarterfinals' } })
+    full_set = target.union(existing_mps)
+    export_full_set = sorted(full_set)
 
-    client.close()
+    with open('../match_parser/matches.txt', 'w') as f:
+        for mp in export_full_set:
+            f.write(mp + "\n")
+
+    return (set(full_set), foo)
 
 if __name__ == "__main__":
-    fixBFB()
-    
-
-    # 5/7 RESTRUCTURING DB
+    update_tournaments_main()
             
 
 

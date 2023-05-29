@@ -27,18 +27,23 @@ class Tournament:
         self.ISSUES = issues
 
         # Tourney start date 
-        self.__date = str_to_date(data['date']) 
+        self.__date = str_to_date(data['date']) if data['date'].contains(' ') else data['date']
 
         # Valid tournament name
-        self.__tournName = data['tourn_name']
+        if 'tourn_name' in data:
+            self.__tournName = data['tourn_name']
+        else:
+            self.__tournName = data['title']
+        
 
-        # handling for issue 6 - Alternate tournament name holding the real name if former had invalid chars, change
-        # self.__tournName to be formatted correctly 
+        # issue 6 does not need to be handled any more
         self.__altName = ""
+        """
         if 6 in self.ISSUES:
             self.__altName = self.__tournName
             for c in ESCAPE:
                 self.__tournName = self.__tournName.replace(c, "")
+        """
 
         # forum post
         self.__forum = data['forum']
@@ -50,13 +55,16 @@ class Tournament:
         self.__bracket = data['bracket'] 
 
         # Tourney acronym
-        guess = self.__guess_tourn_acronym(data['tourn_name']) # TO-DO: ADD LINK TO FORUM HERE
-        if self.__forum: print(self.__forum) 
-        elif self.__tournSheet: print(self.__tournSheet)
-        elif self.__bracket: print(self.__bracket)
-        else: print("No supporting tournament data")
-        correct = input(f"Default Acronym -> [{guess}] / Enter correct if wrong: ")
-        self.__acronym = guess if correct == "" else correct 
+        if 'acronym' in data:
+            self.__acronym = data['acronym']
+        else:
+            guess = self.__guess_tourn_acronym(data['tourn_name']) # TODO: ADD LINK TO FORUM HERE
+            if self.__forum: print(self.__forum) 
+            elif self.__tournSheet: print(self.__tournSheet)
+            elif self.__bracket: print(self.__bracket)
+            else: print("No supporting tournament data")
+            correct = input(f"Default Acronym -> [{guess}] / Enter correct if wrong: ")
+            self.__acronym = guess if correct == "" else correct 
 
         # Player's team name for the tournament
         self.__teamName = data['team_name'] if data['team_name'] != "" else PLAYER_NAME
@@ -77,25 +85,26 @@ class Tournament:
         self.__placement = data['placement']
 
         # additional notes about tournament 
-        self.__notes = data['misc']
+        self.__notes = data['notes']
 
         # player's comments about tournament 
-        self.__comments = data['notes']
+        self.__comments = data['comments']
 
-        # TO-DO: FM rules or mod multiplier rules for the tournament
+        # TODO: FM rules or mod multiplier rules for the tournament
         self.__multipliers = {} 
 
         # player's teammates for the tournament
-        ct = 1
-        tmp = []
-        while ct <= 16:
-            if data[f'p{ct}'] != '':
-                tmp.append(data[f'p{ct}'])
-            else:
-                break
-            ct += 1
-        
-        self.__teammates = tmp
+        if 'teammates' not in data:
+            ct = 1
+            tmp = []
+            while ct <= 16:
+                if data[f'p{ct}'] != '':
+                    tmp.append(data[f'p{ct}'])
+                else:
+                    break
+                ct += 1
+            self.__teammates = tmp
+        else: self.__teammates = data['teammates']
 
         # stores ascending list of all mps for the tournament
         self.__mps = [] 
@@ -119,7 +128,7 @@ class Tournament:
                 foo = input("Enter match IDs that have accuracy as a win condition: ")
 
         # collection of Stage objects with keys representing the round ex. QF, SF, RO16, etc.
-        # TO-DO: figure out this part
+        # TODO: figure out this part
         self.__stages = [] 
         ct = 1
         qualifiersHappened = False
@@ -136,6 +145,12 @@ class Tournament:
             else: 
                 self.__stages.append({f'Match {ct}': s})
                 ct += 1
+
+        if 'date_f' in data: self.__datef = data['date_f']
+        else: self.__datef = ''
+
+        if 'banner' in data: self.__banner = data['banner']
+        else: self.__banner = ''
     
     def __guess_tourn_acronym(self, tourn_title: str) -> str:
         """
@@ -279,7 +294,7 @@ class Tournament:
             for round, stage_data in stage.items():
                 stages_txt.append({round: stage_data.getStage()})
 
-        return {self.__tournName: {
+        return {
             "date": self.__date,
             "acronym": self.__acronym,
             "forum": self.__forum,
@@ -295,5 +310,8 @@ class Tournament:
             "comments": self.__comments,
             "teammates": self.__teammates,
             "stages": stages_txt,
-            "alt_name": self.__altName
-        }} # stub
+            "alt_name": self.__altName,
+            "date_f": self.__datef,
+            "banner": self.__banner,
+            "title": self.__tournName,
+        } # stub
