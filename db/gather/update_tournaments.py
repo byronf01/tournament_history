@@ -4,6 +4,7 @@ the database. Some functions only needed to run once and have been commented out
 """
 
 import sys, os, re, json, requests, time
+sys.path.append('../classes')
 from datetime import datetime
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
@@ -169,29 +170,44 @@ def update_tournaments_main():
         for stage in doc['stages']:
             for _, matches in stage.items():
                 for match in matches:
-                    mp = match.keys()[0]
+                    mp = [k for k in match.keys()][0]
                     existing.add(mp)
 
     # for each match not in database, keep track of what tournaments need to be updated based on acronym
     fix = set()
     for mp in additional:
-        if mp not in existing:
-            # get tournament acronym of mp
-            fix.add(table[mp])
+        if str(mp) not in existing:
+            try:
+                # get tournament acronym of mp
+                fix.add(table[str(mp)])
+            except KeyError as e:
+                continue
 
+    print(f'Problems: {fix}')
+    select = input('Enter tournaments to fix, separated by space: (Other options: none/all): ')
+    if fix == 'none':
+        fix = []
+    elif fix == 'all':
+        pass
+    else:
+        fix = select.split(" ")
     # fix tournaments
     for acr in fix:
         res = collection.find({ 'acronym': acr })
+        # if mp is from an invalid tournament i.e not in db, should skip over it
+
         for doc in res:
             data = {}
             for k, v in doc.items():
                 data[k] = v
             
             issues = ISSUES[doc['title']] if doc['title'] in ISSUES else [0]
+            print(f"Updating {data['title']}")
             updated_tournament = Tournament(data, issues)
             print(updated_tournament.getTournament())
-            input('Commit to DB? (Ctrl+C to quit)')
-            collection.update_one({'title': data['title']}, updated_tournament.getTournament())
+            input('Commit to DB? (Ctrl+C to quit): ')
+            collection.replace_one({'title': data['title']}, updated_tournament.getTournament())
+            print(f"{data['title']} updated in DB ")
 
     client.close()
 
@@ -210,25 +226,52 @@ def parse_ebot():
         match = re.search(exp, line) 
         if match:
             if match.group(1) not in ["o!mm Private", "ETX", "o!mm Ranked", "o!mm Team Private"]:
-                target.add(match.group(2))
+                target.add(int(match.group(2)))
                 foo[match.group(2)] = match.group(1)
 
     existing_mps = set()
     with open("../match_parser/matches.txt", 'r') as f:
         for mp in f:
-            existing_mps.add(mp)
+            existing_mps.add(int(mp.rstrip('\n')))
 
     full_set = target.union(existing_mps)
     export_full_set = sorted(full_set)
 
     with open('../match_parser/matches.txt', 'w') as f:
         for mp in export_full_set:
-            f.write(mp + "\n")
+            f.write(str(mp) + "\n")
 
-    return (set(full_set), foo)
+    return (full_set, foo)
+
+def update_misc():
+    """
+    Updates fields such as bracket, seed, notes, comments, placement. 
+    """
+    client = MongoClient(URI, server_api=ServerApi('1'))
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB")
+    db = client['tournament_history']
+    collection = db['tournament_historyV1.1']
+    while True:
+        title = input('Enter name of tournament to be updated (None to exit): ')
+        if title == '': break
+        res = collection.find({ 'title': title })
+        for doc in res:
+            field = 'foo'
+            while field != '':
+                field = input('Enter field to update (None to exit): ')
+                if field == '': continue
+                elif field not in doc.keys():
+                    print('Field not found ')
+                    continue
+                update = input(f'{field} currently {doc[field]}, new value: ') 
+                collection.update_one({ 'title': title }, { '$set' : { field: update }})
 
 if __name__ == "__main__":
+
     update_tournaments_main()
+    if "misc" in sys.argv:
+        update_misc()
             
 
 

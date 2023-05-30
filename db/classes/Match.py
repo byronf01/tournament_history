@@ -67,7 +67,7 @@ class Match:
 
     def __apiCall(self):
         """
-        function makes multiple API calls to the osu API for details of a match, including match name. Filters out aby \
+        function makes multiple API calls to the osu API for details of a match, including match name. Filters out any
         events in a match that are not maps that are being played. Returns a list of events of matches being played 
         in chronological order. 
         """

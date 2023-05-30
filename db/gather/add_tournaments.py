@@ -1,6 +1,6 @@
 import sys, os, re, json
 sys.path.append('../classes')
-from get_tournament_data import sheet_data # DEPRECATED
+from get_tournament_data import sheet_data, manual_data # DEPRECATED
 from Tournament import Tournament
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
@@ -11,6 +11,7 @@ load_dotenv()
 PASSWORD = os.getenv('mongo_password')
 URI = f"mongodb+srv://byronfong:{PASSWORD}@tournament-history.qp41sza.mongodb.net/?retryWrites=true&w=majority"
 ESCAPE = ["\\", "$", ".", "*", "+", "?", "|", "(", ")", "[", "]", "{", "}"]
+method = sheet_data if 'sheet' in sys.argv else manual_data
 
 # Tournaments with known issues (ex: VNDB had two acronyms)
 ISSUES = {}
@@ -25,15 +26,15 @@ for line in t:
 def construct_tourn(tourn: dict) -> Tournament:
     issue_6 = False
     for char in ESCAPE:
-        if char in tourn['tourn_name']: 
-            if tourn['tourn_name'] not in ISSUES:
-                ISSUES[tourn['tourn_name']] = []
-            ISSUES[tourn['tourn_name']].append(6)
+        if char in tourn['title']: 
+            if tourn['title'] not in ISSUES:
+                ISSUES[tourn['title']] = []
+            ISSUES[tourn['title']].append(6)
             break
 
-    if tourn['tourn_name'] in ISSUES:
-        print(f"Warning: Tournament {tourn['tourn_name']} has issue(s) {ISSUES[ tourn['tourn_name'] ]}")
-        t = Tournament(tourn, ISSUES[tourn['tourn_name']])
+    if tourn['title'] in ISSUES:
+        print(f"Warning: Tournament {tourn['title']} has issue(s) {ISSUES[ tourn['title'] ]}")
+        t = Tournament(tourn, ISSUES[tourn['title']])
     else:
         t = Tournament(tourn, [0])
     return t
@@ -56,32 +57,35 @@ if __name__ == "__main__":
 
             # Select a database and collection
             db = client['tournament_history']
-            collection = db['tournament_history']
+            collection = db['tournament_historyV1.1']
 
+        if method == sheet_data: data = method()
+        else:
+            data = {}
+            ct = 1
+            while input('Continue entering? (None to exit): ') != '':
+                new_data = method()
+                data[ct] = new_data
+                ct += 1
 
-        data = sheet_data()
         # data = {"54": data[54]} # stub for testing
         
         for _, v in data.items():
 
             # Error handling for issue 4 - ignore tournament
-            if v['tourn_name'] in ISSUES and 4 in ISSUES[v['tourn_name']]:
-                print("Tournament " + v['tourn_name'] + " skipped")
+            if v['title'] in ISSUES and 4 in ISSUES[v['title']]:
+                print("Tournament " + v['title'] + " skipped")
                 continue
 
             if len(sys.argv) > 1 and sys.argv[1] == 'debug':
                 pass
             else:
                 # Add tournament object to database if it is not already in 
-                query1 = { v['tourn_name']: {"$exists": True} }
-                modified = v['tourn_name']
-                for char in ESCAPE:
-                    modified = modified.replace(char, "")
-                query2 = { modified: {"$exists": True} }
+                query1 = { 'title': v['title'] }
 
-                dup = collection.count_documents(query1) + collection.count_documents(query2)
+                dup = collection.count_documents(query1)
                 if dup > 0:
-                    print(f"Tournament {v['tourn_name']} already in database ")
+                    print(f"Tournament {v['title']} already in database ")
                     continue 
                 
             

@@ -55,7 +55,7 @@ def sheet_data(sheet=DEFAULT_SPREADSHEET, page=DEFAULT_PAGE):
               
                 key = int(c1[0][1:])
 
-                data[key] = {"date": c2[0], "tourn_name": c1[1], "team_name": c2[1], "forum": c1[2], "tourn_sheet": c2[2], "bracket": c1[6], 
+                data[key] = {"date": c2[0], "title": c1[1], "team_name": c2[1], "forum": c1[2], "tourn_sheet": c2[2], "bracket": c1[6], 
                              "rank_range": c1[3], "seed": c2[3], "format": c1[4], "team_size": c2[4], "placement": c1[5], "notes": c2[5], 
                              "comments": c1[7], "p1": c1[16], "p2": c1[17], "p3": c1[18], "p4": c1[19], "p5": c2[16], "p6": c2[17], "p7": c2[18], 
                              "p8": c2[19], "p9": c1[20], "p10": c2[20], "p11": c1[21], "p12": c2[21], "p13": c1[22], "p14": c2[22], 
@@ -101,7 +101,6 @@ def manual_data():
         data = extract(forum)
         for k, v in data.items():
             if v == '':
-                # TODO: fill in date_f if date 
                 if k == 'date_f': continue # formatted date should not be entered by user
                 
                 data[k] = input(f'{k} not found, enter correct value: ')
@@ -109,9 +108,9 @@ def manual_data():
         data = {'date': '', 'bracket': '', 'tourn_sheet': '', 'format': '', 'team_size': '', 
                 'banner': '', 'title': ''} 
         for k in data.keys():
-            data[k] = input(f'Enter {k}:')
+            data[k] = input(f'Enter {k}: ')
     
-    data['date_f'] = dateparser.parse(data['date']) if data['date_f'] == '' else data['date_f']
+    data['date_f'] = dateparser.parse(data['date']) if 'date_f' not in data else data['date_f']
     data['forum'] = forum
     data['acronym'] = input('Tournament Acronym: ')
     data['team_name'] = 'hiyah' if data['format'] == '1v1' else input('Team Name: ')
@@ -124,7 +123,7 @@ def manual_data():
     while True:
         teammate = input('Enter teammate by id: ')
         if teammate == '': break
-        data['teammates'].append(teammate)
+        data['teammates'] += [int(t) for t in teammate.split(' ')]
 
     while True:
         flag = False
@@ -132,7 +131,7 @@ def manual_data():
         if failsafe != '':
             print('Revising data. Type "exit" at any time to terminate')
             for k, v in data.items():
-                correct = input(f'{k}: (None if correct, "delete" if field to be removed)')
+                correct = input(f'{k}: (None if correct, "delete" if field to be removed): ')
                 if correct == '': continue
                 elif correct == 'delete': data[k] = ''
                 elif correct == 'exit':

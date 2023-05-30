@@ -27,7 +27,7 @@ class Tournament:
         self.ISSUES = issues
 
         # Tourney start date 
-        self.__date = str_to_date(data['date']) if data['date'].contains(' ') else data['date']
+        self.__date = str_to_date(data['date']) if ' ' in data['date'] else data['date']
 
         # Valid tournament name
         if 'tourn_name' in data:
@@ -58,7 +58,7 @@ class Tournament:
         if 'acronym' in data:
             self.__acronym = data['acronym']
         else:
-            guess = self.__guess_tourn_acronym(data['tourn_name']) # TODO: ADD LINK TO FORUM HERE
+            guess = self.__guess_tourn_acronym(self.__tournName) # TODO: ADD LINK TO FORUM HERE
             if self.__forum: print(self.__forum) 
             elif self.__tournSheet: print(self.__tournSheet)
             elif self.__bracket: print(self.__bracket)
@@ -203,6 +203,7 @@ class Tournament:
                 if mp_acr in acronyms: # surely no acronyms have spaces in them
                     self.__mps.append(all_mps[old])
 
+                    """
                     # Keep checking mps after this until 25 mps have passed that are not from this tournament, then terminate early.
                     # Assumption that the player does not play 25 other tournament matches between this and the next match.
                     condition = 0
@@ -224,6 +225,7 @@ class Tournament:
 
                     # All mps have been found without extra searches
                     break 
+                    """
 
             except Exception as e:
                 print("Unknown issue with " + all_mps[old] + ". Consider removing from matches.txt ")
@@ -237,6 +239,7 @@ class Tournament:
                 if mp_acr in acronyms: 
                     self.__mps.insert(0, all_mps[new]) # insert at front of list since goign backwards
 
+                    """
                     condition = 0
                     new -= 1
                     while condition < 25 and new >= old:
@@ -255,6 +258,7 @@ class Tournament:
                         new -= 1
 
                     break
+                    """
 
             except Exception as e:
                 print("Unknown issue with " + all_mps[new] + ". Consider removing from matches.txt ")
@@ -262,6 +266,7 @@ class Tournament:
             old += 1
             new -= 1
 
+        self.__mps = sorted(self.__mps, key=lambda x: int(x))
         print("mps found: ")
         print(self.__mps)
 
