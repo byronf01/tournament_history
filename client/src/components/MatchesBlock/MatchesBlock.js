@@ -12,7 +12,7 @@ function MatchesBlock( {matches} ) {
         } else {
             block.length = 0
             for (let i = 0; i < matches.length; i++) {
-                block.push(<MatchPreview acronym={matches[i]['acronym']} mp={matches[i]['mp']} stage={matches[i]['stage']} match_name={matches[i]['match_name']}/>)
+                block.push(<MatchPreview acronym={matches[i]['acronym']} mp={matches[i]['mp']} stage={matches[i]['stage']} match_name={matches[i]['match_name']} result={matches[i]['result']} teams={matches[i]['teams']} />)
             }
             setcurrentData(block)
             setEmpty(false)

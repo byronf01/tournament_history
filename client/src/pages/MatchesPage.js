@@ -31,8 +31,21 @@ function MatchesPage() {
 
             // get list of Matches alphabetically sorted by acronym value
             let sorted = res.sort((m1, m2) => {
-                if (m1["acronym"].toLowerCase() <= m2["acronym"].toLowerCase()) return -1;
-                else return 0;
+                
+                if (m1["acronym"].toLowerCase() < m2["acronym"].toLowerCase()) return -1;
+                else if (m1['acronym'].toLowerCase() > m2['acronym'].toLowerCase()) return 1;
+                else { // stage by tiebreaker
+                  if (m1['stage'] == 'Qualifiers') return 1; // Qualifiers highest precedence
+                  else if (m2['stage'] == 'Qualifiers') return -1;
+                  else { // None of matches are qualifiers
+                    const s1 = parseInt(m1['stage'].split(' ')[1])
+                    const s2 = parseInt(m2['stage'].split(' ')[2])
+                    if (s1 <= s2) return -1;
+                    else return 1;
+                  }
+                };
+                
+               
             });
             setData(sorted);
             setDataMaster(sorted);

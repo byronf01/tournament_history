@@ -31,7 +31,8 @@ function TournamentDetails(props) {
                     const matches_arr = result[0]['stages'][j][stage_name]   
                     for (const i in matches_arr) {
                         const mp = Object.keys(matches_arr[i])
-                        all_stages.push(<MatchPreview acronym={result[0]['acronym']} mp={mp} stage={stage_name} match_name={matches_arr[i][mp]["match_name"]}/>);
+                        console.log(matches_arr[i][mp]["result"])
+                        all_stages.push(<MatchPreview acronym={result[0]['acronym']} mp={mp} stage={stage_name} match_name={matches_arr[i][mp]["match_name"]} result={matches_arr[i][mp]["result"]} teams={matches_arr[i][mp]['teams']} />);
                     }
                 }
                 setMatches(all_stages);
