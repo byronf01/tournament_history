@@ -1,4 +1,4 @@
-import datetime, os, requests
+import datetime, os, requests, random, string
 from pathlib import Path
 from dotenv import load_dotenv
 from Stage import Stage
@@ -151,6 +151,9 @@ class Tournament:
 
         if 'banner' in data: self.__banner = data['banner']
         else: self.__banner = ''
+
+        if 'url_id' in data: self.__url_id = data['url_id']
+        else: self.__url_id = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(6))
     
     def __guess_tourn_acronym(self, tourn_title: str) -> str:
         """
@@ -298,6 +301,8 @@ class Tournament:
         for stage in self.__stages:
             for round, stage_data in stage.items():
                 stages_txt.append({round: stage_data.getStage()})
+        
+
 
         return {
             "date": self.__date,
@@ -319,4 +324,5 @@ class Tournament:
             "date_f": self.__datef,
             "banner": self.__banner,
             "title": self.__tournName,
+            "url_id": self.__url_id,
         } # stub

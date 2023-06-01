@@ -30,8 +30,8 @@ app.get("/api/data", async (req, res) => {
 })
 
 app.get("/api/data/:id", async (req, res) => {
-    // Return db item by acronym
-
+    // Return tournament item 
+    
     const id = req.params.id;
     const URI = `mongodb+srv://byronfong:${PASSWORD}@tournament-history.qp41sza.mongodb.net/tournament_history`
     await connect(URI).catch(err => console.log(err));
@@ -536,7 +536,9 @@ function modChecking(score) {
 }
 
 async function getTourn(id) {
-    const query = await tournament_history.find({acronym: id})
+    // const query = await tournament_history.find({acronym: id})
+    // changed to url_id as of 5/31
+    const query = await tournament_history.find({url_id: id})
     return query;
 }
 

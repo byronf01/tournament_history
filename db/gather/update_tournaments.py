@@ -3,7 +3,7 @@ This module contains all the functions needed to update various items in
 the database. Some functions only needed to run once and have been commented out.
 """
 
-import sys, os, re, json, requests, time
+import sys, os, re, json, requests, time, random, string
 sys.path.append('../classes')
 from datetime import datetime
 from dotenv import load_dotenv
@@ -151,6 +151,22 @@ def convert(data: dict):
 
     client.close()
 
+def gen_id():
+    """
+    5/31/23 - Add id to each tournament object to replace problem of URLs not being unique
+    (ex: /tournaments/GSHT can be either GSHT1 or GSHT3)
+    """
+    
+    client = MongoClient(URI, server_api=ServerApi('1'))
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB")
+    db = client['tournament_history']
+    collection = db['tournament_historyV1.1']
+    for doc in collection.find():
+        new_id = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(6))
+        title = doc['title']
+        collection.update_one( { 'title': title } , { '$set': { 'url_id': new_id }})
+
 def update_tournaments_main():
     """
     Main function for updating tournaments. Adds newer matches to corresponding tournaments by
@@ -269,10 +285,12 @@ def update_misc():
 
 if __name__ == "__main__":
 
+    gen_id()
+    """
     update_tournaments_main()
     if "misc" in sys.argv:
         update_misc()
-            
+    """
 
 
     

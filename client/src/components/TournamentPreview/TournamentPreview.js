@@ -41,7 +41,7 @@ function TournamentPreview( {new_data} ) {
                                  
                                     }}/>
             </div>
-            <a href={`/tournaments/${data['acronym']}`} style={{textDecoration: "none", width: "50%"}}>
+            <a href={`/tournaments/${data['url_id']}`} style={{textDecoration: "none", width: "50%"}}>
               <div style={{paddingLeft: "7%", width: "90%", height: "100%", display: "flex", justifyContent: "center", paddingTop: "10px"}}>
                 <div style={{width: "100%", height: "100%", wordWrap: "break-word", marginRight: "2%", marginBottom: "10px", top: "50%"}}>
                   <h1 style={{userSelect: "none", color: "black", fontSize: "200%", margin: "0"}}>{data['title']}</h1>
