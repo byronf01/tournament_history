@@ -12,7 +12,7 @@ function MapDetails( props ) {
         <div>
             <div style={{border: "3px solid black"}}>
                 <a href={data["map-link"]}>
-                    <div style={{backgroundImage: `url(${bg})`, height: "100px"}}>
+                    <div style={{backgroundImage: `url(${bg})`, height: "200px"}}>
                         <p>{data["map-title"]}</p>
                     </div>
                 </a>

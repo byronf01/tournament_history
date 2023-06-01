@@ -223,7 +223,7 @@ const wrbyModOptions = (data == false ? null : {
   
   const worstMCOptions = (data == false ? null : {
     animationEnabled: true,
-    theme: "light1",
+    theme: "light2",
     title: {
       text: "Worst Tournament Performances"
     },
@@ -259,17 +259,35 @@ const wrbyModOptions = (data == false ? null : {
                 <p>Lifetime Map Record {data['map_record'][0]} - <b>{data['map_record'][1]}</b></p>
             }
             <p>Average matches per Tournament: {(Math.round(data['avg_matches_per_tourn'] * 100) / 100).toFixed(3)}</p>
-            <GeneralChart options={placementOptions}/>
+            <div style={{width: "50%", margin: "auto"}}>
+              <GeneralChart options={placementOptions}/>
+            </div>
             <h3>Most Teamed</h3>
             <ul style={{display: "flex"}}>{most_teamed}</ul>
-            <GeneralChart options={mostPlayedModsOptions}/>
-            <GeneralChart options={wrbyModOptions}/>
-            <BarChart options={avgScoreByModOptions}/>
-            <GeneralChart options={mostCommonTeamSizeOptions}/>
-            <GeneralChart options={mostCommonFormatOptions}/>
-            <GeneralChart options={tournsOverTimeOptions}/>
-            <BarChart options={bestMCOptions}/>
-            <BarChart options={worstMCOptions}/>
+            <div style={{width: "35%", margin: "auto"}}>
+              <GeneralChart options={mostPlayedModsOptions}/>
+            </div>
+            <div style={{width: "35%", height: "auto", margin: "auto"}}>
+              <GeneralChart options={wrbyModOptions}/>
+            </div>
+            <div style={{width: "30%", margin: "auto"}}>
+              <BarChart options={avgScoreByModOptions}/>
+            </div>
+            <div style={{width: "45%", margin: "auto"}}>
+              <GeneralChart options={mostCommonTeamSizeOptions}/>
+            </div>
+            <div style={{width: "25%", margin: "auto"}}>
+              <GeneralChart options={mostCommonFormatOptions}/>
+            </div>
+            <div style={{width: "45%", margin: "auto"}}>
+              <GeneralChart options={tournsOverTimeOptions}/>
+            </div>
+            <div style={{width: "50%", margin: "auto"}}>
+              <BarChart options={bestMCOptions}/>
+            </div>
+            <div style={{width: "50%", margin: "auto"}}>
+              <BarChart options={worstMCOptions}/>
+            </div>
             <h3>Banners Won</h3>
             <ul>{bannerList}</ul>
             

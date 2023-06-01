@@ -33,7 +33,7 @@ function MatchCosts( {new_data, nameMap, result} ) {
             <div>
                 
                 <div style={{border: "1px solid black"}}>
-                    <img src={winner_img} ></img>
+                    <img src={winner_img} style={{height: '150px', width: 'auto'}}></img>
                     <ol>
                         {ordered.map((ordered, index) => 
                             <li key={Object.keys(ordered)[0]}>
@@ -114,7 +114,7 @@ function MatchCosts( {new_data, nameMap, result} ) {
             <div>
                 
                 <div style={{border: "1px solid black"}}>
-                    <img src={winner_img} ></img>
+                    <img src={winner_img} style={{height: '150px', width: 'auto'}}></img>
                     <h6>Final Score:    
                         {'🔵 '} 
                         {s1} - {s2}
