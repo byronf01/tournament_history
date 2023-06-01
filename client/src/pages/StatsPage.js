@@ -69,6 +69,7 @@ function StatsPage () {
 			title: {
 				text: "Summary of placements"
 			},
+      theme: "light2",
 			data: [
 			{
 				type: "column",
@@ -94,7 +95,7 @@ function StatsPage () {
 			title: {
 				text: "Most Played Mods (by %)"
 			},
-      theme: "light1",
+      theme: "light2",
 			data: [
 			{
 				type: "pie",
@@ -116,6 +117,7 @@ const wrbyModOptions = (data == false ? null : {
   title: {
     text: "Win Rate by Mod (by %)"
   },
+  theme: "light2",
   data: [
   {
     type: "column",
@@ -156,6 +158,7 @@ const wrbyModOptions = (data == false ? null : {
     title: {
       text: "Most Common Team Size"
     },
+    theme: "light2",
     data: [
     {
       type: "column",
@@ -169,6 +172,7 @@ const wrbyModOptions = (data == false ? null : {
     title: {
       text: "Most Common Format"
     },
+    theme: "light2",
     data: [
     {
       type: "column",
@@ -182,6 +186,7 @@ const wrbyModOptions = (data == false ? null : {
     title: {
       text: "Tournaments Over Time"
     },
+    theme: "light2",
     data: [
     {
       type: "line",
@@ -198,7 +203,7 @@ const wrbyModOptions = (data == false ? null : {
         return arr.map((value, index) => ({ label: `${year}-${index + 1}`, y: value }));
       })
     }
-    ]
+    ],
   })
 
   const bestMCOptions = (data == false ? null : {
@@ -264,27 +269,34 @@ const wrbyModOptions = (data == false ? null : {
             </div>
             <h3>Most Teamed</h3>
             <ul style={{display: "flex"}}>{most_teamed}</ul>
-            <div style={{width: "35%", margin: "auto"}}>
+            <div style={{width: "32%", margin: "auto"}}>
               <GeneralChart options={mostPlayedModsOptions}/>
             </div>
-            <div style={{width: "35%", height: "auto", margin: "auto"}}>
+            <br></br>
+            <div style={{width: "30%", height: "auto", margin: "auto"}}>
               <GeneralChart options={wrbyModOptions}/>
             </div>
+            <br></br>
             <div style={{width: "30%", margin: "auto"}}>
               <BarChart options={avgScoreByModOptions}/>
             </div>
-            <div style={{width: "45%", margin: "auto"}}>
+            <br></br>
+            <div style={{width: "44%", margin: "auto"}}>
               <GeneralChart options={mostCommonTeamSizeOptions}/>
             </div>
-            <div style={{width: "25%", margin: "auto"}}>
+            <br></br>
+            <div style={{width: "20%", margin: "auto"}}>
               <GeneralChart options={mostCommonFormatOptions}/>
             </div>
+            <br></br>
             <div style={{width: "45%", margin: "auto"}}>
               <GeneralChart options={tournsOverTimeOptions}/>
             </div>
+            <br></br>
             <div style={{width: "50%", margin: "auto"}}>
               <BarChart options={bestMCOptions}/>
             </div>
+            <br></br>
             <div style={{width: "50%", margin: "auto"}}>
               <BarChart options={worstMCOptions}/>
             </div>
