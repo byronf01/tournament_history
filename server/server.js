@@ -31,7 +31,7 @@ app.get("/api/data", async (req, res) => {
 
 app.get("/api/data/:id", async (req, res) => {
     // Return tournament item 
-    
+
     const id = req.params.id;
     const URI = `mongodb+srv://byronfong:${PASSWORD}@tournament-history.qp41sza.mongodb.net/tournament_history`
     await connect(URI).catch(err => console.log(err));
@@ -291,8 +291,8 @@ app.get("/api/stats", async (req, res) => {
                                     // Check if i played in this map
                                     if (!(SELF in map['red_scores'])) continue;
                                     const user_score = map['red_scores'][SELF];
-                                    const mods = modChecking(user_score)
-                                    avg_score_per_mod[mods].push(user_score['value']);
+                                    const [mods, multiplier] = modChecking(user_score)
+                                    avg_score_per_mod[mods].push((user_score['value'] / multiplier));
                                     
                                 }
 
@@ -370,8 +370,8 @@ app.get("/api/stats", async (req, res) => {
                                 else if (SELF in event['blue_scores']) user_score = event['blue_scores'][SELF];
                                 else throw new Error('user not in either team')
 
-                                const mods = modChecking(user_score);
-                                avg_score_per_mod[mods].push(user_score['value']);
+                                const [mods, multiplier] = modChecking(user_score);
+                                avg_score_per_mod[mods].push((user_score['value'] / multiplier));
                                 most_played_mods[mods] += 1;
                                 win_rate_per_mod[mods][user_win] += 1
 
@@ -513,24 +513,24 @@ app.get("/api/stats", async (req, res) => {
 
 function modChecking(score) {
     // Function that calculates the mod(s) used for a score.
-    // Returns the mod combination used.
+    // Returns the mod combination used, as well as the multiplier for the mod combination.
     let mods = score['mods'];
     mods = mods.filter( (mod) => {
         return mod !== 'NF';
     });
     // mod checking 
     if (mods.includes('HD')) {
-        if (mods.length == 1) return 'HD';
-        else if (mods.includes('HR') && mods.length == 2) return 'HDHR';
-        else if (mods.includes('DT') && mods.length == 2) return 'HDDT';
-        else return 'OTHER';
+        if (mods.length == 1) return ['HD', 1.06];
+        else if (mods.includes('HR') && mods.length == 2) return ['HDHR', 1.17];
+        else if (mods.includes('DT') && mods.length == 2) return ['HDDT', 1.27];
+        else return ['OTHER', 1.00];
     } else {
-        if (mods.length == 0) return 'NM';
-        else if (mods.includes('HR') && mods.length == 1) return 'HR';
-        else if (mods.includes('DT') && mods.length == 1) return 'DT';
-        else if (mods.includes('EZ') && mods.length == 1) return 'EZ';
-        else if (mods.includes('FL') && mods.length == 1) return 'FL';
-        else return 'OTHER';
+        if (mods.length == 0) return ['NM', 1.00];
+        else if (mods.includes('HR') && mods.length == 1) return ['HR', 1.10];
+        else if (mods.includes('DT') && mods.length == 1) return ['DT', 1.20];
+        else if (mods.includes('EZ') && mods.length == 1) return ['EZ', 0.57143];
+        else if (mods.includes('FL') && mods.length == 1) return ['FL', 1.12];
+        else return ['OTHER', 1.00];
     }
     
 }
