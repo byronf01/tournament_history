@@ -58,8 +58,8 @@ const RangeSlider = (props) => {
     
     return (
       <div>
-        <div class="wrapper" style={{backgroundColor: "#617285", width: "90%"}}>
-            <div class="values" style={{marginBottom: "-3rem"}}>
+        <div class="wrapper" style={{backgroundColor: "transparent", width: "32vw"}}>
+            <div class="values" style={{marginBottom: "-3rem", width: '11vw', height: '1.5vw', fontSize: '1.2vw'}}>
                 <span id="range1">
                     {lo}
                 </span>
@@ -68,25 +68,23 @@ const RangeSlider = (props) => {
                     {hi}
                 </span>
             </div>
-            <div class="labels" style={{marginBottom: "-3rem"}}>
-                    <div style={{display: "flex", justifyContent: "space-between"}}>
-                        <p style={{fontSize: "1.5em", color: "#FFFFFF"}}>{MIN_RANGE}</p>
-                        <p style={{fontSize: "1.5em", color: "#FFFFFF"}}>{MAX_RANGE}</p>
-                    </div>
+            <div class="labels" style={{marginBottom: "-3rem", width: '33vw', height: '5vw'}}>
+                <div style={{display: "flex", justifyContent: "space-between", fontSize: '1vw'}}>
+                    <p style={{fontSize: "1.5em", color: "#FFFFFF"}}>{MIN_RANGE}</p>
+                    <p style={{fontSize: "1.5em", color: "#FFFFFF"}}>{MAX_RANGE}+</p>
                 </div>
-            <div class="container">
+            </div>
+            <div class="container" >
                 
-                <div class="sliders">
+                <div class="sliders" >
                     <div class="slider-track" style={fillColor()}></div>
                     <input type="range" min={MIN_RANGE} max={MAX_RANGE} value={lo} id="slider-1" on/>
                     <input type="range" min={MIN_RANGE} max={MAX_RANGE} value={hi} id="slider-2" />
                 </div>
                 
-                
-                
-                
             </div>
         </div>
+        
        
       </div>
     );

@@ -38,7 +38,7 @@ function TournamentPreview( {new_data} ) {
                         justifyContent: "center",
                         }}> 
               <div style={{padding: '10px 0px 10px 0px'}}>
-                <ImageContainer image={img}/>
+                <ImageContainer image={img} width='42vw' height='9vw' />
               </div>
               
               

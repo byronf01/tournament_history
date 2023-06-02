@@ -125,7 +125,7 @@ function TournamentsPage() {
             }
             {isLoading && <Spinner />}
             {data.length > 1 ? <p style={{textAlign: 'center'}}>{data.length} tournaments found</p> :
-            data.length === 1 && typeof(data[0]) != 'undefined' ? <p>{data.length} tournament found</p> : null }
+            data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center'}}>{data.length} tournament found</p> : null }
             {data.length !== 0 && <Pagination 
                     className="pagination-bar"
                     currentPage={currentPage}
