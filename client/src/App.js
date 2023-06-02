@@ -20,7 +20,10 @@ function PageNotFound() {
 
 function App() {
 
-  document.body.style = 'background: linear-gradient(#576C83, #405590)' // 'background: #617285;';
+  document.body.style.background = 'linear-gradient(#576C83, #405590)'; // 'background: #617285;';
+  document.body.style.minHeight = '100vh';
+  document.body.style.display = 'flex';
+  document.body.style.flexDirection = 'column';
 
   return (
     <Router>

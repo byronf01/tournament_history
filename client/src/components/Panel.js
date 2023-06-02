@@ -50,7 +50,7 @@ function TournamentsButton() {
   function Panel() {
     return (
       <div class='outer-wrapper' style={{display: 'flex', width: '100%', height: 'auto', flexWrap: 'wrap', paddingTop: "2.5%", marginLeft: "0%", marginRight: "0px", justifyContent: "center"}}>
-        <div style={{width: '80%', display: "flex", gap: "5%", flexWrap: 'wrap', flexDirection: 'row', flexFlow: 'row wrap', justifyContent: "center" }}>
+        <div style={{width: '80%', display: "flex", gap: "6%", flexWrap: 'wrap', flexDirection: 'row', flexFlow: 'row wrap', justifyContent: "center" }}>
           <TournamentsButton />
           <MatchesButton />
           <StatsButton />

@@ -8,10 +8,10 @@ import { Tag } from '../components/Tag.js'
   class HomePageChild extends Component {
     render() {
       return (
-        <span>
+        <div>
           <Tag />
           <Panel />
-        </span>
+        </div>
       )
     }
   }

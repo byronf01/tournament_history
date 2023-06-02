@@ -1,11 +1,12 @@
 
 import './HomePage.css';
-import {Routes, Route, useNavigate} from 'react-router-dom';
 import React, { useState, useMemo, useEffect } from 'react';
-import { Component } from 'react';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
 import TournamentsBlock from '../components/TournamentsBlock'
+import { InputAdornment, TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import Spinner from '../components/Spinner'
 
 let PageSize = 10;
 
@@ -25,6 +26,7 @@ function TournamentsPage() {
         return select
         
     }, [currentPage, data]);
+
     
     useEffect ( () => {
         
@@ -80,6 +82,12 @@ function TournamentsPage() {
         setIsLoading(false);
         setCurrentPage(1) // reset
     };
+
+    /*
+    <div>
+                    <input type="text" value={query} onChange={changeQuery} placeholder='Search...' />
+                </div>
+    */
     
     return (
         <div>
@@ -89,22 +97,40 @@ function TournamentsPage() {
                 <div>
                 <h1 style={{textAlign: "center", 
                 fontSize: "50px",
+                fontFamily: 'trebuchet ms',
+                textShadow: '3px 3px #505F74',
                 color: "rgb(255,255,255)"}}>🏆 Tournaments 🏆</h1>
                 </div>
                 
     
             </div>
             
-            { dataMaster.length != 1 &&
-                <input type="text" value={query} onChange={changeQuery} placeholder='Search for a specific tournament...'/>
-            }
-            {isLoading && <p>Loading...</p>}
-            {data.length > 1 ? <p>{data.length} tournaments found</p> :
-            data.length == 1 && typeof(data[0]) != 'undefined' ? <p>{data.length} tournament found</p> : null }
             
-            {data.length === 0 && !isLoading && <p>No Results Found</p>}
-            {data.length != 0 && <TournamentsBlock tourns={currentTableData} />}
-            {data.length != 0 && <Pagination 
+
+            { dataMaster.length !== 1 &&
+                <div style={{textAlign: 'center'}}>
+                    <TextField
+                        id="search"
+                        type="search"
+                        placeholder='Search...'
+                        value={query}
+                        onChange={changeQuery}
+                        sx={{ width: 600, borderRadius: 10 }}
+                        InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="start">
+                                <SearchIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        style={{backgroundColor: '#FFFFFF'}}
+                    />
+                </div>
+            }
+            {isLoading && <Spinner />}
+            {data.length > 1 ? <p style={{textAlign: 'center'}}>{data.length} tournaments found</p> :
+            data.length === 1 && typeof(data[0]) != 'undefined' ? <p>{data.length} tournament found</p> : null }
+            {data.length !== 0 && <Pagination 
                     className="pagination-bar"
                     currentPage={currentPage}
                     totalCount={data.length}
@@ -112,7 +138,21 @@ function TournamentsPage() {
                     onPageChange={page => setCurrentPage(page)}
                     dataInfo={data}
                     setData={setData} 
-                    style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>}
+                    style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>
+            }
+            
+            {data.length === 0 && !isLoading && <p>No Results Found</p>}
+            {data.length !== 0 && <TournamentsBlock tourns={currentTableData} />}
+            {data.length !== 0 && <Pagination 
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={data.length}
+                    pageSize={PageSize}
+                    onPageChange={page => setCurrentPage(page)}
+                    dataInfo={data}
+                    setData={setData} 
+                    style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>
+            }
         </div>
     )
 }
