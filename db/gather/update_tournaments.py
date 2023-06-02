@@ -285,12 +285,11 @@ def update_misc():
 
 if __name__ == "__main__":
 
-    gen_id()
-    """
+    
     update_tournaments_main()
     if "misc" in sys.argv:
         update_misc()
-    """
+    
 
 
     

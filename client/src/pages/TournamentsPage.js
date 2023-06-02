@@ -4,9 +4,10 @@ import React, { useState, useMemo, useEffect } from 'react';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
 import TournamentsBlock from '../components/TournamentsBlock'
+import Spinner from '../components/Spinner'
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import Spinner from '../components/Spinner'
+
 
 let PageSize = 10;
 
@@ -83,11 +84,6 @@ function TournamentsPage() {
         setCurrentPage(1) // reset
     };
 
-    /*
-    <div>
-                    <input type="text" value={query} onChange={changeQuery} placeholder='Search...' />
-                </div>
-    */
     
     return (
         <div>
