@@ -20,7 +20,7 @@ function PageNotFound() {
 
 function App() {
 
-  document.body.style = 'background: #617285;';
+  document.body.style = 'background: linear-gradient(#576C83, #405590)' // 'background: #617285;';
 
   return (
     <Router>

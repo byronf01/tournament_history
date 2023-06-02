@@ -13,11 +13,12 @@ code {
 }
 
 .b1 {
-  background-color: #7EA172;
-  color: rgb(212, 212, 212);
-  width: 28%;
-  height: 5em;
+  background-color: #B4B8AB;
+  color: rgb(255, 255, 255);
+  width: 19%;
+  height: 28%;
   font-family: trebuchet ms;
   font-size: 250%;
   display: inline;
+  border-radius: 11px;
 }

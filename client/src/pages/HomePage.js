@@ -9,7 +9,6 @@ import { Tag } from '../components/Tag.js'
     render() {
       return (
         <span>
-          <div style={{height: '5em'}}></div>
           <Tag />
           <Panel />
         </span>
