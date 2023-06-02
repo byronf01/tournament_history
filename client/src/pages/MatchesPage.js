@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect} from 'react';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
 import MatchesBlock from '../components/MatchesBlock'
+import Spinner from '../components/Spinner'
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -15,7 +16,7 @@ function MatchesPage() {
   const [dataMaster, setDataMaster] = useState(Array(1));
   const [query, setQuery] = useState("");
   const [timerId, setTimerId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const currentTableData = useMemo(() => {
       
@@ -51,6 +52,7 @@ function MatchesPage() {
             });
             setData(sorted);
             setDataMaster(sorted);
+            setIsLoading(false);
         })
       
     }, []);
@@ -99,16 +101,40 @@ function MatchesPage() {
           </div>
       </div>
 
-
-      { dataMaster.length != 1 &&
-        <input type="text" value={query} onChange={changeQuery} placeholder='Search for a specific match...'/>
-      }
-      {isLoading && <p>Loading...</p>}
-
-      {data.length > 1 ? <p>{data.length} matches found</p> :
-      data.length == 1 && typeof(data[0]) != 'undefined' ? <p>{data.length} match found</p> : null }
+      { dataMaster.length !== 1 &&
+                <div style={{textAlign: 'center'}}>
+                    <TextField
+                        id="search"
+                        type="search"
+                        placeholder='Search...'
+                        value={query}
+                        onChange={changeQuery}
+                        sx={{ width: '40vw', borderRadius: 10 }}
+                        InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="start">
+                                <SearchIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        style={{backgroundColor: '#FFFFFF'}}
+                    />
+                </div>
+            }
+      {isLoading && <Spinner />}
+      {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} matches found</p> :
+      data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} match found</p> : null }
       
-      {data.length === 0 && !isLoading && <p>No Results Found</p>}
+      {data.length === 0 && !isLoading && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>No Results Found</p>}
+      {data.length != 0 && <Pagination 
+        className="pagination-bar"
+        currentPage={currentPage}
+        totalCount={data.length}
+        pageSize={PageSize}
+        onPageChange={page => setCurrentPage(page)}
+        dataInfo={data}
+        setData={setData} 
+        style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>}
       {data.length != 0 && <MatchesBlock matches={currentTableData} />}
       
       

@@ -24,7 +24,7 @@ function MatchesBlock( {matches} ) {
         <div>
             {
                 empty == false && 
-                    <div>
+                    <div style={{width: '70%', marginLeft: '17%', marginRight: '13%'}}>
                         <ul>{currentData}</ul>
                     </div>
             }

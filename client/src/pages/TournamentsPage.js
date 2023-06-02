@@ -17,7 +17,7 @@ function TournamentsPage() {
     const [dataMaster, setDataMaster] = useState(Array(1));
     const [query, setQuery] = useState("");
     const [timerId, setTimerId] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const currentTableData = useMemo(() => {
         
@@ -46,6 +46,7 @@ function TournamentsPage() {
                 }
                 setData(tmp);
                 setDataMaster(tmp);
+                setIsLoading(false);
             
             })
         
@@ -123,8 +124,8 @@ function TournamentsPage() {
                 </div>
             }
             {isLoading && <Spinner />}
-            {data.length > 1 ? <p style={{textAlign: 'center'}}>{data.length} tournaments found</p> :
-            data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center'}}>{data.length} tournament found</p> : null }
+            {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} tournaments found</p> :
+            data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} tournament found</p> : null }
             {data.length !== 0 && <Pagination 
                     className="pagination-bar"
                     currentPage={currentPage}
@@ -136,7 +137,7 @@ function TournamentsPage() {
                     style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>
             }
             
-            {data.length === 0 && !isLoading && <p>No Results Found</p>}
+            {data.length === 0 && !isLoading && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>No Results Found</p>}
             {data.length !== 0 && <TournamentsBlock tourns={currentTableData} />}
             {data.length !== 0 && <Pagination 
                     className="pagination-bar"
