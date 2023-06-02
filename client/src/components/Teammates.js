@@ -43,13 +43,13 @@ function Member(props) {
             <div style={{marginTop: '0.3vw', display: 'flex', justifyContent: 'center'}}>
                 <a href={profile}>
                     <div>
-                        <ImageContainer image={{url: pfp, alt: 'pfp'}} width='6vw' height='6vw'/>
+                        <ImageContainer image={{url: pfp, alt: 'pfp'}} width='5vw' height='5vw'/>
                     </div>
                 </a>
             </div>
             
             <div style={{margin: '0', lineHeight: '0.3vw', wordWrap: 'break-text'}}>
-                <p><b>{username}</b></p>
+                <p style={{fontSize: '1.2vw'}}><b>{username}</b></p>
                 <p style={{fontSize: '0.9vw'}}><i>{discord}</i></p>
             </div>
             

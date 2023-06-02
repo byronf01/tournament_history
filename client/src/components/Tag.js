@@ -10,7 +10,7 @@ function Tag() {
             <p style={{
               color: 'white',
               fontFamily: 'trebuchet ms',
-              fontSize: '460%',
+              fontSize: '4.7vw',
               marginTop: '0px',
               marginBottom: '0px'
             }}>hiyah's Tournament History</p>

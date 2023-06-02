@@ -10,9 +10,12 @@ function TournamentsButton() {
     }
   
     return (
-      <button class="b1" onClick={handleClick} style={{width: '18rem', height: '10rem'}}>
-        <p style={{marginTop: "4%", marginBottom: "0%",}}>Tournaments</p>
-        <p style={{marginTop: "4%", marginBottom: "6%"}}>🏆</p>
+      <button class="b1" onClick={handleClick} style={{width: '18vw', height: '10vw'}}>
+        <div style={{fontSize: '2.5vw'}}>
+          <p style={{marginTop: "4%", marginBottom: "0%",}}>Tournaments</p>
+          <p style={{marginTop: "4%", marginBottom: "6%"}}>🏆</p>
+        </div>
+        
       </button>
     )
   }
@@ -25,9 +28,11 @@ function TournamentsButton() {
     }
 
     return (
-      <button class="b1" onClick={handleClick} style={{width: '18rem', height: '10rem'}}>
-        <p style={{marginTop: "4%", marginBottom: "0%"}}>Matches</p>
-        <p style={{marginTop: "4%", marginBottom: "6%"}}>🆚</p>
+      <button class="b1" onClick={handleClick} style={{width: '18vw', height: '10vw'}}>
+        <div style={{fontSize: '2.5vw'}}>
+          <p style={{marginTop: "4%", marginBottom: "0%"}}>Matches</p>
+          <p style={{marginTop: "4%", marginBottom: "6%"}}>🆚</p>
+        </div>
       </button>
     )
   }
@@ -40,9 +45,11 @@ function TournamentsButton() {
     }
 
     return (
-      <button class="b1" onClick={handleClick} style={{width: '18rem', height: '10rem'}}>
-        <p style={{marginTop: "4%", marginBottom: "0%"}}>Stats</p>
-        <p style={{marginTop: "4%", marginBottom: "6%"}}>🥇</p>
+      <button class="b1" onClick={handleClick} style={{width: '18vw', height: '10vw'}}>
+        <div style={{fontSize: '2.5vw'}}>
+          <p style={{marginTop: "4%", marginBottom: "0%"}}>Stats</p>
+          <p style={{marginTop: "4%", marginBottom: "6%"}}>🥇</p>
+        </div>
       </button>
     )
   }

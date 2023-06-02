@@ -148,7 +148,9 @@ function TournamentDetails(props) {
 
                         { data['bracket'] != false && <iframe src={url} width="100%" height="500" frameborder="0" scrolling="auto" allowtransparency="true"></iframe>}
                         
-                        <ul>{matches}</ul>
+                        <div>
+                            <ul style={{position: 'relative', left: '2.5vw'}}>{matches}</ul>
+                        </div>
                     </div>
 
                     

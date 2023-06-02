@@ -4,6 +4,8 @@ import React, { useState, useMemo, useEffect} from 'react';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
 import MatchesBlock from '../components/MatchesBlock'
+import { InputAdornment, TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 let PageSize = 20;
 
@@ -90,7 +92,9 @@ function MatchesPage() {
                 paddingRight: "10%"}}>
           <div>
           <h1 style={{textAlign: "center", 
-          fontSize: "50px",
+          fontSize: "3.5vw",
+          fontFamily: 'trebuchet ms',
+          textShadow: '3px 3px #505F74',
           color: "rgb(255,255,255)"}}>🆚 Matches 🆚</h1>
           </div>
       </div>

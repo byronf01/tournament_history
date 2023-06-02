@@ -92,13 +92,12 @@ function TournamentsPage() {
                 paddingRight: "10%"}}>
                 <div>
                 <h1 style={{textAlign: "center", 
-                fontSize: "50px",
+                fontSize: "3.5vw",
                 fontFamily: 'trebuchet ms',
                 textShadow: '3px 3px #505F74',
                 color: "rgb(255,255,255)"}}>🏆 Tournaments 🏆</h1>
                 </div>
-                
-    
+        
             </div>
             
             
@@ -111,7 +110,7 @@ function TournamentsPage() {
                         placeholder='Search...'
                         value={query}
                         onChange={changeQuery}
-                        sx={{ width: 600, borderRadius: 10 }}
+                        sx={{ width: '40vw', borderRadius: 10 }}
                         InputProps={{
                             endAdornment: (
                               <InputAdornment position="start">
