@@ -25,7 +25,7 @@ function TournamentsBlock( {tourns} ) {
             {
                 empty == false && 
                     <div>
-                        <ul>{currentData}</ul>
+                        <ul style={{padding: '0 0 0 0'}}>{currentData}</ul>
                     </div>
             }
             

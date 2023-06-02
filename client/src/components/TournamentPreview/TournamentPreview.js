@@ -23,15 +23,6 @@ function TournamentPreview( {new_data} ) {
         info = "No Preview";
     }
 
-    /*
-    <img src={img} style={{maxWidth: "100%", 
-                                    maxHeight: "100%",
-                                    objectFit: "fill",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                 
-                                    }}/>
-                                    */
     const img = { url: banner, alt: 'banner' };
 
     return (
@@ -40,12 +31,12 @@ function TournamentPreview( {new_data} ) {
           <div class="inner" style={{border: "1px solid black", borderStyle: "solid", 
                       marginBottom: '2%', marginLeft: '12%', marginRight: '12%', borderRadius: "30px",
                       width: "76%", backgroundColor: "#7F9C96",
-                      display: "flex", maxHeight: "200px",
+                      display: "flex", maxHeight: "20vw",
                       boxShadow: "2px 5px #1a1d21", overflow: "hidden",
-                      justifyContent: 'center'}}>
+                      justifyContent: 'center', alignItems: "center"}}>
             <div style={{width: "60%", height: "100%", display: "flex", 
-                        overflow: "hidden", objectFit: "fill", justifyContent: "center",
-                        }}>
+                        justifyContent: "center",
+                        }}> 
               <div style={{padding: '10px 0px 10px 0px'}}>
                 <ImageContainer image={img}/>
               </div>
@@ -92,7 +83,7 @@ function TournamentPreview( {new_data} ) {
                     style={{
                       
                       color: "black",
-                      fontSize: "200%",
+                      fontSize: "2.2vw",
                       margin: "0"
                     }}
                   >
@@ -102,7 +93,7 @@ function TournamentPreview( {new_data} ) {
                     style={{
                       
                       color: "black",
-                      fontSize: "100%",
+                      fontSize: "1.2vw",
                       margin: "0"
                     }}
                   >
