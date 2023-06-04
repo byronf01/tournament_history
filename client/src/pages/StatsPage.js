@@ -1,5 +1,5 @@
 
-import './HomePage.css';
+import './Pages.css';
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { Component } from 'react';

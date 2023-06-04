@@ -33,7 +33,25 @@ function TournamentPreview( {new_data} ) {
                       width: "76%", backgroundColor: "#7F9C96",
                       display: "flex", maxHeight: "20vw",
                       boxShadow: "2px 5px #1a1d21", overflow: "hidden",
-                      justifyContent: 'center', alignItems: "center"}}>
+                      justifyContent: 'center', alignItems: "center", cursor: 'pointer'}}
+                onClick={(e) => {
+                        // Check if text is selected
+                        const selection = window.getSelection();
+                        const selectedText = selection.toString();
+                        if (selectedText.length === 0) {
+                          
+                          if (e.target.tagName !== 'A') {
+                            // Redirect to the link when no text is selected
+                            window.location.href = `/tournaments/${data["url_id"]}`;
+                          } else {
+                              window.open(info, '_blank');
+                          }
+                        }
+                        
+                        
+
+
+                      }}>
             <div style={{width: "60%", height: "100%", display: "flex", 
                         justifyContent: "center",
                         }}> 
@@ -49,15 +67,7 @@ function TournamentPreview( {new_data} ) {
                 width: "40%",
                 cursor: "pointer" // Add cursor pointer to indicate it's clickable
               }}
-              onClick={(e) => {
-                // Check if text is selected
-                const selection = window.getSelection();
-                const selectedText = selection.toString();
-                if (selectedText.length === 0) {
-                  // Redirect to the link when no text is selected
-                  window.location.href = `/tournaments/${data["url_id"]}`;
-                }
-              }}
+              
             >
               <div
                 style={{
@@ -99,7 +109,7 @@ function TournamentPreview( {new_data} ) {
                   >
                     {start}
                     <br></br>
-                    {info}
+                    <a class='styled'>{info}</a>
                   </p>
                 </div>
               </div>

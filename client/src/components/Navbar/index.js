@@ -30,7 +30,7 @@ const Navbar = () => {
     
         </NavMenu>
         <NavBtn>
-          <NavBtnLink to='https://osu.ppy.sh/users/16626263' style={{
+          <NavBtnLink to='https://osu.ppy.sh/users/16626263' target="_blank" rel="noreferrer" style={{
             paddingLeft: "0%", paddingRight: "0%"
           }}>
             <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>

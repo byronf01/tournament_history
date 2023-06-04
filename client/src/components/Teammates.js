@@ -41,7 +41,7 @@ function Member(props) {
                 }
             </div>
             <div style={{marginTop: '0.3vw', display: 'flex', justifyContent: 'center'}}>
-                <a href={profile}>
+                <a href={profile} target="_blank" rel="noreferrer">
                     <div>
                         <ImageContainer image={{url: pfp, alt: 'pfp'}} width='5vw' height='5vw'/>
                     </div>

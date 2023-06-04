@@ -1,5 +1,5 @@
 
-import './HomePage.css';
+import './Pages.css';
 import React from 'react';
 import { Component } from 'react';
 import { Panel } from '../components/Panel.js'

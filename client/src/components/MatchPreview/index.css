@@ -1,0 +1,12 @@
+.styled {
+    text-decoration: none;
+    color: #000000;
+}
+
+.styled:hover {
+    text-decoration: underline;
+}
+.styled:active {
+    text-decoration: underline;
+    color: #de3434;
+}

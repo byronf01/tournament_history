@@ -1,5 +1,5 @@
 
-import './HomePage.css';
+import './Pages.css';
 import React, { useState, useMemo, useEffect } from 'react';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'

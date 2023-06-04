@@ -1,4 +1,4 @@
-
+import './index.css'
 
 const USER = 16626263;
 function MatchPreview( {acronym, mp, stage, match_name, result, teams} ) {
@@ -29,8 +29,16 @@ function MatchPreview( {acronym, mp, stage, match_name, result, teams} ) {
                 const selection = window.getSelection();
                 const selectedText = selection.toString();
                 if (selectedText.length === 0) {
-                    // Redirect to the link when no text is selected
-                    window.location.href = `/matches/${acronym}/${mp}`;
+                   
+                    if (e.target.tagName !== 'A') {
+                        
+                        window.location.href = `/matches/${acronym}/${mp}`;
+                     } else {
+                        // Open a new page when the <a> tag is clicked
+                        
+                        window.open(match_url, '_blank');
+                      }
+                    
                 }
                 }}
                 style={{
@@ -57,7 +65,7 @@ function MatchPreview( {acronym, mp, stage, match_name, result, teams} ) {
                     
                 </div>
                 <div className="link" style={{ display: 'flex', marginTop: "0vw", fontSize: "1.1vw", marginLeft: '1vw' }}>
-                    <p style={{ marginTop: "0.8vw" }}>{match_url}</p>
+                    <p style={{ marginTop: "0.8vw" }}><a class='styled' >{match_url}</a></p>
                     <p style={{marginTop: "0.8vw", marginLeft: 'auto', marginRight: '1.5vw', alignItems: 'flex-end'}}>{result[0]} - {result[1]}</p>
                     
                 </div>

@@ -1,5 +1,5 @@
 
-import './HomePage.css';
+import './Pages.css';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar'

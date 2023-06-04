@@ -101,3 +101,31 @@ input[type="range"]:active::-webkit-slider-thumb{
     left: 0;
     right: 0;
 }
+
+.styled {
+    text-decoration: none;
+    color: #000000;
+}
+
+.styled:hover {
+    text-decoration: underline;
+    
+}
+.styled:active {
+    text-decoration: underline;
+    color: #fe2f2f;
+}
+
+.styled2 {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+.styled2:hover {
+    text-decoration: none;
+}
+
+.styled2:active {
+    text-decoration: underline;
+    color: #FFFFFF;
+}
