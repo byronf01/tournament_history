@@ -27,7 +27,7 @@ function TournamentPreview( {new_data} ) {
 
     return (
         
-        <div>
+        <div style={{fontFamily: 'trebuchet ms'}}>
           <div class="inner" style={{border: "1px solid black", borderStyle: "solid", 
                       marginBottom: '2%', marginLeft: '12%', marginRight: '12%', borderRadius: "30px",
                       width: "76%", backgroundColor: "#7F9C96",

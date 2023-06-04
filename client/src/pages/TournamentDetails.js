@@ -77,7 +77,7 @@ function TournamentDetails(props) {
                                     <p>Forum Post</p> 
                                     
                                     { data['forum'] !== '' ? 
-                                        <a href={data['forum']} style={{textAlign: 'center'}}>
+                                        <a href={data['forum']} target="_blank" rel="noreferrer" style={{textAlign: 'center'}}>
                                             <div style={{justifyContent: 'center', alignItems: 'center'}}>
                                                 <ImageContainer image={{url: osu_logo, alt: 'osu'}} width='5vw' height='5vw' />
                                             </div>
@@ -96,7 +96,7 @@ function TournamentDetails(props) {
                                     <p>Spreadsheet</p> 
                                 
                                     { data['tourn_sheet'] !== '' ? 
-                                        <a href={data['tourn_sheet']}>
+                                        <a target="_blank" rel="noreferrer" href={data['tourn_sheet']} style={{textAlign: 'center'}}>
                                             <div style={{justifyContent: 'center', alignItems: 'center'}}>
                                                 <ImageContainer image={{url: sheets_logo, alt: 'sheet'}} width='5vw' height='5vw' />
                                             </div>
@@ -115,7 +115,7 @@ function TournamentDetails(props) {
                                     <p>Bracket</p> 
                                     
                                     { data['tourn_sheet'] !== '' ? 
-                                        <a href={data['bracket']}>
+                                        <a href={data['bracket']} target="_blank" rel="noreferrer" style={{textAlign: 'center'}}>
                                             <div style={{justifyContent: 'center', alignItems: 'center'}}>
                                                 <ImageContainer image={{url: challonge_logo, alt: 'bracket'}} width='5vw' height='5vw' />
                                             </div>
@@ -142,8 +142,8 @@ function TournamentDetails(props) {
                         <Teammates members={data['teammates']} />
 
                         <div style={{fontSize: '1.3vw', lineHeight: '1.8vw', paddingBottom: '0.7vw'}}>
-                            <p style={{margin: '0'}}>Seed: {data['seed']}</p>
-                            <p style={{margin: '0'}}>Placement: {data['placement']}</p>
+                            <p style={{margin: '0'}}>Seed: <b><u>{data['seed']}</u></b></p>
+                            <p style={{margin: '0'}}>Placement: <b><u>{data['placement']}</u></b></p>
                         </div>
 
                         { data['bracket'] != false && <iframe src={url} width="100%" height="500" frameborder="0" scrolling="auto" allowtransparency="true"></iframe>}
