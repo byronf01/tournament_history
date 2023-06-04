@@ -80,7 +80,32 @@ function MatchDetails(props) {
                             </a>
                         </div>
 
-                        <hr style={{width: '90%', height: '1vw', backgroundColor: '#224476'}}/>
+                        <hr style={{width: '80%', height: '0.6vw', backgroundColor: '#D0D0D0', marginBottom: '1.5vw'}}/>
+                        
+                        <div style={{display: 'flex', marginLeft: '10%', marginRight: '10%', color: '#FFFFFF'}}>
+
+                            <div style={{width: '29%', marginLeft: '1%'}}>
+                                <div style={{display: 'flex', flexDirection: 'column'}}>
+                                    <h1 style={{marginTop: '0', fontSize: '2.5vw'}}>Match Costs</h1>
+                                    <div>
+                                        <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} result={data["result"]} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{width: '4%'}}>
+                                <div style={{borderLeft: '0.5vw solid #D0D0D0', height: '500px'}}></div>
+                            </div>
+
+                            <div style={{width: '65%', marginRight: '1%'}}>
+                                <div style={{display: 'flex', flexDirection: 'column'}}>
+                                    <h1 style={{marginTop: '0', fontSize: '2.5vw'}}>Match Costs</h1>
+                                </div>
+                            </div>
+                        </div>
+
+
+
 
                         <div style={{display: "flex", height: "100vh"}}>
                             <div style={{flex: "1", overflowY: "hidden"}}>

@@ -11,7 +11,7 @@ import {
 const Navbar = () => {
   return (
     <>
-      <Nav>
+      <Nav style={{position: 'sticky', top: '0'}}>
         <Bars />
   
         <NavMenu>
