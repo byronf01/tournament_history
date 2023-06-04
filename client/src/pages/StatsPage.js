@@ -7,40 +7,51 @@ import Navbar from '../components/Navbar'
 import BarChart from '../components/BarChart'
 import GeneralChart from '../components/GeneralChart'
 import Teammates from '../components/Teammates.js'
+import Spinner from '../components/Spinner'
+import Dropdown from '../components/Dropdown'
+import ImageContainer from '../components/ImageContainer'
+import arrowdown from '../assets/arrowdown.png'
+import arrowup from '../assets/arrowup.png'
 
 function Member(props) {
   const id = props.id;
   const username = props.username;
+  const weight = props.weight;
   const pfp = `https://a.ppy.sh/${id}?1677187336.png`
   const profile = `https://osu.ppy.sh/users/${id}`;
   
   return (
-      <div style={{display: "inline", marginRight: "10px"}}>
-          <a href={profile}>
-              <img src={pfp} style={{width: "6em", height: "6em"}} />
-          </a>
-          <p><b>{username}</b></p>
-      </div>
+      
+        <div style={{display: "flex", justifyContent: 'center', alignItems: 'center', gap: '1vw'}}>
+            <a href={profile}>
+                <img src={pfp} style={{width: `${weight}vw`, height: `${weight}vw`}} />
+            </a>
+            <p style={{fontSize: `${weight*0.3}vw`, flexGrow: 1}}><b>{username}</b></p>
+        </div>
+      
   )
 }
   
 function StatsPage () {
   const [data, setData] = useState(false);
-  const [userOsuData, setUserOsuData] = useState(false)
-  const [bannerList, setBannerList] = useState(false)
+  const [userOsuData, setUserOsuData] = useState(false);
+  const [bannerList, setBannerList] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showBanners, setShowBanners] = useState(false);
   
   useEffect ( () => {
         
     fetch('http://localhost:5000/api/stats').then( resp => resp.json())
         .then( (result) => {
           setData(result);  
-
+          setIsLoading(false);
           // add banners
           let banners = [];
           for (let b in result['banners_won']) {
+            
             banners.push(
-              <div>
-                <img src={result['banners_won'][b]} />
+              <div style={{display: 'flex', justifyContent: 'center', paddingBottom: '2vw'}}>
+                <img src={result['banners_won'][b]} style={{maxWidth: '50vw', maxHeight: '20vw'}}/>
               </div>
             )
           }
@@ -101,17 +112,18 @@ function StatsPage () {
 				type: "pie",
 				indexLabel: "{label}: {y}%",		
 				startAngle: -90,
-        dataPoints: Object.entries(data['most_played_mods']).map(([label, y]) => ({ label, y: y * 100 }))
+        dataPoints: Object.entries(data['most_played_mods']).map(([label, y]) => ({ label, y: (y * 100).toFixed(3) }))
 			}
 			]
 		})
   
   const most_teamed = (data == false || userOsuData == false ? null : 
                       data['most_teamed'].map((member) => 
-                      <div>
-                        <p>{member[1]}</p>
-                        <Member id={member[0]} username={userOsuData[member[0]]} />
-                      </div>))
+                        
+                      <div style={{display: 'flex', gap: '1vw', paddingBottom: '1vw'}}>
+                        <p style={{fontSize: `${member[1]*0.3}vw`}}>{member[1]}</p>
+                        <Member id={member[0]} username={userOsuData[member[0]]} weight={member[1]} />
+                      </div>).slice(0, 10))
 
 const wrbyModOptions = (data == false ? null : {
   title: {
@@ -145,6 +157,7 @@ const wrbyModOptions = (data == false ? null : {
       includeZero: true,
       labelFormatter: (e) => { return e.value.toLocaleString("en-US") }
     },
+    
     data: [{
       type: "bar",
       dataPoints: Object.entries(data['avg_score_per_mod']).map(([label, y]) => ({ label, y })).sort((a, b) => {
@@ -198,7 +211,6 @@ const wrbyModOptions = (data == false ? null : {
             lastZero -= 1;
           }
           arr = arr.slice(0, lastZero + 1);
-          console.log(arr)
         }
         return arr.map((value, index) => ({ label: `${year}-${index + 1}`, y: value }));
       })
@@ -212,9 +224,8 @@ const wrbyModOptions = (data == false ? null : {
     title: {
       text: "Best Tournament Performances"
     },
-    axisX: {
-      title: "Tournament",
-      reversed: true,
+    axisX:{
+      reversed:  true
     },
     axisY: {
       title: "Average Match Cost",
@@ -232,9 +243,8 @@ const wrbyModOptions = (data == false ? null : {
     title: {
       text: "Worst Tournament Performances"
     },
-    axisX: {
-      title: "Tournament",
-      reversed: true,
+    axisX:{
+      reversed:  true
     },
     axisY: {
       title: "Average Match Cost",
@@ -249,60 +259,117 @@ const wrbyModOptions = (data == false ? null : {
   return (
     <div>
         <Navbar />
+        <div style={{paddingLeft: "10%", 
+                paddingRight: "10%"}}>
+                <div>
+                <h1 style={{textAlign: "center", 
+                fontSize: "3.5vw",
+                fontFamily: 'trebuchet ms',
+                textShadow: '3px 3px #505F74',
+                color: "rgb(255,255,255)"}}>🥇Stats🥇</h1>
+                </div>
+            </div>
+        {isLoading && <Spinner />}
         { data != false &&
-          <div>
-            {
-              data['match_record'][0] >= data['match_record'][1] ? 
-                <p>Lifetime Match Record <b>{data['match_record'][0]}</b> - {data['match_record'][1]}</p>
-              : 
-                <p>Lifetime Match Record {data['match_record'][0]} - <b>{data['match_record'][1]}</b></p>
-            }
-            {
-              data['map_record'][0] >= data['map_record'][1] ? 
-                <p>Lifetime Map Record <b>{data['map_record'][0]}</b> - {data['map_record'][1]}</p>
-              : 
-                <p>Lifetime Map Record {data['map_record'][0]} - <b>{data['map_record'][1]}</b></p>
-            }
-            <p>Average matches per Tournament: {(Math.round(data['avg_matches_per_tourn'] * 100) / 100).toFixed(3)}</p>
-            <div style={{width: "50%", margin: "auto"}}>
-              <GeneralChart options={placementOptions}/>
-            </div>
-            <h3>Most Teamed</h3>
-            <ul style={{display: "flex"}}>{most_teamed}</ul>
-            <div style={{width: "32%", margin: "auto"}}>
-              <GeneralChart options={mostPlayedModsOptions}/>
-            </div>
-            <br></br>
-            <div style={{width: "30%", height: "auto", margin: "auto"}}>
-              <GeneralChart options={wrbyModOptions}/>
-            </div>
-            <br></br>
-            <div style={{width: "30%", margin: "auto"}}>
-              <BarChart options={avgScoreByModOptions}/>
-            </div>
-            <br></br>
-            <div style={{width: "44%", margin: "auto"}}>
-              <GeneralChart options={mostCommonTeamSizeOptions}/>
-            </div>
-            <br></br>
-            <div style={{width: "20%", margin: "auto"}}>
-              <GeneralChart options={mostCommonFormatOptions}/>
-            </div>
-            <br></br>
-            <div style={{width: "45%", margin: "auto"}}>
-              <GeneralChart options={tournsOverTimeOptions}/>
-            </div>
-            <br></br>
-            <div style={{width: "50%", margin: "auto"}}>
-              <BarChart options={bestMCOptions}/>
-            </div>
-            <br></br>
-            <div style={{width: "50%", margin: "auto"}}>
-              <BarChart options={worstMCOptions}/>
-            </div>
-            <h3>Banners Won</h3>
-            <ul>{bannerList}</ul>
+          <div style={{fontFamily: 'trebuchet ms', color: '#FFFFFF'}}>
             
+
+            <div style={{ display: 'flex', marginLeft: '15%', marginRight: '15%', width: '70%' }}>
+              <div style={{ width: '57%', paddingRight: '6%' }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div>
+                    <BarChart options={avgScoreByModOptions} containerProps={{ height: '30vw' }} />
+                  </div>
+                </div>
+              </div>
+              <div style={{ width: '37%', display: 'flex', flexDirection: 'column' }}>
+                <div>
+                  <GeneralChart options={wrbyModOptions} containerProps={{height: '20vw'}}/>
+                </div>
+                <div >
+                  <p style={{ textAlign: 'center', fontSize: '1.6vw', marginTop: '2vw', marginBottom: '0.8vw' }}>Average matches per Tournament:</p>
+                  <p style={{ textAlign: 'center', fontSize: '3vw', marginTop: '0' }}>{(Math.round(data['avg_matches_per_tourn'] * 100) / 100).toFixed(3)}</p>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', marginLeft: '15%', marginRight: '15%', marginTop: '3vw', width: '70%' }}>
+              <div style={{ width: '27%', paddingRight: '6%' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
+                  <div>
+                    <p style={{fontSize: '1.8vw', marginTop: '0.3vw', marginBottom: '0.8vw'}}>Lifetime Match Record: </p>
+                    {
+                      data['match_record'][0] >= data['match_record'][1] ? 
+                        <div style={{fontSize: '2.5vw', lineHeight: '2.2vw'}}><b style={{fontSize: '2.7vw'}}>(W) {data['match_record'][0]}</b><br /> - <br/><p style={{fontSize: '2vw', marginTop: '0'}}>(L) {data['match_record'][1]}</p></div>
+                      : 
+                        <div style={{fontSize: '2.5vw'}}><p style={{fontSize: '2vw', marginTop: '0'}}>(W) {data['match_record'][0]}</p><br /> - <br /><b style={{fontSize: '2.7vw'}}>(L) {data['match_record'][1]}</b></div>
+                    }
+                    <p style={{fontSize: '1.8vw', marginTop: '0.3vw', marginBottom: '0.8vw'}}>Lifetime Map Record: </p>
+                    {
+                      data['map_record'][0] >= data['map_record'][1] ? 
+                        <div style={{fontSize: '2.5vw', lineHeight: '2.2vw'}}><b style={{fontSize: '2.7vw'}}>(W) {data['map_record'][0]}</b><br /> - <br /><p style={{fontSize: '2vw', marginTop: '0'}}>(L) {data['map_record'][1]}</p></div>
+                      : 
+                        <div style={{fontSize: '2.5vw'}}><p style={{fontSize: '2vw', marginTop: '0'}}>(W) {data['map_record'][0]}</p><br /> - <br /><b style={{fontSize: '2.7vw'}}>(L) {data['map_record'][1]}</b></div>
+                    }
+                    
+                  </div>
+                </div>
+              </div>
+              <div style={{ width: '64%', display: 'flex', flexDirection: 'column' }}>
+                <div>
+                  <GeneralChart options={tournsOverTimeOptions}/>
+                </div>
+                
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', marginLeft: '10%', marginRight: '10%', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
+              <div style={{ width: '58%', paddingRight: '6%' }}>
+                  <div>
+                    <GeneralChart options={mostCommonTeamSizeOptions}/>
+                  </div>
+              </div>
+              <div style={{ width: '34%', display: 'flex', flexDirection: 'column' }}>
+                  <GeneralChart options={mostCommonFormatOptions}/>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', marginLeft: '12%', marginRight: '10%', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
+              <div style={{ width: '38%', paddingRight: '2%' }}>
+                <GeneralChart options={mostPlayedModsOptions}/>
+              </div>
+              <div style={{width: "50%", margin: "auto"}}>
+                <GeneralChart options={placementOptions}/>
+              </div>
+            </div>
+            
+            <div style={{display: 'flex', marginLeft: '5%', marginTop: '3vw', flexDirection: 'row'}}>
+
+              <div style={{display: 'flex', flexDirection: 'column', width: '50%'}}>
+                <div style={{ marginLeft: '12%', marginTop: '3vw'}}>
+                  <BarChart options={bestMCOptions}/>
+                </div>
+                
+                <div style={{marginLeft: '12%', marginTop: '3vw'}}>
+                  <BarChart options={worstMCOptions}/>
+                </div>
+              </div>
+
+              <div style={{display: 'flex', flexDirection: 'column', marginLeft: '7vw', justifyContent: 'center', width: '30%', textAlign: 'center'}}>
+                
+                <p style={{margin: '0', marginBottom: '1.4vw', fontSize: '2vw'}}>Most Teamed: </p>
+                <div style={{display: 'flex', alignItems: 'center'}}>
+                  <ul style={{display: "flex", flexDirection: 'column'}}>{most_teamed}</ul>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <Dropdown showBanners={showBanners} setShowBanners={() => {setShowBanners(!showBanners) }} banners={bannerList} />
+            </div>
+            
+            {/*extra space at end of page*/}
+            <div style={{height: '5vh'}}></div>
             
           </div>
         }

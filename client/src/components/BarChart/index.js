@@ -5,50 +5,43 @@ import CanvasJSReact from '@canvasjs/react-charts';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 class BarChart extends Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
-			options: {
-				animationEnabled: true,
-				theme: "light2",
-				title:{
-					text: "Most Popular Social Networking Sites"
-				},
-				axisX: {
-					title: "Social Network",
-					reversed: true,
-				},
-				axisY: {
-					title: "Monthly Active Users",
-					includeZero: true,
-					labelFormatter: this.addSymbols
-				},
-				data: [{
-					type: "bar",
-					dataPoints: [
-						{ y:  2200000000, label: "Facebook" },
-						{ y:  1800000000, label: "YouTube" },
-						{ y:  800000000, label: "Instagram" },
-						{ y:  563000000, label: "Qzone" },
-						{ y:  376000000, label: "Weibo" },
-						{ y:  336000000, label: "Twitter" },
-						{ y:  330000000, label: "Reddit" }
-					]
-				}]
-			}
-		}
-	}
+		  options: props.options,
+		  containerProps: props.containerProps,
+		};
+	  }
 	
+	/*
 	componentDidMount() {
         if (this.props.options) {
-            this.setState({options: this.props.options})
+            this.setState({options: this.props.options, containerProps: this.props.containerProps})
         }
     }
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.containerProps !== this.props.containerProps) {
+		  this.updateContainerProps();
+		}
+	  }
+	
+	  updateContainerProps() {
+		if (this.props.options) {
+		  this.setState({
+			options: this.props.options,
+			containerProps: this.props.containerProps,
+		  });
+		}
+	  }
+
+	*/
+
 	render() {
 		
 		return (
 		<div>
-			<CanvasJSChart options = {this.state.options}
+			<CanvasJSChart options = {this.state.options} containerProps={this.state.containerProps}
 				/* onRef={ref => this.chart = ref} */
 			/>
 			{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
