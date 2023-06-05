@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './matchcosts.css'
 
 function MatchCosts( {new_data, nameMap, result} ) {
     // new_data type: Array -> [Obj, Obj]
@@ -32,7 +33,7 @@ function MatchCosts( {new_data, nameMap, result} ) {
         return (
             <div>
                 
-                <div style={{border: "1px solid black"}}>
+                <div>
                     <img src={winner_img} style={{height: '150px', width: 'auto'}}></img>
                     <ol>
                         {ordered.map((ordered, index) => 
@@ -113,40 +114,45 @@ function MatchCosts( {new_data, nameMap, result} ) {
         return (
             <div>
                 
-                <div style={{border: "1px solid black"}}>
-                    <img src={winner_img} style={{height: '150px', width: 'auto'}}></img>
-                    <h6>Final Score:    
+                <div>
+                    <h3 style={{fontSize: '3vh', marginTop: '0', marginBottom: '0.8vw'}}>Final Score:    
                         {'🔵 '} 
                         {s1} - {s2}
                         {' 🔴'}
-                    </h6>
-                    <h5>{team1 == "blue_team" ? 'Blue Team 🔵' : team1 == "red_team" ? 'Red Team 🔴' : ''}</h5>
-                    <ol>
-                        {win_ordered.map((win_ordered, index) => 
-                            <li key={Object.keys(win_ordered)[0]}>
-                                <a href={`https://osu.ppy.sh/users/${Object.keys(win_ordered)[0]}`}>
-                                {nameMap[Object.keys(win_ordered)[0]]}</a> - {win_ordered[Object.keys(win_ordered)[0]].toString().substring(0, 6)}
-                                {Object.keys(win_ordered)[0] === Object.keys(mc1)[0] ? ' 🥇' 
-                                : Object.keys(win_ordered)[0] === Object.keys(mc2)[0] ? ' 🥈' 
-                                : Object.keys(win_ordered)[0] === Object.keys(mc3)[0] ? ' 🥉' 
-                                : ''}
-                            </li>
-                        )}
-                    </ol>
-                    
-                    <h5>{team2 == "blue_team" ? 'Blue Team 🔵' : team2 == "red_team" ? 'Red Team 🔴' : ''}</h5>
-                    <ol>
-                        {lose_ordered.map((lose_ordered, index) => 
-                            <li key={Object.keys(lose_ordered)[0]}>
-                                <a href={`https://osu.ppy.sh/users/${Object.keys(lose_ordered)[0]}`}>
-                                {nameMap[Object.keys(lose_ordered)[0]]}</a> - {lose_ordered[Object.keys(lose_ordered)[0]].toString().substring(0, 6)}
-                                {Object.keys(lose_ordered)[0] === Object.keys(mc1)[0] ? ' 🥇' 
-                                : Object.keys(lose_ordered)[0] === Object.keys(mc2)[0] ? ' 🥈' 
-                                : Object.keys(lose_ordered)[0] === Object.keys(mc3)[0] ? ' 🥉' 
-                                : ''}
-                            </li>
-                        )}
-                    </ol>
+                    </h3>
+                    <img src={winner_img} style={{width: '7vw', height: 'auto'}}></img>
+
+                    <div style={{marginLeft: '0.3vw'}}>
+                        <h5 style={{fontSize: '2.4vh', marginTop: '0.3vw', marginBottom: '0'}}>{team1 == "blue_team" ? 'Blue Team 🔵' : team1 == "red_team" ? 'Red Team 🔴' : ''}</h5>
+                        <ol style={{marginTop: '0.3vw', lineHeight: '3vh', fontSize: '2vh'}}>
+                            {win_ordered.map((win_ordered, index) => 
+                                <li key={Object.keys(win_ordered)[0]}>
+                                    <a class='styled2' href={`https://osu.ppy.sh/users/${Object.keys(win_ordered)[0]}`} target="_blank" rel="noreferrer">
+                                    {nameMap[Object.keys(win_ordered)[0]]}</a> - {win_ordered[Object.keys(win_ordered)[0]].toString().substring(0, 6)}
+                                    {Object.keys(win_ordered)[0] === Object.keys(mc1)[0] ? ' 🥇' 
+                                    : Object.keys(win_ordered)[0] === Object.keys(mc2)[0] ? ' 🥈' 
+                                    : Object.keys(win_ordered)[0] === Object.keys(mc3)[0] ? ' 🥉' 
+                                    : ''}
+                                </li>
+                            )}
+                        </ol>
+                        
+                        <h5 style={{fontSize: '2.4vh', marginTop: '0.3vw', marginBottom: '0'}}>{team2 == "blue_team" ? 'Blue Team 🔵' : team2 == "red_team" ? 'Red Team 🔴' : ''}</h5>
+                        <ol style={{marginTop: '0.3vw', lineHeight: '3vh', fontSize: '2vh'}}>
+                            {lose_ordered.map((lose_ordered, index) => 
+                                <li key={Object.keys(lose_ordered)[0]}>
+                                    <a class='styled2' href={`https://osu.ppy.sh/users/${Object.keys(lose_ordered)[0]}`}>
+                                    {nameMap[Object.keys(lose_ordered)[0]]}</a> - {lose_ordered[Object.keys(lose_ordered)[0]].toString().substring(0, 6)}
+                                    {Object.keys(lose_ordered)[0] === Object.keys(mc1)[0] ? ' 🥇' 
+                                    : Object.keys(lose_ordered)[0] === Object.keys(mc2)[0] ? ' 🥈' 
+                                    : Object.keys(lose_ordered)[0] === Object.keys(mc3)[0] ? ' 🥉' 
+                                    : ''}
+                                </li>
+                            )}
+                        </ol>
+                    </div>
+
+
                 </div>
             </div>
         );

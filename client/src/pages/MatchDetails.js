@@ -86,7 +86,7 @@ function MatchDetails(props) {
 
                             <div style={{width: '29%', marginLeft: '1%'}}>
                                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                                    <h1 style={{marginTop: '0', fontSize: '2.5vw'}}>Match Costs</h1>
+                                    <h1 style={{marginTop: '0', marginBottom: '0.3vw', fontSize: '5vh'}}>Match Costs</h1>
                                     <div>
                                         <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} result={data["result"]} />
                                     </div>
@@ -94,12 +94,17 @@ function MatchDetails(props) {
                             </div>
 
                             <div style={{width: '4%'}}>
-                                <div style={{borderLeft: '0.5vw solid #D0D0D0', height: '500px'}}></div>
+                                <div style={{borderLeft: '0.5vw solid #D0D0D0', height: '50000px'}}></div>
                             </div>
 
                             <div style={{width: '65%', marginRight: '1%'}}>
                                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                                    <h1 style={{marginTop: '0', fontSize: '2.5vw'}}>Match Costs</h1>
+                                    <h1 style={{marginTop: '0', fontSize: '2.5vw'}}>Match Procedure</h1>
+                                    <div style={{paddingBottom: "20px"}}>
+                                        {data["events"].map((event) => 
+                                            <MapDetails data={event} nameMap={nameMap} />
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

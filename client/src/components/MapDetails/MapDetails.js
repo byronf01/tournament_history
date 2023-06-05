@@ -1,3 +1,5 @@
+import defaultbg from '../../assets/defaultbg.png'
+import './index.css'
 
 function MapDetails( props ) {
     const data = props.data;
@@ -8,12 +10,19 @@ function MapDetails( props ) {
 
     // Edge case with qual lobbies with one person
     const bg = (data["map-background"] == "" ? "https://osu.ppy.sh/images/headers/profile-covers/c8.jpg" : data["map-background"]);
+    
     return (
         <div>
-            <div style={{border: "3px solid black"}}>
-                <a href={data["map-link"]}>
-                    <div style={{backgroundImage: `url(${bg})`, height: "200px"}}>
-                        <p>{data["map-title"]}</p>
+            <div style={{border: "0.3vw solid #224476"}}>
+                <a class='styled2' href={data["map-link"]} target="_blank" rel="noreferrer">
+                    <div style={{backgroundImage: `url(${defaultbg})`, backgroundSize: 'cover', height: "15vw"}}>
+                        <div style={{backgroundImage: `url(${bg})`, height: '100%', width: '100%'}}>
+                            <div style={{display: 'flex', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
+                                <div style={{alignSelf: 'center', textAlign: 'center', marginLeft: '1vw', marginRight: '1vw'}}>
+                                    <h2 style={{margin: '0', fontSize: '1.8vw', webkitTextStroke: '1px #000000'}}>{data["map-title"].slice(1, -1)}</h2>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </a>
                 
