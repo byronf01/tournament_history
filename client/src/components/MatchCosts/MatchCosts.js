@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import Sticky from 'react-sticky';
-import { StickyContainer } from 'react-sticky';
+
+
 import './matchcosts.css'
 
 function MatchCosts( {new_data, nameMap, result, isSticky} ) {

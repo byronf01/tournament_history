@@ -3,15 +3,10 @@ import './Pages.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar'
-import osu_logo from '../assets/osu_logo.png';
-import sheets_logo from '../assets/sheets_logo.png';
-import challonge_logo from '../assets/challonge_logo.png';
-import { RangeSlider } from '../components/RangeSlider'
-import { Teammates } from '../components/Teammates';
-import MatchPreview from '../components/MatchPreview';
 import MatchCosts from '../components/MatchCosts';
 import MapDetails from '../components/MapDetails';
 import Spinner from '../components/Spinner';
+import StickyBox from "react-sticky-box";
 
 
 function MatchDetails(props) {
@@ -93,8 +88,8 @@ function MatchDetails(props) {
                         
                         <div style={{display: 'flex', justifyContent: 'center', }}>
                             <a class='styled2' target="_blank" rel="noreferrer">
-                                <p style={{fontSize: '3.5vw', color: '#FFFFFF', cursor: 'pointer', margin: 'auto', 
-                                    marginTop: '2vw', marginBottom: '2vw'}} 
+                                <p style={{fontSize: '7vh', color: '#FFFFFF', cursor: 'pointer', margin: 'auto', 
+                                    marginTop: '2vw', marginBottom: '2vw', textAlign: 'center'}} 
                                     onClick={(e) => {
                                         const selection = window.getSelection();
                                         const selectedText = selection.toString();
@@ -112,12 +107,14 @@ function MatchDetails(props) {
                         <div style={{display: 'flex', marginLeft: '10%', marginRight: '10%', color: '#FFFFFF'}}>
 
                             <div style={{width: '29%', marginLeft: '1%'}}>
+                                <StickyBox offsetTop={120}>
                                 <div style={{display: 'flex', flexDirection: 'column'}}>
                                     <h1 style={{marginTop: '0', marginBottom: '0.3vw', fontSize: '5vh'}}>Match Costs</h1>
                                     <div>
                                         <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} result={data["result"]} isSticky={isSticky} />
                                     </div>
                                 </div>
+                                </StickyBox >
                             </div>
 
                             <div style={{ width: '4%' }}>
