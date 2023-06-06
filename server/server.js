@@ -15,7 +15,6 @@ const tournament_history = mongoose.model("tournament_historyV1.1", TournSchema,
 require('dotenv').config({path:__dirname+'../../.env'});
 const PASSWORD = process.env.mongo_password;
 const CLIENT_SECRET = process.env.client_secret;
-console.log(tournament_history)
 
 app.get("/api/data", async (req, res) => {
     // Return all db items
@@ -551,9 +550,14 @@ async function getMatches() {
     // Return a collection of Objects for previewing matches, with keys 
     // { acronym: "", mp: "", stage: "", match_name: "", result: [] }
     // Note there can be multiple objects with the same acronym
+
+    // 6/6: added player usernames for each match
     const all_data = []
     const query = await tournament_history.find()
+    let map = new Map(); // player id -> list of INDEXES in data, representing matches the player has been in
+    let all_players = [];
     
+    let ct = 0;
     for (let i=0; i < query.length; i++) {
         const doc = query[i].toJSON()
         const all_stages = doc["stages"]
@@ -566,20 +570,94 @@ async function getMatches() {
                 const all_matches = Object.keys(stage_data[k])
                 for (let match_key = 0; match_key < all_matches.length; match_key++) {
                     const match_details = all_matches[match_key];
+                    const teams = stage_data[k][match_details]['teams'];
                     const match_ret = { "acronym": acronym,
                                         "mp": all_matches[match_key],
                                         "stage": stage_name,
                                         "match_name": stage_data[k][match_details]["match_name"],
                                         "result": stage_data[k][match_details]["result"],
-                                        "teams": stage_data[k][match_details]['teams']};
+                                        "teams": teams,
+                                        "users": [],
+                                    };
                     all_data.push(match_ret);
+
+                    for (let t in teams) {
+                        const players = teams[t]
+                        for (let p in players) {
+                            if (!map.has(players[p])) {
+                                map.set(players[p], []);
+                                all_players.push(players[p]);
+                            }
+                            let indexes = map.get(players[p])
+                            indexes.push(ct)
+                            map.set(players[p], indexes )
+                        }
+                    }
+                    ct += 1;
                 }
             }
         }
     }
-  
+
+    // Get usernames of all players in map with multiple osu api calls
+    // TODO: bug where "hiyah" twice in users?
+
+    selection = 0;
+    
+    do {
+        const ids = all_players.slice(50*selection, 50*(selection+1));
+        const inf = {
+            'client_id': 21309,
+            'client_secret': CLIENT_SECRET,
+            'grant_type': 'client_credentials',
+            'scope': 'public',
+        }
+
+        await axios.post('https://osu.ppy.sh/oauth/token', data=inf).then( (resp) => {
+            const token = resp['data']['access_token']
+
+            const headers = {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+                "Accept": "application/json",
+            };
+
+            axios.get(`https://osu.ppy.sh/api/v2/users/`, { 
+                headers, 
+                params: {
+                    ids
+                },
+            })
+            .then( (resp2) => {
+                console.log(`Players ${50*selection} - ${50*(selection+1)} queued`)
+                const users = resp2["data"]["users"];
+                
+                for (let i in users) {
+                    const id = users[i]["id"]
+                    const username = users[i]["username"]
+                    
+                    const user_matches = map.get(id)
+                    for (let j in user_matches) { // Match indexes back to original all_data obj
+                        all_data[user_matches[j]]["users"].push(username)
+                    }
+
+                }
+
+                ++selection;
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        })
+
+    } while (50*selection < all_players.length);
+    
+    
     return all_data;  
 }
+
+
 
 async function getMatch(acr, id) {
     const query = await tournament_history.find({acronym: acr})

@@ -17,6 +17,7 @@ function MatchesPage() {
   const [query, setQuery] = useState("");
   const [timerId, setTimerId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
 
   const currentTableData = useMemo(() => {
       
@@ -28,6 +29,7 @@ function MatchesPage() {
   }, [currentPage, data]);
 
   useEffect ( () => {
+    let timer;
         
     fetch('http://localhost:5000/api/matches').then( resp => resp.json())
         .then( (res) => {
@@ -53,7 +55,15 @@ function MatchesPage() {
             setData(sorted);
             setDataMaster(sorted);
             setIsLoading(false);
+            clearTimeout(timer);
+            
         })
+
+        timer = setTimeout(() => {
+          setLoadingTimeExpired(true);
+        }, 20000);
+      
+        return () => clearTimeout(timer);
       
     }, []);
 
@@ -76,7 +86,11 @@ function MatchesPage() {
       if (newQuery !== "") {
           const regex = newQuery.toLowerCase().replace('\\','\\\\');
           const queriedData = dataMaster.filter((m) => (
-          m['match_name'].toLowerCase().match(regex) 
+            // search in match name
+            m['match_name'].toLowerCase().match(regex) 
+
+            // search in players in match
+            || m['users'].includes(regex)
           ));
           setData(queriedData);
       } else {
@@ -122,6 +136,7 @@ function MatchesPage() {
                 </div>
             }
       {isLoading && <Spinner />}
+      {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
       {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} matches found</p> :
       data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} match found</p> : null }
       
