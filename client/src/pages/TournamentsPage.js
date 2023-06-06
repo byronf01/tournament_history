@@ -102,7 +102,7 @@ function TournamentsPage() {
             </div>
             
             
-
+            <div >
             { dataMaster.length !== 1 &&
                 <div style={{textAlign: 'center'}}>
                     <TextField
@@ -149,6 +149,7 @@ function TournamentsPage() {
                     setData={setData} 
                     style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>
             }
+            </div>
         </div>
     )
 }

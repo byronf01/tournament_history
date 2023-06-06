@@ -20,3 +20,29 @@
     text-decoration: underline;
     color: #de3434;
 }
+
+/* Mobile margins*/
+.inner {
+    width: 98%;
+}
+
+/* Tablet margins*/
+@media (min-width:600px) {
+    .inner {
+        width: 90%;
+    }
+}
+
+/* Desktop margins*/
+@media (min-width:900px) {
+    .inner {
+        width: 80%;
+    }
+}
+
+/* Monitor margins*/
+@media (min-width:1700px) {
+    .inner {
+        width: 70%;
+    }
+}

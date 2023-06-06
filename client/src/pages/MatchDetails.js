@@ -104,7 +104,7 @@ function MatchDetails(props) {
 
                         <hr ref={horizontalLineRef} style={{width: '80%', height: '0.6vw', backgroundColor: '#D0D0D0', marginBottom: '1.5vw'}}/>
                         
-                        <div style={{display: 'flex', marginLeft: '10%', marginRight: '10%', color: '#FFFFFF'}}>
+                        <div className='margin' style={{display: 'flex', color: '#FFFFFF'}}>
 
                             <div style={{width: '29%', marginLeft: '1%'}}>
                                 <StickyBox offsetTop={120}>

@@ -54,7 +54,7 @@ function TournamentDetails(props) {
             <Navbar />
             {
                 data != false && 
-                    <div style={{marginLeft: "15%", marginRight: "15%", fontFamily: 'trebuchet ms'}}>
+                    <div className='margin2' style={{ fontFamily: 'trebuchet ms'}}>
                         <div style={{display: "flex", alignItems: 'center', width: "100%"}}>
                             <div style={{textAlign: "left"}}>
                                 <h1 style={{fontSize: "3.5vw", marginBottom: "0"}}>{data["title"]}</h1>

@@ -45,6 +45,7 @@ const Pagination = props => {
   return (
     <ul
       className={classnames('pagination-container', { [className]: className })}
+      style={{padding: 0}}
     >
        {/* Left navigation arrow */}
       <li

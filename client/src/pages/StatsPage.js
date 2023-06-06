@@ -274,7 +274,7 @@ const wrbyModOptions = (data == false ? null : {
           <div style={{fontFamily: 'trebuchet ms', color: '#FFFFFF'}}>
             
 
-            <div style={{ display: 'flex', marginLeft: '15%', marginRight: '15%', width: '70%' }}>
+            <div className='margin2' style={{ display: 'flex', width: '70%' }}>
               <div style={{ width: '57%', paddingRight: '6%' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <div>
@@ -293,7 +293,7 @@ const wrbyModOptions = (data == false ? null : {
               </div>
             </div>
 
-            <div style={{ display: 'flex', marginLeft: '15%', marginRight: '15%', marginTop: '3vw', width: '70%' }}>
+            <div className='margin2' style={{ display: 'flex', marginTop: '3vw', width: '70%' }}>
               <div style={{ width: '27%', paddingRight: '6%' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
                   <div>
@@ -323,7 +323,7 @@ const wrbyModOptions = (data == false ? null : {
               </div>
             </div>
 
-            <div style={{ display: 'flex', marginLeft: '10%', marginRight: '10%', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
+            <div className='margin' style={{ display: 'flex', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
               <div style={{ width: '58%', paddingRight: '6%' }}>
                   <div>
                     <GeneralChart options={mostCommonTeamSizeOptions}/>
@@ -334,7 +334,7 @@ const wrbyModOptions = (data == false ? null : {
               </div>
             </div>
 
-            <div style={{ display: 'flex', marginLeft: '12%', marginRight: '10%', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
+            <div className='margin' style={{ display: 'flex', paddingLeft: '2%', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
               <div style={{ width: '38%', paddingRight: '2%' }}>
                 <GeneralChart options={mostPlayedModsOptions}/>
               </div>
@@ -343,24 +343,24 @@ const wrbyModOptions = (data == false ? null : {
               </div>
             </div>
             
-            <div style={{display: 'flex', marginLeft: '5%', marginTop: '3vw', flexDirection: 'row'}}>
+            <div className='margin' style={{display: 'flex', marginTop: '3vw', flexDirection: 'row'}}>
 
               <div style={{display: 'flex', flexDirection: 'column', width: '50%'}}>
-                <div style={{ marginLeft: '12%', marginTop: '3vw'}}>
+                <div className='margin3' style={{  marginTop: '3vw'}}>
                   <BarChart options={bestMCOptions}/>
                 </div>
                 
-                <div style={{marginLeft: '12%', marginTop: '3vw'}}>
+                <div className='margin3' style={{marginTop: '3vw'}}>
                   <BarChart options={worstMCOptions}/>
                 </div>
               </div>
 
-              <div style={{display: 'flex', flexDirection: 'column', marginLeft: '7vw', justifyContent: 'center', width: '30%', textAlign: 'center'}}>
+              <div className='margin3' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '30%', textAlign: 'center'}}>
                 
                 <p style={{margin: '0', marginBottom: '1.4vw', fontSize: '2vw'}}>Most Teamed: </p>
                 <div style={{display: 'flex', alignItems: 'center'}}>
-                  <ul style={{display: "flex", flexDirection: 'column'}}>{most_teamed}</ul>
-                </div>
+                  <ul style={{padding: '0', display: "flex", flexDirection: 'column'}}>{most_teamed}</ul>
+                </div> 
               </div>
             </div>
             
