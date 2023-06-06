@@ -12,3 +12,10 @@
     color: #FFFFFF;
 }
 
+.corners {
+    position: absolute;
+    background-size: cover;
+    width: 2vw;
+    height: 2vw
+}
+

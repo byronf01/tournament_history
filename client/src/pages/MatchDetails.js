@@ -1,6 +1,6 @@
 
 import './Pages.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar'
 import osu_logo from '../assets/osu_logo.png';
@@ -19,6 +19,9 @@ function MatchDetails(props) {
     const [data, setData] = useState(false);
     const [nameMap, setNameMap] = useState({}); // Maps a user's osu id to their osu username
     const [isLoading, setIsLoading] = useState(true);
+    const [isSticky, setIsSticky] = useState(false);
+    const navbarRef = useRef(null);
+    const horizontalLineRef = useRef(null);
 
     useEffect( () => {
         fetch(`http://localhost:5000/api/matches/${acr}/${mp}`).then( resp => resp.json())
@@ -53,11 +56,35 @@ function MatchDetails(props) {
             })
     }, [])
 
-
+    
+    useEffect(() => {
+        const handleScroll = () => {
+          const navbarHeight = navbarRef.current ? navbarRef.current.offsetHeight : 0;
+          // const navbarTop = navbarRef.current ? navbarRef.current.getBoundingClientRect().top : 0;
+          const horizontalLineBottom = horizontalLineRef.current ? horizontalLineRef.current.getBoundingClientRect().bottom : 0;
+            
+          setIsSticky(horizontalLineBottom <= navbarHeight);
+        };
+      
+        setTimeout(() => {
+          handleScroll();
+          window.addEventListener('scroll', handleScroll);
+        }, 0);
+      
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, []);
     
     return (
         <div>
-            <Navbar />
+            
+            <div style={{ position: 'sticky', top: '0', zIndex: '100'}}>
+                <div ref={navbarRef}>
+                    <Navbar />
+                </div>
+            </div>
+            
             {isLoading && <Spinner />}
             {   
                 data != false && 
@@ -80,7 +107,7 @@ function MatchDetails(props) {
                             </a>
                         </div>
 
-                        <hr style={{width: '80%', height: '0.6vw', backgroundColor: '#D0D0D0', marginBottom: '1.5vw'}}/>
+                        <hr ref={horizontalLineRef} style={{width: '80%', height: '0.6vw', backgroundColor: '#D0D0D0', marginBottom: '1.5vw'}}/>
                         
                         <div style={{display: 'flex', marginLeft: '10%', marginRight: '10%', color: '#FFFFFF'}}>
 
@@ -88,18 +115,25 @@ function MatchDetails(props) {
                                 <div style={{display: 'flex', flexDirection: 'column'}}>
                                     <h1 style={{marginTop: '0', marginBottom: '0.3vw', fontSize: '5vh'}}>Match Costs</h1>
                                     <div>
-                                        <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} result={data["result"]} />
+                                        <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} result={data["result"]} isSticky={isSticky} />
                                     </div>
                                 </div>
                             </div>
 
-                            <div style={{width: '4%'}}>
-                                <div style={{borderLeft: '0.5vw solid #D0D0D0', height: '50000px'}}></div>
+                            <div style={{ width: '4%' }}>
+                                <div
+                                    style={{
+                                    borderLeft: '0.5vw solid #D0D0D0',
+                                    height: '80vh',
+                                    position: isSticky ? 'sticky' : 'static',
+                                    top: '17vh',
+                                    }}
+                                ></div>
                             </div>
 
                             <div style={{width: '65%', marginRight: '1%'}}>
                                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                                    <h1 style={{marginTop: '0', fontSize: '2.5vw'}}>Match Procedure</h1>
+                                    <h1 style={{marginTop: '0', fontSize: '5vh'}}>Match Procedure</h1>
                                     <div style={{paddingBottom: "20px"}}>
                                         {data["events"].map((event) => 
                                             <MapDetails data={event} nameMap={nameMap} />
@@ -108,26 +142,7 @@ function MatchDetails(props) {
                                 </div>
                             </div>
                         </div>
-
-
-
-
-                        <div style={{display: "flex", height: "100vh"}}>
-                            <div style={{flex: "1", overflowY: "hidden"}}>
-                                <h2>Match Costs</h2>
-                                <MatchCosts new_data={data["matchcosts"]} nameMap={nameMap} result={data["result"]} />
-                            </div>
-                            <div style={{flex: "1", overflowY: "auto"}}>
-                                <h2>Match Procedure</h2>
-                                
-                                <div style={{paddingBottom: "20px"}}>
-                                    {data["events"].map((event) => 
-                                        <MapDetails data={event} nameMap={nameMap} />
-                                    )}
-                                </div>
-
-                            </div>
-                        </div>
+   
                     </div>
                 
             }
