@@ -37,19 +37,23 @@ function MatchCosts( {new_data, nameMap, result, isSticky} ) {
             <div>
                 
                 <div>
-                    <img src={winner_img} style={{height: '150px', width: 'auto'}}></img>
-                    <ol>
-                        {ordered.map((ordered, index) => 
-                            <li key={Object.keys(ordered)[0]}>
-                                <a href={`https://osu.ppy.sh/users/${Object.keys(ordered)[0]}`}>
-                                    {nameMap[Object.keys(ordered)[0]]}
-                                </a>
-                                - {ordered[Object.keys(ordered)[0]].toString().substring(0, 6)}
-                                {index === 0 ? ' 🥇' : index === 1 ? ' 🥈' : index === 2 ? ' 🥉' : ''}
-                            </li>
-                        )}
-                    </ol>
+                    <img src={winner_img} style={{width: '7vw', height: 'auto'}} />
+                    <div style={{marginLeft: '0.3vw'}}>
+                        <ol style={{marginTop: '0.3vw', lineHeight: '3vh', fontSize: '2.2vh'}}>
+                            {ordered.map((ordered, index) => 
+                                <li key={Object.keys(ordered)[0]}>
+                                    <a class='styled2' href={`https://osu.ppy.sh/users/${Object.keys(ordered)[0]}`}>
+                                        {nameMap[Object.keys(ordered)[0]]}
+                                    </a>
+                                    - {ordered[Object.keys(ordered)[0]].toString().substring(0, 6)}
+                                    {index === 0 ? ' 🥇' : index === 1 ? ' 🥈' : index === 2 ? ' 🥉' : ''}
+                                </li>
+                            )}
+                        </ol>
+                    </div>
+                    
                 </div>
+
             </div>
         );
     } else {
@@ -115,7 +119,6 @@ function MatchCosts( {new_data, nameMap, result, isSticky} ) {
 
         winner_img = `https://a.ppy.sh/${winner_img}?1677187336.png`
         return (
-            <StickyContainer>
             <div>
                 
                 
@@ -159,7 +162,6 @@ function MatchCosts( {new_data, nameMap, result, isSticky} ) {
 
                 
             </div>
-            </StickyContainer>
         );
     }
     

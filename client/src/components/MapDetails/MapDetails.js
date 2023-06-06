@@ -92,7 +92,7 @@ function MapDetails( props ) {
                     </div>
                 }
                 {
-                    ("red_scores" in data) &&
+                    ("red_scores" in data && "blue_scores" in data) &&
                         <div style={{width: "50%", backgroundColor: '#EE8181', paddingTop: '0.4vw', borderTop: "0.2vw solid #224476"}}>
                             
                             {Object.entries(data["red_scores"])
@@ -140,6 +140,51 @@ function MapDetails( props ) {
                             }
                           
                         </div>
+                            
+                        </div>
+                }
+                {
+                    ("red_scores" in data && !("blue_scores" in data)) &&
+                        <div style={{width: "100%", backgroundColor: '#BAACBD', paddingTop: '0.4vw', borderTop: "0.2vw solid #224476"}}>
+                            
+                            {Object.entries(data["red_scores"])
+                                .sort((s1, s2) => s2[1].value - s1[1].value )
+                                .map(([id, score], index) => 
+                                    <div>
+                                        { index != 0 && 
+                                            <hr style={{marginLeft: '1vw', marginRight: '1vw', borderTop: '0.5vw dashed #FFFFFF', 
+                                                    borderLeft: '0', borderRight: '0', borderBottom: '0', borderWidth: '0.2vw'}} />
+                                        }
+
+                                        <div style={{paddingLeft: '1.5vw', paddingRight: '1.5vw'}}>
+                                            
+                                            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+                                                <div style={{display: 'flex'}}>
+                                                    <p style={{margin: '0', fontSize: '2vw'}}>{nameMap[id]}</p>
+                                                    <p style={{marginTop: '0.2vw', marginBottom: '0', marginLeft: 'auto', fontSize: '1.6vw'}}>{score['value'].toLocaleString('en-US')}</p>
+                                                </div>
+                                                <div style={{marginLeft: 'auto'}}>
+                                                    <p style={{marginTop: '0', fontSize: '1vw'}}>{score['combo'].toLocaleString('en-US')}x</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div style={{marginTop: '-2.5vw', fontSize: '1.3vw', lineHeight: '0.5vw'}}>
+                                                <p >Mods: {score['mods'].map((mod) => `${mod} `)}</p>
+                                                <p>Accuracy: {(Number(score['acc'])*100).toFixed(2)}% (
+                                                    {score['stats']['count_300']}/
+                                                    {score['stats']['count_100']}/
+                                                    {score['stats']['count_50']}/
+                                                    {score['stats']['count_miss']}
+                                                )</p>
+                                            </div>
+                                            
+                                        </div>
+                                    
+                                    </div>
+                                )
+                            }
+
+                        
                             
                         </div>
                 }
