@@ -19,11 +19,11 @@ app.use(cors());
 const TournSchema = mongoose.Schema({ any: {} }, { collection: "tournament_historyV1.1" });
 const tournament_history = mongoose.model("tournament_historyV1.1", TournSchema, "tournament_historyV1.1");
 
-/*
-require('dotenv').config({path:__dirname+'../../.env'}); // will this work?
+
+// require('dotenv').config({path:__dirname+'../../.env'}); // will this work?
 const PASSWORD = process.env.mongo_password;
 const CLIENT_SECRET = process.env.client_secret;
-*/
+
 
 
 app.get("/", (req, res) => {
