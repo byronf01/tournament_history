@@ -18,6 +18,7 @@ function TournamentsPage() {
     const [query, setQuery] = useState("");
     const [timerId, setTimerId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
 
     const currentTableData = useMemo(() => {
         
@@ -30,6 +31,7 @@ function TournamentsPage() {
 
     
     useEffect ( () => {
+        let timer;
         
         fetch('http://localhost:5000/api/data').then( resp => resp.json())
             .then( (result) => {
@@ -47,8 +49,15 @@ function TournamentsPage() {
                 setData(tmp);
                 setDataMaster(tmp);
                 setIsLoading(false);
+                clearTimeout(timer);
             
             })
+
+            timer = setTimeout(() => {
+                setLoadingTimeExpired(true);
+              }, 20000);
+            
+            return () => clearTimeout(timer);
         
         }, []);
     
@@ -124,6 +133,7 @@ function TournamentsPage() {
                 </div>
             }
             {isLoading && <Spinner />}
+            {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
             {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} tournaments found</p> :
             data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} tournament found</p> : null }
             {data.length !== 0 && <Pagination 

@@ -38,9 +38,11 @@ function StatsPage () {
   const [bannerList, setBannerList] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showBanners, setShowBanners] = useState(false);
+  const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
   
   useEffect ( () => {
-        
+    let timer;
+
     fetch('http://localhost:5000/api/stats').then( resp => resp.json())
         .then( (result) => {
           setData(result);  
@@ -71,9 +73,16 @@ function StatsPage () {
               body: JSON.stringify(ids)
           }).then( resp2 => resp2.json()).then( (res2) => {
               setUserOsuData(res2)
+              clearTimeout(timer);
           })
 
         })
+
+      timer = setTimeout(() => {
+        setLoadingTimeExpired(true);
+      }, 20000);
+    
+      return () => clearTimeout(timer);
     }, []);
 
     const placementOptions = (data == false ? null : {
@@ -270,6 +279,7 @@ const wrbyModOptions = (data == false ? null : {
                 </div>
             </div>
         {isLoading && <Spinner />}
+        {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
         { data != false &&
           <div style={{fontFamily: 'trebuchet ms', color: '#FFFFFF'}}>
             
@@ -335,10 +345,10 @@ const wrbyModOptions = (data == false ? null : {
             </div>
 
             <div className='margin' style={{ display: 'flex', paddingLeft: '2%', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
-              <div style={{ width: '38%', paddingRight: '2%' }}>
+              <div style={{ width: '38%', paddingRight: '4%' }}>
                 <GeneralChart options={mostPlayedModsOptions}/>
               </div>
-              <div style={{width: "50%", margin: "auto"}}>
+              <div style={{width: "56%", margin: "0"}}>
                 <GeneralChart options={placementOptions}/>
               </div>
             </div>
