@@ -1,17 +1,13 @@
 
 import './Pages.css';
-import {Routes, Route, useNavigate} from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { Component } from 'react';
 import Navbar from '../components/Navbar'
 import BarChart from '../components/BarChart'
 import GeneralChart from '../components/GeneralChart'
-import Teammates from '../components/Teammates.js'
 import Spinner from '../components/Spinner'
 import Dropdown from '../components/Dropdown'
-import ImageContainer from '../components/ImageContainer'
-import arrowdown from '../assets/arrowdown.png'
-import arrowup from '../assets/arrowup.png'
+import ScrollButton from '../components/ScrollButton';
+
 
 function Member(props) {
   const id = props.id;
@@ -279,6 +275,7 @@ const wrbyModOptions = (data == false ? null : {
                 </div>
             </div>
         {isLoading && <Spinner />}
+        <ScrollButton />
         {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
         { data != false &&
           <div style={{fontFamily: 'trebuchet ms', color: '#FFFFFF'}}>

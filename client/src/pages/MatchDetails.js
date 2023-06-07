@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar'
 import MatchCosts from '../components/MatchCosts';
 import MapDetails from '../components/MapDetails';
 import Spinner from '../components/Spinner';
+import ScrollButton from '../components/ScrollButton';
 import StickyBox from "react-sticky-box";
 
 
@@ -81,6 +82,7 @@ function MatchDetails(props) {
             </div>
             
             {isLoading && <Spinner />}
+            <ScrollButton />
             {   
                 data != false && 
                     
@@ -138,6 +140,7 @@ function MatchDetails(props) {
                                     </div>
                                 </div>
                             </div>
+
                         </div>
    
                     </div>
