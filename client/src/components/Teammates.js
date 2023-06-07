@@ -15,7 +15,7 @@ function Member(props) {
     
     useEffect( () => {
         async function fetchData() {
-            const resp = await fetch(`${API_URL}}/api/name/${id}`);
+            const resp = await fetch(`${API_URL}/api/name/${id}`);
             const data = await resp.json();
             setUsername(data['username'])
             
