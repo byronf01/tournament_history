@@ -561,10 +561,14 @@ async function getTourn(id) {
     return query;
 }
 
+*/
+
 async function getItems() {
     const query = await tournament_history.find()
     return query    
 }
+
+/*
 
 async function getMatches() {
     // Return a collection of Objects for previewing matches, with keys 
