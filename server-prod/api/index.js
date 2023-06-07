@@ -1,13 +1,16 @@
-const mongoose = require("mongoose");
+
 const express = require('express');
+/*
+const mongoose = require("mongoose");
 const cors = require('cors');
 const axios = require('axios');
 const bodyParser = require('body-parser')
+*/
 const app = express();
 
 
 
-
+/*
 const SELF = 16626263;
 
 
@@ -22,10 +25,17 @@ require('dotenv').config({path:__dirname+'../../.env'}); // will this work?
 const PASSWORD = process.env.mongo_password;
 const CLIENT_SECRET = process.env.client_secret;
 
+*/
+
 app.get("/", (req, res) => {
     res.send("Online");
-  });
+});
 
+app.get("/api", (req, res) => {
+    res.send("Api Online");
+});
+
+/*
 
 app.get("/api/data", async (req, res) => {
     // Return all db items
@@ -720,6 +730,8 @@ async function connect(URI) {
 
 
 app.listen(5000, () => {console.log("Server started on port 5000")})
+
+*/
 
 module.exports = app;
 // export default app;
