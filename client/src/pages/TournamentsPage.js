@@ -34,7 +34,28 @@ function TournamentsPage() {
     useEffect ( () => {
         let timer;
         
+        /*
         fetch('http://localhost:5000/api/data').then( resp => resp.json())
+            .then( (result) => {
+            
+                // sort array alphabetically by tournament title
+                let items = result;
+                items.sort( (a, b) => {
+                    if (a["title"].toLowerCase() <= b["title"].toLowerCase() ) return -1;
+                    else return 1
+                })
+                let tmp = Array(items.length);
+                for (let i = 0; i < items.length; i++) {
+                    tmp[i] = items[i]
+                }
+                setData(tmp);
+                setDataMaster(tmp);
+                setIsLoading(false);
+                clearTimeout(timer);
+            
+            })   */
+
+            fetch('https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app/api/data').then( resp => resp.json())
             .then( (result) => {
             
                 // sort array alphabetically by tournament title
