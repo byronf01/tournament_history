@@ -30,10 +30,6 @@ app.get("/", (req, res) => {
     res.send("Online");
 });
 
-app.get("/api", (req, res) => {
-    res.send("Api Online");
-});
-
 
 app.get("/api/data", async (req, res) => {
     // Return all db items
@@ -92,8 +88,6 @@ app.get("/api/name/:id", async (req, res) => {
         });
     })
 })
-
-/*
 
 app.post("/api/name", async (req, res) => {
     // Get osu usernames of a series of ids {id: username}
@@ -562,8 +556,6 @@ async function getTourn(id) {
     return query;
 }
 
-*/
-
 async function getItems() {
     const query = await tournament_history.find()
     return query    
@@ -731,9 +723,8 @@ async function connect(URI) {
 }
 
 
-// app.listen(5000, () => {console.log("Server started on port 5000")})
+app.listen(5000, () => {console.log("Server started on port 5000")})
 
 
 
 module.exports = app;
-// export default app;
