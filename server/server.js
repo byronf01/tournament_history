@@ -600,7 +600,6 @@ async function getMatches() {
     }
 
     // Get usernames of all players in map with multiple osu api calls
-    // TODO: bug where "hiyah" twice in users?
 
     selection = 0;
     const queries = [];
@@ -616,39 +615,6 @@ async function getMatches() {
         queries.map(async q => getUsernamesBulk(q, all_data, map) )
     )
     
-
-    // test 
-    /*
-    let t1 = queries[0]
-    let t2 = queries[1]
-    let t3 = queries[2]
-    let t4 = queries[3]
-    let t5 = queries[4]
-    let t6 = queries[5]
-    let t7 = queries[0]
-    let t8 = queries[1]
-    let t9 = queries[2]
-    let t10 = queries[3]
-    let t11 = queries[4]
-    let t12 = queries[5]
-
-    const foo2 = await Promise.all(
-        [getUsernamesBulk(t1, all_data, map),
-        getUsernamesBulk(t2, all_data, map),
-        getUsernamesBulk(t3, all_data, map),
-        getUsernamesBulk(t4, all_data, map),
-        getUsernamesBulk(t5, all_data, map),
-        getUsernamesBulk(t6, all_data, map),
-        getUsernamesBulk(t7, all_data, map),
-        getUsernamesBulk(t8, all_data, map),
-        getUsernamesBulk(t9, all_data, map),
-        getUsernamesBulk(t10, all_data, map),
-        getUsernamesBulk(t11, all_data, map),
-        getUsernamesBulk(t12, all_data, map)]
-
-
-    )
-            */
     console.log('All players fetched')
     return all_data;  
 }
@@ -708,47 +674,6 @@ async function getUsernamesBulk(ids, all_data, map) {
       });
 
 }
-    /*
-    return axios.post('https://osu.ppy.sh/oauth/token', data=inf).then( (resp) => {
-        const token = resp['data']['access_token']
-
-        const headers = {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-            "Accept": "application/json",
-        };
-
-        return axios.get(`https://osu.ppy.sh/api/v2/users/`, { 
-            headers, 
-            params: {
-                ids
-            },
-        })
-        .then( (resp2) => {
-            console.log(`Players ${ids[0]} queued`)
-            const users = resp2["data"]["users"];
-            
-            for (let i in users) {
-                const id = users[i]["id"]
-                const username = users[i]["username"]
-                
-                const user_matches = map.get(id)
-                for (let j in user_matches) { // Match indexes back to original all_data obj
-                    all_data[user_matches[j]]["users"].push(username)
-                }
-
-            }
-
-        })
-        .catch(error => {
-            console.error(error);
-        });
-    })
-    
-
-
-}
-*/
 
 async function getMatch(acr, id) {
     const query = await tournament_history.find({acronym: acr})
