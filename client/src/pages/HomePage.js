@@ -2,8 +2,8 @@
 import './Pages.css';
 import React from 'react';
 import { Component } from 'react';
-import { Panel } from '../components/Panel.js'
-import { Tag } from '../components/Tag.js'
+import Panel from '../components/Panel'
+import Tag from '../components/Tag'
 
   class HomePageChild extends Component {
     render() {

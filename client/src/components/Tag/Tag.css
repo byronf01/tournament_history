@@ -1,0 +1,51 @@
+
+/* Mobile margins*/
+.tag-margin {
+    margin-left: 2%;
+}
+.tag-pfp {
+    width: 40%;
+}
+.tag-text {
+    font-size: 10vw;
+}
+
+/* Tablet margins*/
+@media (min-width:600px) {
+    .tag-margin {
+        margin-left: 5%;
+    }
+    .tag-pfp {
+        width: 30%;
+    }
+    .tag-text {
+        font-size: 7vw;
+    }
+}
+
+/* Desktop margins*/
+@media (min-width:900px) {
+    .tag-margin {
+        margin-left: 10%;
+    }
+    .tag-pfp {
+        width: 17%;
+    }
+    .tag-text {
+        font-size: 4.7vw;
+    }
+}
+
+/* Monitor margins*/
+@media (min-width:1700px) {
+    .tag-margin {
+        margin-left: 15%;
+    }
+    .tag-pfp {
+        width: 17%;
+    }
+    .tag-text {
+        font-size: 3vw;
+    }
+}
+

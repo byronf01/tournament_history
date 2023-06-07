@@ -1,6 +1,4 @@
-import tourn from '../assets/trophy.png';
-import match from '../assets/match.png';
-import stats from '../assets/stats.png';
+import './Panel.css'
 
 function TournamentsButton() {
   
@@ -10,8 +8,8 @@ function TournamentsButton() {
     }
   
     return (
-      <button class="b1" onClick={handleClick} style={{width: '18vw', height: '10vw'}}>
-        <div style={{fontSize: '2.5vw'}}>
+      <button class="b1 panel-button" onClick={handleClick} >
+        <div >
           <p style={{marginTop: "4%", marginBottom: "0%",}}>Tournaments</p>
           <p style={{marginTop: "4%", marginBottom: "6%"}}>🏆</p>
         </div>
@@ -28,8 +26,8 @@ function TournamentsButton() {
     }
 
     return (
-      <button class="b1" onClick={handleClick} style={{width: '18vw', height: '10vw'}}>
-        <div style={{fontSize: '2.5vw'}}>
+      <button class="b1 panel-button" onClick={handleClick} >
+        <div>
           <p style={{marginTop: "4%", marginBottom: "0%"}}>Matches</p>
           <p style={{marginTop: "4%", marginBottom: "6%"}}>🆚</p>
         </div>
@@ -45,8 +43,8 @@ function TournamentsButton() {
     }
 
     return (
-      <button class="b1" onClick={handleClick} style={{width: '18vw', height: '10vw'}}>
-        <div style={{fontSize: '2.5vw'}}>
+      <button class="b1 panel-button" onClick={handleClick} >
+        <div>
           <p style={{marginTop: "4%", marginBottom: "0%"}}>Stats</p>
           <p style={{marginTop: "4%", marginBottom: "6%"}}>🥇</p>
         </div>
@@ -56,8 +54,8 @@ function TournamentsButton() {
   
   function Panel() {
     return (
-      <div class='outer-wrapper' style={{display: 'flex', width: '100%', height: 'auto', flexWrap: 'wrap', paddingTop: "2.5%", marginLeft: "0%", marginRight: "0px", justifyContent: "center"}}>
-        <div style={{width: '80%', display: "flex", gap: "6%", flexWrap: 'wrap', flexDirection: 'row', flexFlow: 'row wrap', justifyContent: "center" }}>
+      <div style={{display: 'flex', width: '100%', height: 'auto', flexWrap: 'wrap', paddingTop: "2.5%", marginLeft: "0", marginRight: "0", justifyContent: "center"}}>
+        <div style={{width: '80%', display: "flex", gridGap: '5vw', flexWrap: 'wrap', flexDirection: 'row', flexFlow: 'row wrap', justifyContent: "center" }}>
           <TournamentsButton />
           <MatchesButton />
           <StatsButton />
@@ -67,4 +65,4 @@ function TournamentsButton() {
     )
   }
   
-  export { Panel };
+  export default Panel;

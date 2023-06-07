@@ -9,6 +9,7 @@ import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 
+
 let PageSize = 10;
 
 function TournamentsPage() {
@@ -111,6 +112,7 @@ function TournamentsPage() {
             </div>
             
             
+
             <div >
             { dataMaster.length !== 1 &&
                 <div style={{textAlign: 'center'}}>
@@ -132,6 +134,7 @@ function TournamentsPage() {
                     />
                 </div>
             }
+            
             {isLoading && <Spinner />}
             {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
             {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} tournaments found</p> :

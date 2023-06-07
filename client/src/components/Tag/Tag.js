@@ -1,22 +1,23 @@
+import './Tag.css'
 
 function Tag() {
     return (
       <div>
         
-          <div style={{marginLeft: "10%", marginTop: "4%"}}>
-            <img src='https://a.ppy.sh/16626263?1677187336.png' style={{width: "17%", height: "auto"}}></img>
+          <div className='tag-margin' style={{ marginTop: "4%"}}>
+            <img className='tag-pfp' src='https://a.ppy.sh/16626263?1677187336.png' style={{ height: "auto"}}></img>
           </div>
-          <div style={{marginLeft: "10%", marginTop: "1%",}}>
-            <p style={{
+          <div className='tag-margin' style={{ marginTop: "1%",}}>
+            <p className='tag-text' style={{
               color: 'white',
               fontFamily: 'trebuchet ms',
-              fontSize: '4.7vw',
+              
               marginTop: '0px',
               marginBottom: '0px'
             }}>hiyah's Tournament History</p>
           </div>
         
-        <div style={{marginLeft: "10%", marginTop: '1.5%'}}>
+        <div className='tag-margin' style={{marginTop: '1.5%'}}>
           <hr style={{
             backgroundColor: '#FFFFFF',
             width: '88%',
@@ -29,4 +30,4 @@ function Tag() {
     )
   }
 
-  export { Tag };
+  export default Tag;
