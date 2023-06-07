@@ -11,6 +11,12 @@ import Tag from '../components/Tag'
         <div>
           <Tag />
           <Panel />
+          <div style={{height: '10%', textAlign: 'center', paddingTop: '2em'}}>
+            <a href='https://github.com/byronf01/tournament_history' target="_blank" rel="noreferrer" >
+              <img src='https://cdn-icons-png.flaticon.com/512/25/25231.png' style={{ height: '2.5em', width: 'auto'}}/>
+            </a>
+            
+          </div>
         </div>
       )
     }
@@ -27,7 +33,6 @@ import Tag from '../components/Tag'
     }
       
     render() {
-      let myHomePage;
     
       return (
         <div>

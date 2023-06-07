@@ -140,7 +140,7 @@ const wrbyModOptions = (data == false ? null : {
   data: [
   {
     type: "column",
-    dataPoints: Object.entries(data['win_rate_per_mod']).map(([label, y]) => ({ label, y: y * 100 })).sort((a, b) => {
+    dataPoints: Object.entries(data['win_rate_per_mod']).map(([label, y]) => ({ label, y: Number((y*100).toFixed(2)) })).sort((a, b) => {
       if (a['y'] < b['y']) return 1;
       else if (a['y'] > b['y']) return -1;
       else return 0;
@@ -167,7 +167,7 @@ const wrbyModOptions = (data == false ? null : {
     
     data: [{
       type: "bar",
-      dataPoints: Object.entries(data['avg_score_per_mod']).map(([label, y]) => ({ label, y })).sort((a, b) => {
+      dataPoints: Object.entries(data['avg_score_per_mod']).map(([label, y]) => ({ label, y: Number(y.toFixed(0)) })).sort((a, b) => {
       if (a['y'] < b['y']) return 1;
       else if (a['y'] > b['y']) return -1;
       else return 0;
@@ -240,7 +240,7 @@ const wrbyModOptions = (data == false ? null : {
     },
     data: [{
       type: "bar",
-      dataPoints: data['avg_mc_per_tourn'].map(([label, y]) => ({ label, y })).slice(0, 10)
+      dataPoints: data['avg_mc_per_tourn'].map(([label, y]) => ({ label, y: Number(y.toFixed(3)) })).slice(0, 10)
     }]
   })
   
@@ -259,7 +259,7 @@ const wrbyModOptions = (data == false ? null : {
     },
     data: [{
       type: "bar",
-      dataPoints: data['avg_mc_per_tourn'].map(([label, y]) => ({ label, y })).slice(-11, -1)
+      dataPoints: data['avg_mc_per_tourn'].map(([label, y]) => ({ label, y: Number(y.toFixed(3)) })).slice(-11, -1)
     }]
   })
     
