@@ -1,31 +1,30 @@
 
 const express = require('express');
-/*
 const mongoose = require("mongoose");
 const cors = require('cors');
 const axios = require('axios');
 const bodyParser = require('body-parser')
-*/
+
 const app = express();
 
 
 
-/*
 const SELF = 16626263;
 
 
 
-
+/*
 app.use(bodyParser.json());
 app.use(cors());
 const TournSchema = mongoose.Schema({ any: {} }, { collection: "tournament_historyV1.1" });
 const tournament_history = mongoose.model("tournament_historyV1.1", TournSchema, "tournament_historyV1.1");
 
+
 require('dotenv').config({path:__dirname+'../../.env'}); // will this work?
 const PASSWORD = process.env.mongo_password;
 const CLIENT_SECRET = process.env.client_secret;
-
 */
+
 
 app.get("/", (req, res) => {
     res.send("Online");
@@ -34,6 +33,7 @@ app.get("/", (req, res) => {
 app.get("/api", (req, res) => {
     res.send("Api Online");
 });
+
 
 /*
 
