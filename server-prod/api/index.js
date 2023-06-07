@@ -47,7 +47,6 @@ app.get("/api/data", async (req, res) => {
 
 })
 
-/*
 app.get("/api/data/:id", async (req, res) => {
     // Return tournament item 
 
@@ -93,6 +92,8 @@ app.get("/api/name/:id", async (req, res) => {
         });
     })
 })
+
+/*
 
 app.post("/api/name", async (req, res) => {
     // Get osu usernames of a series of ids {id: username}
@@ -568,8 +569,6 @@ async function getItems() {
     return query    
 }
 
-/*
-
 async function getMatches() {
     // Return a collection of Objects for previewing matches, with keys 
     // { acronym: "", mp: "", stage: "", match_name: "", result: [] }
@@ -725,7 +724,6 @@ async function getMatch(acr, id) {
     return {"Error": "Match Not Found"}
 
 }
-*/
 
 async function connect(URI) {
     const connection = await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
