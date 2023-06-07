@@ -1,6 +1,6 @@
 
 import './Pages.css';
-import React, { useState, useMemo, useEffect} from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
 import MatchesBlock from '../components/MatchesBlock'
@@ -18,6 +18,7 @@ function MatchesPage() {
   const [timerId, setTimerId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
+  const dataFetchedRef = useRef(false);
 
   const currentTableData = useMemo(() => {
       
@@ -28,6 +29,7 @@ function MatchesPage() {
       
   }, [currentPage, data]);
 
+  /*
   useEffect ( () => {
     let timer;
         
@@ -66,6 +68,51 @@ function MatchesPage() {
         return () => clearTimeout(timer);
       
     }, []);
+    */
+   const fetchData = () => {
+    let timer;
+        
+    fetch('http://localhost:5000/api/matches').then( resp => resp.json())
+        .then( (res) => {
+
+            // get list of Matches alphabetically sorted by acronym value
+            let sorted = res.sort((m1, m2) => {
+                
+                if (m1["acronym"].toLowerCase() < m2["acronym"].toLowerCase()) return -1;
+                else if (m1['acronym'].toLowerCase() > m2['acronym'].toLowerCase()) return 1;
+                else { // stage by tiebreaker
+                  if (m1['stage'] == 'Qualifiers') return 1; // Qualifiers highest precedence
+                  else if (m2['stage'] == 'Qualifiers') return -1;
+                  else { // None of matches are qualifiers
+                    const s1 = parseInt(m1['stage'].split(' ')[1])
+                    const s2 = parseInt(m2['stage'].split(' ')[2])
+                    if (s1 <= s2) return -1;
+                    else return 1;
+                  }
+                };
+                
+               
+            });
+            setData(sorted);
+            setDataMaster(sorted);
+            setIsLoading(false);
+            clearTimeout(timer);
+            
+        })
+
+        timer = setTimeout(() => {
+          setLoadingTimeExpired(true);
+        }, 20000);
+      
+        return () => clearTimeout(timer);
+   }
+
+    useEffect(() => {
+      if (dataFetchedRef.current) return;
+      dataFetchedRef.current = true;
+      fetchData();
+    },[])
+
 
     const changeQuery = (event) => {
       setQuery(event.target.value);
