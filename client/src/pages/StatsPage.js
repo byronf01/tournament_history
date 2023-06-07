@@ -8,6 +8,8 @@ import Spinner from '../components/Spinner'
 import Dropdown from '../components/Dropdown'
 import ScrollButton from '../components/ScrollButton';
 
+const API_URL_LOCAL = 'http://localhost:5000/api/data';
+const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
 
 function Member(props) {
   const id = props.id;
@@ -39,7 +41,7 @@ function StatsPage () {
   useEffect ( () => {
     let timer;
 
-    fetch('http://localhost:5000/api/stats').then( resp => resp.json())
+    fetch(`${API_URL}/api/stats`).then( resp => resp.json())
         .then( (result) => {
           setData(result);  
           setIsLoading(false);
@@ -61,7 +63,7 @@ function StatsPage () {
           }
 
           // 2nd fetch for usernames for most teamed teammates
-          fetch(`http://localhost:5000/api/name`, {
+          fetch(`${API_URL}/api/name`, {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",

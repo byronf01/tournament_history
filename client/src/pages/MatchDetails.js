@@ -9,6 +9,9 @@ import Spinner from '../components/Spinner';
 import ScrollButton from '../components/ScrollButton';
 import StickyBox from "react-sticky-box";
 
+const API_URL_LOCAL = 'http://localhost:5000/api/data';
+const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
+
 
 function MatchDetails(props) {
     const { acr, mp } = useParams();
@@ -20,7 +23,7 @@ function MatchDetails(props) {
     const horizontalLineRef = useRef(null);
 
     useEffect( () => {
-        fetch(`http://localhost:5000/api/matches/${acr}/${mp}`).then( resp => resp.json())
+        fetch(`${API_URL}/api/matches/${acr}/${mp}`).then( resp => resp.json())
             .then( (result) => {
                 setIsLoading(false)
                 setData(result);
@@ -37,7 +40,7 @@ function MatchDetails(props) {
                     }  
                 }
                 
-                fetch(`http://localhost:5000/api/name`, {
+                fetch(`${API_URL}/api/name`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

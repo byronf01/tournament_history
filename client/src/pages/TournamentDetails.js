@@ -14,6 +14,8 @@ import { Teammates } from '../components/Teammates';
 import MatchPreview from '../components/MatchPreview';
 import ImageContainer from '../components/ImageContainer'
 
+const API_URL_LOCAL = 'http://localhost:5000/api/data';
+const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
 
 function TournamentDetails(props) {
     const { id } = useParams();
@@ -23,7 +25,7 @@ function TournamentDetails(props) {
 
     useEffect ( () => {
         
-        fetch(`http://localhost:5000/api/data/${id}`).then( resp => resp.json())
+        fetch(`${API_URL}/api/data/${id}`).then( resp => resp.json())
             .then( (result) => {
                
                 setData(result[0])

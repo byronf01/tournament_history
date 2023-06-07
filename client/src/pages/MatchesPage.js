@@ -8,6 +8,8 @@ import Spinner from '../components/Spinner'
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
+const API_URL_LOCAL = 'http://localhost:5000/api/data';
+const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
 let PageSize = 20;
 
 function MatchesPage() {
@@ -32,7 +34,7 @@ function MatchesPage() {
   const fetchData = () => {
   let timer;
       
-  fetch('http://localhost:5000/api/matches').then( resp => resp.json())
+  fetch(`${API_URL}/api/matches`).then( resp => resp.json())
       .then( (res) => {
 
           // get list of Matches alphabetically sorted by acronym value
