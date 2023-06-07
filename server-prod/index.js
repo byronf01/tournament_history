@@ -22,6 +22,10 @@ require('dotenv').config({path:__dirname+'../../.env'}); // will this work?
 const PASSWORD = process.env.mongo_password;
 const CLIENT_SECRET = process.env.client_secret;
 
+app.get("/", (req, res) => {
+    res.send("Online");
+  });
+
 
 app.get("/api/data", async (req, res) => {
     // Return all db items
