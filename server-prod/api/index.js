@@ -35,8 +35,6 @@ app.get("/api", (req, res) => {
 });
 
 
-/*
-
 app.get("/api/data", async (req, res) => {
     // Return all db items
 
@@ -49,6 +47,7 @@ app.get("/api/data", async (req, res) => {
 
 })
 
+/*
 app.get("/api/data/:id", async (req, res) => {
     // Return tournament item 
 
@@ -722,6 +721,7 @@ async function getMatch(acr, id) {
     return {"Error": "Match Not Found"}
 
 }
+*/
 
 async function connect(URI) {
     const connection = await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -729,9 +729,9 @@ async function connect(URI) {
 }
 
 
-app.listen(5000, () => {console.log("Server started on port 5000")})
+// app.listen(5000, () => {console.log("Server started on port 5000")})
 
-*/
+
 
 module.exports = app;
 // export default app;
