@@ -29,82 +29,42 @@ function MatchesPage() {
       
   }, [currentPage, data]);
 
-  /*
-  useEffect ( () => {
-    let timer;
-        
-    fetch('http://localhost:5000/api/matches').then( resp => resp.json())
-        .then( (res) => {
-
-            // get list of Matches alphabetically sorted by acronym value
-            let sorted = res.sort((m1, m2) => {
-                
-                if (m1["acronym"].toLowerCase() < m2["acronym"].toLowerCase()) return -1;
-                else if (m1['acronym'].toLowerCase() > m2['acronym'].toLowerCase()) return 1;
-                else { // stage by tiebreaker
-                  if (m1['stage'] == 'Qualifiers') return 1; // Qualifiers highest precedence
-                  else if (m2['stage'] == 'Qualifiers') return -1;
-                  else { // None of matches are qualifiers
-                    const s1 = parseInt(m1['stage'].split(' ')[1])
-                    const s2 = parseInt(m2['stage'].split(' ')[2])
-                    if (s1 <= s2) return -1;
-                    else return 1;
-                  }
-                };
-                
-               
-            });
-            setData(sorted);
-            setDataMaster(sorted);
-            setIsLoading(false);
-            clearTimeout(timer);
-            
-        })
-
-        timer = setTimeout(() => {
-          setLoadingTimeExpired(true);
-        }, 20000);
+  const fetchData = () => {
+  let timer;
       
-        return () => clearTimeout(timer);
-      
-    }, []);
-    */
-   const fetchData = () => {
-    let timer;
-        
-    fetch('http://localhost:5000/api/matches').then( resp => resp.json())
-        .then( (res) => {
+  fetch('http://localhost:5000/api/matches').then( resp => resp.json())
+      .then( (res) => {
 
-            // get list of Matches alphabetically sorted by acronym value
-            let sorted = res.sort((m1, m2) => {
-                
-                if (m1["acronym"].toLowerCase() < m2["acronym"].toLowerCase()) return -1;
-                else if (m1['acronym'].toLowerCase() > m2['acronym'].toLowerCase()) return 1;
-                else { // stage by tiebreaker
-                  if (m1['stage'] == 'Qualifiers') return 1; // Qualifiers highest precedence
-                  else if (m2['stage'] == 'Qualifiers') return -1;
-                  else { // None of matches are qualifiers
-                    const s1 = parseInt(m1['stage'].split(' ')[1])
-                    const s2 = parseInt(m2['stage'].split(' ')[2])
-                    if (s1 <= s2) return -1;
-                    else return 1;
-                  }
-                };
-                
-               
-            });
-            setData(sorted);
-            setDataMaster(sorted);
-            setIsLoading(false);
-            clearTimeout(timer);
-            
-        })
+          // get list of Matches alphabetically sorted by acronym value
+          let sorted = res.sort((m1, m2) => {
+              
+              if (m1["acronym"].toLowerCase() < m2["acronym"].toLowerCase()) return -1;
+              else if (m1['acronym'].toLowerCase() > m2['acronym'].toLowerCase()) return 1;
+              else { // stage by tiebreaker
+                if (m1['stage'] == 'Qualifiers') return 1; // Qualifiers highest precedence
+                else if (m2['stage'] == 'Qualifiers') return -1;
+                else { // None of matches are qualifiers
+                  const s1 = parseInt(m1['stage'].split(' ')[1])
+                  const s2 = parseInt(m2['stage'].split(' ')[2])
+                  if (s1 <= s2) return -1;
+                  else return 1;
+                }
+              };
+              
+              
+          });
+          setData(sorted);
+          setDataMaster(sorted);
+          setIsLoading(false);
+          clearTimeout(timer);
+          
+      })
 
-        timer = setTimeout(() => {
-          setLoadingTimeExpired(true);
-        }, 20000);
-      
-        return () => clearTimeout(timer);
+      timer = setTimeout(() => {
+        setLoadingTimeExpired(true);
+      }, 20000);
+    
+      return () => clearTimeout(timer);
    }
 
     useEffect(() => {
@@ -131,13 +91,15 @@ function MatchesPage() {
 
   const applyQueryFilter = (newQuery) => {
       if (newQuery !== "") {
-          const regex = newQuery.toLowerCase().replace('\\','\\\\');
+          const regex = new RegExp(newQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
           const queriedData = dataMaster.filter((m) => (
             // search in match name
             m['match_name'].toLowerCase().match(regex) 
 
             // search in players in match
-            || m['users'].includes(regex)
+            || m['users'].some((u) => u.toLowerCase().match(regex))
+         
+            
           ));
           setData(queriedData);
       } else {
