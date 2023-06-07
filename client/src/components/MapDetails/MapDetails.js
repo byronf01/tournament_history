@@ -21,7 +21,7 @@ function MapDetails( props ) {
                             <div style={{display: 'flex', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', position: 'relative'}}>
                             
                                 <div style={{alignSelf: 'center', textAlign: 'center', marginLeft: '1vw', marginRight: '1vw'}}>
-                                    <h2 style={{margin: '0', fontSize: '1.8vw', webkitTextStroke: '1px #000000'}}>{data["map-title"].slice(1, -1)}</h2>
+                                    <h2 style={{margin: '0', fontSize: '1.8vw', webkitTextStroke: '1px #000000'}}>{data['map-title'] != 'deleted beatmap' ? data["map-title"].slice(1, -1) : data['map-title']}</h2>
                                 </div>
                                 
                                 <div class='corners' style={{backgroundImage: `url(${corner})`, top: '0.7vw', left: '0.7vw',}}></div>

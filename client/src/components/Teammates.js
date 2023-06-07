@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ImageContainer from './ImageContainer'
 
+const API_URL_LOCAL = 'http://localhost:5000/api/data';
+const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
+
 function Member(props) {
     const id = props.id;
     const index = props.index
@@ -12,7 +15,7 @@ function Member(props) {
     
     useEffect( () => {
         async function fetchData() {
-            const resp = await fetch(`http://localhost:5000/api/name/${id}`);
+            const resp = await fetch(`${API_URL}}/api/name/${id}`);
             const data = await resp.json();
             setUsername(data['username'])
             
