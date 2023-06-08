@@ -10,3 +10,17 @@
     text-decoration: underline;
     color: #de3434;
 }
+
+.matches-block {
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 96%;
+}
+
+@media (min-width:600px) {
+    .matches-block {
+        margin-left: 17%;
+        margin-right: 17%;
+        width: 66%;
+    }
+}

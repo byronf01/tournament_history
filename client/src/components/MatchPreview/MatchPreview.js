@@ -69,28 +69,28 @@ function MatchPreview( {acronym, mp, stage, match_name, result, teams} ) {
                     textDecoration: "none",
                     cursor: "pointer",
                     backgroundColor: color,
-                    width: "90%",
+                    width: "100%",
                     marginBottom: "2%",
                     fontFamily: "trebuchet ms",
                     height: 'auto',
+                    maxHeight: '10em',
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: '10px',
-                    
                     }}
                 >
                     <div className="title" style={{ display: "flex", marginLeft: '1vw', flexWrap: 'wrap', alignItems: 'center' }}>
-                        <div style={{width: '80%'}}>
-                            <h2 style={{ marginTop: "0.8vw", marginBottom: "0", fontSize: "1.9vw" }}>{match_name}</h2>
+                        <div style={{width: '70%'}}>
+                            <h2 style={{ marginTop: "0.8vw", marginBottom: "0", fontSize: "1.9em" }}>{match_name}</h2>
                         </div>
                         <div style={{margin: '1.2vw 1vw 0 auto', alignItems: 'flex-end', alignSelf: 'flex-start'}}>
-                            <h2 style={{margin: 'auto 0.3vw 0 0', fontSize: '1.5vw'}}>{stage}</h2>
+                            <h2 style={{margin: 'auto 0.3vw 0 0', fontSize: '1.5em'}}>{stage}</h2>
                         </div>
                         
                     </div>
-                    <div className="link" style={{ display: 'flex', marginTop: "0vw", fontSize: "1.1vw", marginLeft: '1vw' }}>
-                        <p style={{ marginTop: "0.8vw" }}><a class='styled' >{match_url}</a></p>
-                        <p style={{marginTop: "0.8vw", marginLeft: 'auto', marginRight: '1.5vw', alignItems: 'flex-end'}}>{match_result}</p>
+                    <div className="link" style={{ display: 'flex', marginTop: "0vw", fontSize: "1.1em", marginLeft: '1vw' }}>
+                        <p style={{ marginTop: "0.8vw", width: '70%', display: 'flex', flexWrap: 'break-word' }}><a class='styled' >{match_url}</a></p>
+                        <p style={{marginTop: "0.8vw", marginLeft: 'auto', marginRight: '1.5em', alignItems: 'flex-end'}}>{match_result}</p>
                         
                     </div>
                 </div>
@@ -121,7 +121,7 @@ function MatchPreview( {acronym, mp, stage, match_name, result, teams} ) {
                     textDecoration: "none",
                     cursor: "pointer",
                     backgroundColor: color,
-                    width: "90%",
+                    width: "100%",
                     marginBottom: "2%",
                     fontFamily: "trebuchet ms",
                     height: 'auto',
@@ -156,54 +156,60 @@ function MatchPreview( {acronym, mp, stage, match_name, result, teams} ) {
     return (
         
         <div>
-            <div
-                className="container"
-                onClick={(e) => {
-                // Check if text is selected
-                const selection = window.getSelection();
-                const selectedText = selection.toString();
-                if (selectedText.length === 0) {
-                   
-                    if (e.target.tagName !== 'A') {
+                <div
+                    className="container"
+                    onClick={(e) => {
+                    // Check if text is selected
+                    const selection = window.getSelection();
+                    const selectedText = selection.toString();
+                    if (selectedText.length === 0) {
+                    
+                        if (e.target.tagName !== 'A') {
+                            
+                            window.location.href = `/matches/${acronym}/${mp}`;
+                        } else {
                         
-                        window.location.href = `/matches/${acronym}/${mp}`;
-                     } else {
+                            window.open(match_url, '_blank');
+                        }
+                        
+                    }
+                    }}
+                    style={{
+                    textDecoration: "none",
+                    cursor: "pointer",
+                    backgroundColor: color,
+                    width: "100%",
+                    marginBottom: "2%",
+                    fontFamily: "trebuchet ms",
+                    height: 'auto',
+                    display: "flex",
+                    flexDirection: "column",
+                    borderRadius: '10px',
                     
-                        window.open(match_url, '_blank');
-                      }
-                    
-                }
-                }}
-                style={{
-                textDecoration: "none",
-                cursor: "pointer",
-                backgroundColor: color,
-                width: "90%",
-                marginBottom: "2%",
-                fontFamily: "trebuchet ms",
-                height: 'auto',
-                display: "flex",
-                flexDirection: "column",
-                borderRadius: '10px',
-                
-                }}
-            >
-                <div className="title" style={{ display: "flex", marginLeft: '1vw', flexWrap: 'wrap', alignItems: 'center' }}>
-                    <div style={{width: '80%'}}>
-                        <h2 style={{ marginTop: "0.8vw", marginBottom: "0", fontSize: "1.9vw" }}>{match_name}</h2>
+                    }}
+                >
+                    <div style={{ display: "flex", marginLeft: '1em', flexWrap: 'wrap', alignItems: 'center', flexWrap: 'wrap', wordWrap: 'anywhere' }}>
+                        <div style={{width: '70%', marginRight: '10%'}}>
+                            <h2 style={{ marginTop: "0.8vw", marginBottom: "0", fontSize: "1.9em" }}>{match_name}</h2>
+                        </div>
+                        <div style={{width: '18%', marginTop: '0.8em', marginRight: '2%', marginBottom: '0', marginLeft: 'auto', alignItems: 'flex-end', alignSelf: 'flex-start', textAlign: 'right'}}>
+                            <h2 style={{margin: 'auto 0.3vw 0 0', fontSize: '1.5em'}}>{stage}</h2>
+                        </div>
                     </div>
-                    <div style={{margin: '1.2vw 1vw 0 auto', alignItems: 'flex-end', alignSelf: 'flex-start'}}>
-                        <h2 style={{margin: 'auto 0.3vw 0 0', fontSize: '1.5vw'}}>{stage}</h2>
+
+                    <div className="link" style={{ display: 'flex', marginTop: "0vw", fontSize: "1.1em", marginLeft: '1em', flexWrap: 'wrap' }}>
+                        <div style={{width: '70%', marginRight: '10%', marginTop: "0.8em", marginBottom: '0.8em', flexWrap: 'wrap', wordWrap: 'anywhere'}}>
+                            <p style={{margin: 0, fontSize: '1em' }}><a class='styled' >{match_url}</a></p>
+                        </div>
+                        
+                        <div style={{width: '18%', marginTop: "0.8em", marginBottom: '0.8em', marginRight: '2%', marginLeft: 'auto', alignItems: 'flex-end', alignSelf: 'flex-start', textAlign: 'right'}}>
+                            <p style={{margin: 'auto 0.3vw 0 0', fontSize: '1em', alignItems: 'flex-end'}}>{match_result}</p>
+                        </div>
+                        
+                        
                     </div>
-                    
-                </div>
-                <div className="link" style={{ display: 'flex', marginTop: "0vw", fontSize: "1.1vw", marginLeft: '1vw' }}>
-                    <p style={{ marginTop: "0.8vw" }}><a class='styled' >{match_url}</a></p>
-                    <p style={{marginTop: "0.8vw", marginLeft: 'auto', marginRight: '1.5vw', alignItems: 'flex-end'}}>{match_result}</p>
-                    
                 </div>
             </div>
-        </div>
        
       );
 }

@@ -192,11 +192,11 @@ function MatchesPage() {
         </div>
       }
       {isLoading && <Spinner />}
-      {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
-      {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} matches found</p> :
-      data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} match found</p> : null }
+      {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2em'}}>Api failure, try again later</p>}
+      {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2em'}}>{data.length} matches found</p> :
+      data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2em'}}>{data.length} match found</p> : null }
       
-      {data.length === 0 && !isLoading && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>No Results Found</p>}
+      {data.length === 0 && !isLoading && <p style={{textAlign: 'center', fontSize: '1.2em'}}>No Results Found</p>}
       {data.length != 0 && <Pagination 
         className="pagination-bar"
         currentPage={currentPage}

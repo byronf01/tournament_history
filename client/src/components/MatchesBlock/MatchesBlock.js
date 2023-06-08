@@ -24,8 +24,8 @@ function MatchesBlock( {matches} ) {
         <div>
             {
                 empty == false && 
-                    <div style={{width: '70%', marginLeft: '17%', marginRight: '13%'}}>
-                        <ul>{currentData}</ul>
+                    <div className='matches-block' style={{display: 'flex', justifyContent: 'left', }}>
+                        <ul style={{padding: 0, width: '100%'}}>{currentData}</ul>
                     </div>
             }
             
