@@ -20,11 +20,11 @@ function Member(props) {
   
   return (
       
-        <div style={{display: "flex", justifyContent: 'center', alignItems: 'center', gap: '1vw'}}>
+        <div style={{display: "flex", justifyContent: 'center', alignItems: 'center', gap: '1em'}}>
             <a href={profile}>
-                <img src={pfp} style={{width: `${weight}vw`, height: `${weight}vw`}} />
+                <img src={pfp} style={{width: `${weight}em`, height: `${weight}em`}} />
             </a>
-            <p style={{fontSize: `${weight*0.3}vw`, flexGrow: 1}}><b>{username}</b></p>
+            <p style={{fontSize: `${weight*0.3}em`, flexGrow: 1}}><b>{username}</b></p>
         </div>
       
   )
@@ -37,6 +37,7 @@ function StatsPage () {
   const [isLoading, setIsLoading] = useState(true);
   const [showBanners, setShowBanners] = useState(false);
   const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   
   useEffect ( () => {
     let timer;
@@ -50,7 +51,7 @@ function StatsPage () {
           for (let b in result['banners_won']) {
             
             banners.push(
-              <div style={{display: 'flex', justifyContent: 'center', paddingBottom: '2vw'}}>
+              <div style={{display: 'flex', justifyContent: 'center', paddingBottom: '2em'}}>
                 <img src={result['banners_won'][b]} style={{maxWidth: '50vw', maxHeight: '20vw'}}/>
               </div>
             )
@@ -82,6 +83,216 @@ function StatsPage () {
     
       return () => clearTimeout(timer);
     }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const statsView = () => {
+    if (windowWidth < 600) {
+      return (
+        <div style={{fontFamily: 'trebuchet ms', color: '#FFFFFF', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+          
+          <div className='margin2' style={{paddingBottom: '4vw'}}>
+            <BarChart options={avgScoreByModOptions} containerProps={{ height: '60vw' }} />
+          </div>
+
+          <div className='margin2' style={{paddingBottom: '4vw'}}>
+            <BarChart options={avgScoreByModOptions} containerProps={{ height: '60vw' }} />
+          </div>
+            
+          <div className='margin2' style={{display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
+            <p style={{ textAlign: 'center', fontSize: '4vw', marginTop: '2vw', marginBottom: '0.8vw' }}>Average matches per Tournament:</p>
+            <p style={{ textAlign: 'center', fontSize: '7vw', marginTop: '0' }}>{(Math.round(data['avg_matches_per_tourn'] * 100) / 100).toFixed(3)}</p>
+          </div>
+
+          <div className='margin2' style={{display: 'flex', justifyContent: 'center', gap: '5w'}}>
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
+              <p style={{fontSize: '1.5em', marginTop: '0.3vw', marginBottom: '0.8vw'}}>Lifetime Match Record: </p>
+              {
+                data['match_record'][0] >= data['match_record'][1] ? 
+                  <div style={{fontSize: '1em', lineHeight: '1.3em', marginTop: '2vw'}}>
+                    <b style={{fontSize: '2.3em'}}>(W) {data['match_record'][0]}</b>
+                    <br /> - <br/>
+                    <p style={{fontSize: '1.5em', marginTop: '0'}}>(L) {data['match_record'][1]}</p>
+                  </div>
+                : 
+                  <div style={{fontSize: '1em'}}><p style={{fontSize: '1.5em', marginTop: '0'}}>(W) {data['match_record'][0]}</p><br /> - <br /><b style={{fontSize: '2.3em'}}>(L) {data['match_record'][1]}</b></div>
+              }
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
+              <p style={{fontSize: '1.5em', marginTop: '0.3vw', marginBottom: '0.8vw'}}>Lifetime Map Record: </p>
+              {
+                data['map_record'][0] >= data['map_record'][1] ? 
+                  <div style={{fontSize: '1em', lineHeight: '1.3em', marginTop: '2vw'}}><b style={{fontSize: '2.3em'}}>(W) {data['map_record'][0]}</b><br /> - <br /><p style={{fontSize: '1.5em', marginTop: '0'}}>(L) {data['map_record'][1]}</p></div>
+                : 
+                  <div style={{fontSize: '1em'}}><p style={{fontSize: '1.5em', marginTop: '0'}}>(W) {data['map_record'][0]}</p><br /> - <br /><b style={{fontSize: '2.3emvw'}}>(L) {data['map_record'][1]}</b></div>
+              }
+            </div>
+            
+          </div>
+          
+          <div className='margin2' style={{ paddingBottom: '4vw'}}>
+            <GeneralChart options={tournsOverTimeOptions} containerProps={{height: '60vw'}}/>
+          </div>
+
+          <div className='margin2' style={{paddingBottom: '4vw'}}>
+            <GeneralChart options={wrbyModOptions} containerProps={{height: '60vw'}}/>
+          </div>
+
+          <div className='margin2' style={{ paddingBottom: '4vw'}}>
+            <GeneralChart options={mostCommonTeamSizeOptions} containerProps={{height: '60vw'}}/>
+          </div>
+
+          <div className='margin2' style={{ paddingBottom: '4vw'}}>
+            <GeneralChart options={mostPlayedModsOptions} containerProps={{height: '60vw'}}/>
+          </div>
+
+          <div className='margin2' style={{ paddingBottom: '4vw'}}>
+            <GeneralChart options={placementOptions} containerProps={{height: '60vw'}}/>
+          </div>
+
+          <div className='margin2' style={{ paddingBottom: '4vw'}}>
+            <BarChart options={bestMCOptions} containerProps={{height: '90vw'}}/>
+          </div>
+
+          <div className='margin2' style={{ paddingBottom: '4vw'}}>
+            <BarChart options={worstMCOptions} containerProps={{height: '90vw'}}/>
+          </div>
+
+
+          <div className='margin3' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center'}}>
+            
+            <p style={{margin: '0', marginBottom: '1.4vw', fontSize: '1.7em'}}>Most Teamed: </p>
+            <div style={{display: 'flex', alignItems: 'center', alignSelf: 'center'}}>
+              <ul style={{padding: '0', display: "flex", flexDirection: 'column'}}>{most_teamed2}</ul>
+            </div> 
+          </div>
+          
+          
+          <div>
+            <Dropdown showBanners={showBanners} setShowBanners={() => {setShowBanners(!showBanners) }} banners={bannerList} />
+          </div>
+
+          <div style={{height: '5vh'}}></div>
+        
+      </div>
+      );
+    } else {
+      return (
+        <div style={{fontFamily: 'trebuchet ms', color: '#FFFFFF'}}>
+            
+        <div className='margin2' style={{ display: 'flex', width: '70%' }}>
+          <div style={{ width: '57%', paddingRight: '6%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div>
+                <BarChart options={avgScoreByModOptions} containerProps={{ height: '30vw' }} />
+              </div>
+            </div>
+          </div>
+          <div style={{ width: '37%', display: 'flex', flexDirection: 'column' }}>
+            <div>
+              <GeneralChart options={wrbyModOptions} containerProps={{height: '20vw'}}/>
+            </div>
+            <div >
+              <p style={{ textAlign: 'center', fontSize: '1.6vw', marginTop: '2vw', marginBottom: '0.8vw' }}>Average matches per Tournament:</p>
+              <p style={{ textAlign: 'center', fontSize: '3vw', marginTop: '0' }}>{(Math.round(data['avg_matches_per_tourn'] * 100) / 100).toFixed(3)}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className='margin2' style={{ display: 'flex', marginTop: '3vw', width: '70%' }}>
+          <div style={{ width: '27%', paddingRight: '6%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
+              <div>
+                <p style={{fontSize: '1.8vw', marginTop: '0.3vw', marginBottom: '0.8vw'}}>Lifetime Match Record: </p>
+                {
+                  data['match_record'][0] >= data['match_record'][1] ? 
+                    <div style={{fontSize: '2.5vw', lineHeight: '2.2vw'}}><b style={{fontSize: '2.7vw'}}>(W) {data['match_record'][0]}</b><br /> - <br/><p style={{fontSize: '2vw', marginTop: '0'}}>(L) {data['match_record'][1]}</p></div>
+                  : 
+                    <div style={{fontSize: '2.5vw'}}><p style={{fontSize: '2vw', marginTop: '0'}}>(W) {data['match_record'][0]}</p><br /> - <br /><b style={{fontSize: '2.7vw'}}>(L) {data['match_record'][1]}</b></div>
+                }
+                <p style={{fontSize: '1.8vw', marginTop: '0.3vw', marginBottom: '0.8vw'}}>Lifetime Map Record: </p>
+                {
+                  data['map_record'][0] >= data['map_record'][1] ? 
+                    <div style={{fontSize: '2.5vw', lineHeight: '2.2vw'}}><b style={{fontSize: '2.7vw'}}>(W) {data['map_record'][0]}</b><br /> - <br /><p style={{fontSize: '2vw', marginTop: '0'}}>(L) {data['map_record'][1]}</p></div>
+                  : 
+                    <div style={{fontSize: '2.5vw'}}><p style={{fontSize: '2vw', marginTop: '0'}}>(W) {data['map_record'][0]}</p><br /> - <br /><b style={{fontSize: '2.7vw'}}>(L) {data['map_record'][1]}</b></div>
+                }
+                
+              </div>
+            </div>
+          </div>
+          <div style={{ width: '64%', display: 'flex', flexDirection: 'column' }}>
+            <div>
+              <GeneralChart options={tournsOverTimeOptions}/>
+            </div>
+            
+          </div>
+        </div>
+
+        <div className='margin' style={{ display: 'flex', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
+          <div style={{ width: '58%', paddingRight: '6%' }}>
+              <div>
+                <GeneralChart options={mostCommonTeamSizeOptions}/>
+              </div>
+          </div>
+          <div style={{ width: '34%', display: 'flex', flexDirection: 'column' }}>
+              <GeneralChart options={mostCommonFormatOptions}/>
+          </div>
+        </div>
+
+        <div className='margin' style={{ display: 'flex', paddingLeft: '2%', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
+          <div style={{ width: '38%', paddingRight: '4%' }}>
+            <GeneralChart options={mostPlayedModsOptions}/>
+          </div>
+          <div style={{width: "56%", margin: "0"}}>
+            <GeneralChart options={placementOptions}/>
+          </div>
+        </div>
+        
+        <div className='margin' style={{display: 'flex', marginTop: '3vw', flexDirection: 'row'}}>
+
+          <div style={{display: 'flex', flexDirection: 'column', width: '50%'}}>
+            <div className='margin3' style={{  marginTop: '3vw'}}>
+              <BarChart options={bestMCOptions}/>
+            </div>
+            
+            <div className='margin3' style={{marginTop: '3vw'}}>
+              <BarChart options={worstMCOptions}/>
+            </div>
+          </div>
+
+          <div className='margin3' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '30%', textAlign: 'center'}}>
+            
+            <p style={{margin: '0', marginBottom: '1.4vw', fontSize: '2vw'}}>Most Teamed: </p>
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <ul style={{padding: '0', display: "flex", flexDirection: 'column'}}>{most_teamed}</ul>
+            </div> 
+          </div>
+        </div>
+        
+        <div>
+          <Dropdown showBanners={showBanners} setShowBanners={() => {setShowBanners(!showBanners) }} banners={bannerList} />
+        </div>
+
+        
+        
+        {/*extra space at end of page*/}
+        <div style={{height: '5vh'}}></div>
+        
+      </div>
+      );
+    }
+  };
 
     const placementOptions = (data == false ? null : {
 			title: {
@@ -131,6 +342,14 @@ function StatsPage () {
                         <p style={{fontSize: `${member[1]*0.3}vw`}}>{member[1]}</p>
                         <Member id={member[0]} username={userOsuData[member[0]]} weight={member[1]} />
                       </div>).slice(0, 10))
+
+  const most_teamed2 = (data == false || userOsuData == false ? null : 
+    data['most_teamed'].map((member) => 
+      
+    <div style={{display: 'flex', gap: '1em', paddingBottom: '1em'}}>
+      <p style={{fontSize: `${member[1]*0.3}em`}}>{member[1]}</p>
+      <Member id={member[0]} username={userOsuData[member[0]]} weight={member[1]} />
+    </div>).slice(0, 10))
 
 const wrbyModOptions = (data == false ? null : {
   title: {
@@ -270,7 +489,9 @@ const wrbyModOptions = (data == false ? null : {
                 paddingRight: "10%"}}>
                 <div>
                 <h1 style={{textAlign: "center", 
-                fontSize: "3.5vw",
+                fontSize: "3.7em",
+                marginTop: '0.6em',
+                marginBottom: '0.6em',
                 fontFamily: 'trebuchet ms',
                 textShadow: '3px 3px #505F74',
                 color: "rgb(255,255,255)"}}>🥇Stats🥇</h1>
@@ -280,106 +501,8 @@ const wrbyModOptions = (data == false ? null : {
         <ScrollButton />
         {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
         { data != false &&
-          <div style={{fontFamily: 'trebuchet ms', color: '#FFFFFF'}}>
-            
-
-            <div className='margin2' style={{ display: 'flex', width: '70%' }}>
-              <div style={{ width: '57%', paddingRight: '6%' }}>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div>
-                    <BarChart options={avgScoreByModOptions} containerProps={{ height: '30vw' }} />
-                  </div>
-                </div>
-              </div>
-              <div style={{ width: '37%', display: 'flex', flexDirection: 'column' }}>
-                <div>
-                  <GeneralChart options={wrbyModOptions} containerProps={{height: '20vw'}}/>
-                </div>
-                <div >
-                  <p style={{ textAlign: 'center', fontSize: '1.6vw', marginTop: '2vw', marginBottom: '0.8vw' }}>Average matches per Tournament:</p>
-                  <p style={{ textAlign: 'center', fontSize: '3vw', marginTop: '0' }}>{(Math.round(data['avg_matches_per_tourn'] * 100) / 100).toFixed(3)}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className='margin2' style={{ display: 'flex', marginTop: '3vw', width: '70%' }}>
-              <div style={{ width: '27%', paddingRight: '6%' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center'}}>
-                  <div>
-                    <p style={{fontSize: '1.8vw', marginTop: '0.3vw', marginBottom: '0.8vw'}}>Lifetime Match Record: </p>
-                    {
-                      data['match_record'][0] >= data['match_record'][1] ? 
-                        <div style={{fontSize: '2.5vw', lineHeight: '2.2vw'}}><b style={{fontSize: '2.7vw'}}>(W) {data['match_record'][0]}</b><br /> - <br/><p style={{fontSize: '2vw', marginTop: '0'}}>(L) {data['match_record'][1]}</p></div>
-                      : 
-                        <div style={{fontSize: '2.5vw'}}><p style={{fontSize: '2vw', marginTop: '0'}}>(W) {data['match_record'][0]}</p><br /> - <br /><b style={{fontSize: '2.7vw'}}>(L) {data['match_record'][1]}</b></div>
-                    }
-                    <p style={{fontSize: '1.8vw', marginTop: '0.3vw', marginBottom: '0.8vw'}}>Lifetime Map Record: </p>
-                    {
-                      data['map_record'][0] >= data['map_record'][1] ? 
-                        <div style={{fontSize: '2.5vw', lineHeight: '2.2vw'}}><b style={{fontSize: '2.7vw'}}>(W) {data['map_record'][0]}</b><br /> - <br /><p style={{fontSize: '2vw', marginTop: '0'}}>(L) {data['map_record'][1]}</p></div>
-                      : 
-                        <div style={{fontSize: '2.5vw'}}><p style={{fontSize: '2vw', marginTop: '0'}}>(W) {data['map_record'][0]}</p><br /> - <br /><b style={{fontSize: '2.7vw'}}>(L) {data['map_record'][1]}</b></div>
-                    }
-                    
-                  </div>
-                </div>
-              </div>
-              <div style={{ width: '64%', display: 'flex', flexDirection: 'column' }}>
-                <div>
-                  <GeneralChart options={tournsOverTimeOptions}/>
-                </div>
-                
-              </div>
-            </div>
-
-            <div className='margin' style={{ display: 'flex', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
-              <div style={{ width: '58%', paddingRight: '6%' }}>
-                  <div>
-                    <GeneralChart options={mostCommonTeamSizeOptions}/>
-                  </div>
-              </div>
-              <div style={{ width: '34%', display: 'flex', flexDirection: 'column' }}>
-                  <GeneralChart options={mostCommonFormatOptions}/>
-              </div>
-            </div>
-
-            <div className='margin' style={{ display: 'flex', paddingLeft: '2%', marginTop: '3vw', width: '80%', justifyContent: 'center' }}>
-              <div style={{ width: '38%', paddingRight: '4%' }}>
-                <GeneralChart options={mostPlayedModsOptions}/>
-              </div>
-              <div style={{width: "56%", margin: "0"}}>
-                <GeneralChart options={placementOptions}/>
-              </div>
-            </div>
-            
-            <div className='margin' style={{display: 'flex', marginTop: '3vw', flexDirection: 'row'}}>
-
-              <div style={{display: 'flex', flexDirection: 'column', width: '50%'}}>
-                <div className='margin3' style={{  marginTop: '3vw'}}>
-                  <BarChart options={bestMCOptions}/>
-                </div>
-                
-                <div className='margin3' style={{marginTop: '3vw'}}>
-                  <BarChart options={worstMCOptions}/>
-                </div>
-              </div>
-
-              <div className='margin3' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '30%', textAlign: 'center'}}>
-                
-                <p style={{margin: '0', marginBottom: '1.4vw', fontSize: '2vw'}}>Most Teamed: </p>
-                <div style={{display: 'flex', alignItems: 'center'}}>
-                  <ul style={{padding: '0', display: "flex", flexDirection: 'column'}}>{most_teamed}</ul>
-                </div> 
-              </div>
-            </div>
-            
-            <div>
-              <Dropdown showBanners={showBanners} setShowBanners={() => {setShowBanners(!showBanners) }} banners={bannerList} />
-            </div>
-            
-            {/*extra space at end of page*/}
-            <div style={{height: '5vh'}}></div>
-            
+          <div>
+            { statsView() }
           </div>
         }
     </div>

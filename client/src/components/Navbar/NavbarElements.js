@@ -22,7 +22,7 @@ export const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   text-decoration: none;
-  padding: 0 1rem;
+  padding: 0 0.7rem;
   font-size: 1em;
   height: 100%;
   /* font-size: 1.3vw; */
@@ -30,6 +30,9 @@ export const NavLink = styled(Link)`
   &.active {
     color: #000000;
   }
+  @media (min-width:600px) {
+    padding: 0 1rem;
+  };
   
 `;
   

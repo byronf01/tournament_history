@@ -14,7 +14,7 @@ const Dropdown = ({showBanners, setShowBanners, banners}) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-      <h3 style={{ fontSize: '2.2vw', marginTop: '2vw', marginBottom: '1vw' }}>Banners</h3>
+      <h3 style={{ fontSize: '2.2em', marginTop: '2vw', marginBottom: '1vw', }}>Banners</h3>
       <button
         style={{
           width: '5%',
@@ -24,19 +24,21 @@ const Dropdown = ({showBanners, setShowBanners, banners}) => {
           cursor: 'pointer',
           color: '#FFFFFF',
           fontFamily: 'trebuchet ms',
-          fontSize: '1.2vw',
+          fontSize: '1.2em',
+          display: 'flex',
+          justifyContent: 'center',
         }}
         onClick={toggleShowBanners}
       >
         {showBanners ? (
           <div>
-            <p>Close</p>
-            <img src={arrowup} style={{ maxWidth: '1.2vw', maxHeight: '1.2vw' }} />
+            <p >Close</p>
+            <img src={arrowup} style={{ maxWidth: '1.2em', maxHeight: '1.2em' }} />
           </div>
         ) : (
           <div>
             <p>Expand</p>
-            <img src={arrowdown} style={{ maxWidth: '1.2vw', maxHeight: '1.2vw' }} />
+            <img src={arrowdown} style={{ maxWidth: '1.2em', maxHeight: '1.2em' }} />
           </div>
         )}
       </button>
