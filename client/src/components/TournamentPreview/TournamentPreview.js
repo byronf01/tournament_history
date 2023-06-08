@@ -194,25 +194,25 @@ function TournamentPreview( {new_data} ) {
   
 
 
-    let start = data['date_f'].split("T")[0]
-    let banner = data['banner']
-    let info = ""
-    
-    if (data['forum'] != "") {
-        info = data['forum'];
-    } else if (data['tourn_sheet']) {
-        info = data['tourn_sheet'];
-    } else {
-        info = "No Preview";
-    }
+  let start = data['date_f'].split("T")[0]
+  let banner = data['banner']
+  let info = ""
+  
+  if (data['forum'] != "") {
+      info = data['forum'];
+  } else if (data['tourn_sheet']) {
+      info = data['tourn_sheet'];
+  } else {
+      info = "No Preview";
+  }
 
-    const img = { url: banner, alt: 'banner' };
+  const img = { url: banner, alt: 'banner' };
 
-    return (
-        <div>
-          {blockView()}
-        </div>
-      );
+  return (
+      <div>
+        {blockView()}
+      </div>
+    );
 }
 
 export default TournamentPreview;

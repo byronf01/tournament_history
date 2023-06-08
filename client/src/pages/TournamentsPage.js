@@ -35,8 +35,6 @@ function TournamentsPage() {
     useEffect ( () => {
         let timer;
         
-        
-
         fetch(`${API_URL}/api/data`).then( resp => resp.json())
         .then( (result) => {
         

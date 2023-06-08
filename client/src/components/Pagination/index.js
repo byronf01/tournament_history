@@ -43,9 +43,10 @@ const Pagination = props => {
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
+    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
     <ul
       className={classnames('pagination-container', { [className]: className })}
-      style={{padding: 0}}
+      style={{padding: 0, display: 'flex', flexDirection: 'row'}}
     >
        {/* Left navigation arrow */}
       <li
@@ -85,6 +86,7 @@ const Pagination = props => {
         <div className="arrow right" />
       </li>
     </ul>
+    </div>
   );
 };
 
