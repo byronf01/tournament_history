@@ -20,6 +20,7 @@ function TournamentsPage() {
     const [timerId, setTimerId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     const currentTableData = useMemo(() => {
         
@@ -63,6 +64,64 @@ function TournamentsPage() {
             return () => clearTimeout(timer);
         
         }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+    
+        window.addEventListener('resize', handleResize);
+    
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+        }, []);
+        
+    const searchBar = () => {
+        if (windowWidth < 600) {
+            return (
+                <div style={{textAlign: 'center'}}>
+                    <TextField
+                        id="search"
+                        type="search"
+                        placeholder='Search...'
+                        value={query}
+                        onChange={changeQuery}
+                        sx={{ width: '80vw', borderRadius: 10 }}
+                        InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="start">
+                                <SearchIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        style={{backgroundColor: '#FFFFFF'}}
+                    />
+                </div>
+            );
+        } else {
+            return (
+                <div style={{textAlign: 'center'}}>
+                    <TextField
+                        id="search"
+                        type="search"
+                        placeholder='Search...'
+                        value={query}
+                        onChange={changeQuery}
+                        sx={{ width: '40vw', borderRadius: 10 }}
+                        InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="start">
+                                <SearchIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        style={{backgroundColor: '#FFFFFF'}}
+                    />
+                </div>
+            )
+        }
+    }
     
     const changeQuery = (event) => {
         setQuery(event.target.value);
@@ -104,43 +163,27 @@ function TournamentsPage() {
             <div style={{paddingLeft: "10%", 
                 paddingRight: "10%"}}>
                 <div>
-                <h1 style={{textAlign: "center", 
-                fontSize: "3.5vw",
+                <h1 className='title-header' style={{textAlign: "center", 
+                marginTop: '0.6em',
+                marginBottom: '0.6em',
                 fontFamily: 'trebuchet ms',
                 textShadow: '3px 3px #505F74',
                 color: "rgb(255,255,255)"}}>🏆 Tournaments 🏆</h1>
                 </div>
         
             </div>
-            
-            
-
+        
             <div >
             { dataMaster.length !== 1 &&
-                <div style={{textAlign: 'center'}}>
-                    <TextField
-                        id="search"
-                        type="search"
-                        placeholder='Search...'
-                        value={query}
-                        onChange={changeQuery}
-                        sx={{ width: '40vw', borderRadius: 10 }}
-                        InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="start">
-                                <SearchIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                        style={{backgroundColor: '#FFFFFF'}}
-                    />
+                <div>
+                    {searchBar()}
                 </div>
             }
             
             {isLoading && <Spinner />}
-            {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
-            {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} tournaments found</p> :
-            data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} tournament found</p> : null }
+            {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2em'}}>Api failure, try again later</p>}
+            {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2em'}}>{data.length} tournaments found</p> :
+            data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2em'}}>{data.length} tournament found</p> : null }
             {data.length !== 0 && <Pagination 
                     className="pagination-bar"
                     currentPage={currentPage}
@@ -152,7 +195,7 @@ function TournamentsPage() {
                     style={{textAlign: "center", marginLeft: "auto", marginRight: "auto"}}/>
             }
             
-            {data.length === 0 && !isLoading && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>No Results Found</p>}
+            {data.length === 0 && !isLoading && <p style={{textAlign: 'center', fontSize: '1.2em'}}>No Results Found</p>}
             {data.length !== 0 && <TournamentsBlock tourns={currentTableData} />}
             {data.length !== 0 && <Pagination 
                     className="pagination-bar"

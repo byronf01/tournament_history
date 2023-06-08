@@ -142,6 +142,9 @@ input[type="range"]:active::-webkit-slider-thumb{
 .margin3 {
     margin-left: 2%;
 }
+.title-header {
+    font-size: 8vw;
+}
 
 /* Tablet margins*/
 @media (min-width:600px) {
@@ -155,6 +158,9 @@ input[type="range"]:active::-webkit-slider-thumb{
     }
     .margin3 {
         margin-left: 5%;
+    }
+    .title-header {
+        font-size: 6vw;
     }
 }
 
@@ -171,6 +177,9 @@ input[type="range"]:active::-webkit-slider-thumb{
     .margin3 {
         margin-left: 11%;
     }
+    .title-header {
+        font-size: 3.7vw;
+    }
 }
 
 /* Monitor margins*/
@@ -185,6 +194,9 @@ input[type="range"]:active::-webkit-slider-thumb{
     }
     .margin3 {
         margin-left: 17%;
+    }
+    .title-header {
+        font-size: 3.3vw;
     }
 }
 

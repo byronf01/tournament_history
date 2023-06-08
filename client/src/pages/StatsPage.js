@@ -488,8 +488,7 @@ const wrbyModOptions = (data == false ? null : {
         <div style={{paddingLeft: "10%", 
                 paddingRight: "10%"}}>
                 <div>
-                <h1 style={{textAlign: "center", 
-                fontSize: "3.7em",
+                <h1 className='title-header' style={{textAlign: "center", 
                 marginTop: '0.6em',
                 marginBottom: '0.6em',
                 fontFamily: 'trebuchet ms',

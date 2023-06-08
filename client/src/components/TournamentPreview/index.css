@@ -25,11 +25,17 @@
 .inner {
     width: 98%;
 }
+.margin-tpreview {
+    margin-left: 2%;
+}
 
 /* Tablet margins*/
 @media (min-width:600px) {
     .inner {
         width: 90%;
+    }
+    .margin-tpreview {
+        margin-left: 5%;
     }
 }
 
@@ -38,11 +44,17 @@
     .inner {
         width: 80%;
     }
+    .margin-tpreview {
+        margin-left: 7%;
+    }
 }
 
 /* Monitor margins*/
 @media (min-width:1700px) {
     .inner {
         width: 70%;
+    }
+    .margin-tpreview {
+        margin-left: 10%;
     }
 }

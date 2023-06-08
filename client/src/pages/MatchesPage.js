@@ -20,6 +20,7 @@ function MatchesPage() {
   const [timerId, setTimerId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const dataFetchedRef = useRef(false);
 
   const currentTableData = useMemo(() => {
@@ -68,6 +69,64 @@ function MatchesPage() {
     
       return () => clearTimeout(timer);
    }
+
+  useEffect(() => {
+  const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+  };
+
+  window.addEventListener('resize', handleResize);
+
+  return () => {
+      window.removeEventListener('resize', handleResize);
+  };
+  }, []);
+    
+  const searchBar = () => {
+      if (windowWidth < 600) {
+          return (
+              <div style={{textAlign: 'center'}}>
+                  <TextField
+                      id="search"
+                      type="search"
+                      placeholder='Search...'
+                      value={query}
+                      onChange={changeQuery}
+                      sx={{ width: '80vw', borderRadius: 10 }}
+                      InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="start">
+                              <SearchIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      style={{backgroundColor: '#FFFFFF'}}
+                  />
+              </div>
+          );
+      } else {
+          return (
+              <div style={{textAlign: 'center'}}>
+                  <TextField
+                      id="search"
+                      type="search"
+                      placeholder='Search...'
+                      value={query}
+                      onChange={changeQuery}
+                      sx={{ width: '40vw', borderRadius: 10 }}
+                      InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="start">
+                              <SearchIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      style={{backgroundColor: '#FFFFFF'}}
+                  />
+              </div>
+          )
+      }
+  }
 
     useEffect(() => {
       if (dataFetchedRef.current) return;
@@ -118,8 +177,9 @@ function MatchesPage() {
       <div style={{paddingLeft: "10%", 
                 paddingRight: "10%"}}>
           <div>
-          <h1 style={{textAlign: "center", 
-          fontSize: "3.5vw",
+          <h1 className='title-header' style={{textAlign: "center", 
+          marginTop: '0.6em',
+          marginBottom: '0.6em',
           fontFamily: 'trebuchet ms',
           textShadow: '3px 3px #505F74',
           color: "rgb(255,255,255)"}}>🆚 Matches 🆚</h1>
@@ -127,25 +187,10 @@ function MatchesPage() {
       </div>
 
       { dataMaster.length !== 1 &&
-                <div style={{textAlign: 'center'}}>
-                    <TextField
-                        id="search"
-                        type="search"
-                        placeholder='Search...'
-                        value={query}
-                        onChange={changeQuery}
-                        sx={{ width: '40vw', borderRadius: 10 }}
-                        InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="start">
-                                <SearchIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                        style={{backgroundColor: '#FFFFFF'}}
-                    />
-                </div>
-            }
+        <div>
+          {searchBar()}
+        </div>
+      }
       {isLoading && <Spinner />}
       {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2vw'}}>Api failure, try again later</p>}
       {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2vw'}}>{data.length} matches found</p> :
