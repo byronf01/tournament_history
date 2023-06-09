@@ -7,7 +7,35 @@ function MatchCosts( {new_data, nameMap, result, isSticky} ) {
     // new_data type: Array -> [Obj, Obj]
     const [team_win, setTeam_win] = useState(new_data[0]);
     const [team_lose, setTeam_lose] = useState(new_data[1]);
-    console.log(isSticky)
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const view = (winner_img) => {
+        if (windowWidth < 600) {
+            return <img src={winner_img} style={{width: '5em', height: 'auto'}} />;
+        } else {
+            return <img src={winner_img} style={{width: '7em', height: 'auto'}} />;
+        }
+    }
+
+    const height = (winner_img) => {
+        if (windowWidth < 600) {
+            return 34;
+        } else {
+            return 100;
+        }
+    }
 
     const s1 = result[0];
     const s2 = result[1];
@@ -34,12 +62,12 @@ function MatchCosts( {new_data, nameMap, result, isSticky} ) {
         });
         winner_img = `https://a.ppy.sh/${winner_img}?1677187336.png`
         return (
-            <div>
+            <div style={{maxHeight: `${height()}em`, overflowY: 'auto'}}>
                 
                 <div>
-                    <img src={winner_img} style={{width: '7vw', height: 'auto'}} />
-                    <div style={{marginLeft: '0.3vw'}}>
-                        <ol style={{marginTop: '0.3vw', lineHeight: '3vh', fontSize: '2.2vh'}}>
+                    {view(winner_img)}
+                    <div style={{marginLeft: '0.3em'}}>
+                        <ol style={{marginTop: '0.3em', lineHeight: '3.1vh', fontSize: '2.2vh'}}>
                             {ordered.map((ordered, index) => 
                                 <li key={Object.keys(ordered)[0]}>
                                     <a class='styled2' href={`https://osu.ppy.sh/users/${Object.keys(ordered)[0]}`}>
@@ -119,7 +147,7 @@ function MatchCosts( {new_data, nameMap, result, isSticky} ) {
 
         winner_img = `https://a.ppy.sh/${winner_img}?1677187336.png`
         return (
-            <div>
+            <div style={{maxHeight: `${height()}em`, overflowY: 'auto'}}>
                 
                 
                 <h3 style={{fontSize: '3vh', marginTop: '0', marginBottom: '0.8vw'}}>Final Score:    
@@ -127,7 +155,7 @@ function MatchCosts( {new_data, nameMap, result, isSticky} ) {
                     {s1} - {s2}
                     {' 🔴'}
                 </h3>
-                <img src={winner_img} style={{width: '7vw', height: 'auto'}}></img>
+                {view(winner_img)}
 
                 <div style={{marginLeft: '0.3vw'}}>
                     <h5 style={{fontSize: '2.4vh', marginTop: '0.3vw', marginBottom: '0'}}>{team1 == "blue_team" ? 'Blue Team 🔵' : team1 == "red_team" ? 'Red Team 🔴' : ''}</h5>
