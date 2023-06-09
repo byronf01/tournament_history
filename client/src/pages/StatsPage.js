@@ -339,7 +339,7 @@ function StatsPage () {
                       data['most_teamed'].map((member) => 
                         
                       <div style={{display: 'flex', gap: '1vw', paddingBottom: '1vw'}}>
-                        <p style={{fontSize: `${member[1]*0.3}vw`}}>{member[1]}</p>
+                        <p style={{fontSize: `${member[1]*0.3}em`}}>{member[1]}</p>
                         <Member id={member[0]} username={userOsuData[member[0]]} weight={member[1]} />
                       </div>).slice(0, 10))
 
