@@ -58,7 +58,7 @@ function TournamentDetails(props) {
                 data != false && 
                     <div className='margin2' style={{ fontFamily: 'trebuchet ms', display: 'flex', flexDirection: 'column', flexFlow: 'column-wrap'}}>
                         <div style={{display: "flex", alignItems: 'center', width: "100%", flexWrap: 'wrap', gap: '1em', justifyContent: 'center'}}>
-                            <div style={{textAlign: "left", width: '30em', flexWrap: 'wrap'}}>
+                            <div style={{textAlign: "left", width: '30em', flexWrap: 'wrap', marginRight: 'auto'}}>
                                 <h1 style={{fontSize: "3.5em", marginBottom: "0"}}>{data["title"]}</h1>
                                 <div style={{fontSize: "1.4em", overflowWrap: 'break-word'}}>
                                     <p style={{marginTop: '0.5em', marginBottom: '0'}}>Start Date: {data['date']}</p>
@@ -68,7 +68,7 @@ function TournamentDetails(props) {
                                 </div>
                             </div>
                             
-                                <ImageContainer image={banner} width='33em' height='11em'/>
+                                <ImageContainer image={banner} width='33em' height='100%'/>
                             
                         </div>
                         
