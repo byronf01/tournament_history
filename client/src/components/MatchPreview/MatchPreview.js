@@ -185,7 +185,7 @@ function MatchPreview( {acronym, mp, stage, match_name, result, teams} ) {
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: '10px',
-                    
+                    boxShadow: "1px 2px #1a1d21",
                     }}
                 >
                     <div style={{ display: "flex", marginLeft: '1em', flexWrap: 'wrap', alignItems: 'center', flexWrap: 'wrap', wordWrap: 'anywhere' }}>
