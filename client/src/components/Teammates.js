@@ -37,23 +37,23 @@ function Member(props) {
     
 
     return (
-        <div style={{display: "inline", marginRight: "2.5vw", wordWrap: 'break-word', display: 'flex', textAlign: 'center', justifyContent: 'center', flexDirection: 'column', alignContent: 'flex-start'}}>
-            <div style={{height: '2vw', fontSize: '1.2vw'}}>
+        <div style={{display: "inline", marginRight: "2em", wordWrap: 'anywhere', display: 'flex', textAlign: 'center', justifyContent: 'center', flexDirection: 'column', alignContent: 'flex-start'}}>
+            <div style={{height: '2em', fontSize: '1.2em'}}>
                 { index === 0 &&
                     <p style={{margin: '0'}}>(c)</p>
                 }
             </div>
-            <div style={{marginTop: '0.3vw', display: 'flex', justifyContent: 'center'}}>
+            <div style={{marginTop: '0.3em', display: 'flex', justifyContent: 'center'}}>
                 <a href={profile} target="_blank" rel="noreferrer">
                     <div>
-                        <ImageContainer image={{url: pfp, alt: 'pfp'}} width='5vw' height='5vw'/>
+                        <ImageContainer image={{url: pfp, alt: 'pfp'}} width='4.5em' height='4.5em'/>
                     </div>
                 </a>
             </div>
             
-            <div style={{margin: '0', lineHeight: '0.3vw', wordWrap: 'break-text'}}>
-                <p style={{fontSize: '1.2vw'}}><b>{username}</b></p>
-                <p style={{fontSize: '0.9vw'}}><i>{discord}</i></p>
+            <div style={{margin: '0', lineHeight: '0.3em', wordWrap: 'break-text'}}>
+                <p style={{fontSize: '1em'}}><b>{username}</b></p>
+                <p style={{fontSize: '0.8em'}}><i>{discord}</i></p>
             </div>
             
         </div>
@@ -67,8 +67,8 @@ function Teammates(props) {
     const team = members.map((member, i) => <Member id={member} index={i}/>)
 
     return (
-      <div style={{display: "flex", alignItems: "stretch", justifyContent: "center", paddingTop: '1vw'}}>
-        <ul style={{ display: "flex", flexWrap: "wrap", listStyle: "none", padding: 0, marginTop: '-2vw', marginBottom: '0vw' }}>
+      <div style={{display: "flex", alignItems: "stretch", justifyContent: "center", paddingTop: '1em'}}>
+        <ul style={{ display: "flex", flexWrap: "wrap", listStyle: "none", padding: 0, marginTop: '-2em', marginBottom: '0' }}>
             {team}
         </ul>
       </div>

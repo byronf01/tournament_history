@@ -56,6 +56,122 @@ function TournamentDetails(props) {
             <Navbar />
             {
                 data != false && 
+                    <div className='margin2' style={{ fontFamily: 'trebuchet ms', display: 'flex', flexDirection: 'column', flexFlow: 'column-wrap'}}>
+                        <div style={{display: "flex", alignItems: 'center', width: "100%", flexWrap: 'wrap', gap: '1em', justifyContent: 'center'}}>
+                            <div style={{textAlign: "left", width: '30em', flexWrap: 'wrap'}}>
+                                <h1 style={{fontSize: "3.5em", marginBottom: "0"}}>{data["title"]}</h1>
+                                <div style={{fontSize: "1.4em", overflowWrap: 'break-word'}}>
+                                    <p style={{marginTop: '0.5em', marginBottom: '0'}}>Start Date: {data['date']}</p>
+                                    <p style={{marginTop: '0.5em', marginBottom: '0'}}>Format: {data['format']}</p>
+                                    <p style={{marginTop: '0.5em', marginBottom: '0'}}>Gimmick: {data['notes'] ? data['notes'] : "No Gimmick"}</p>
+                                    <p style={{marginTop: '0.5em', marginBottom: '0'}}><i>"{data['comments']}"</i></p>
+                                </div>
+                            </div>
+                            
+                                <ImageContainer image={banner} width='33em' height='11em'/>
+                            
+                        </div>
+                        
+                        <div style={{marginBottom: '0', display: 'flex', flexWrap: 'wrap', gap: '1em', justifyContent: 'center'}}>
+                            <div style={{display: "flex", paddingLeft: '2%', paddingRight: '7%', marginTop: '1vw', gap: "4vw", alignItems: 'flex-start', fontSize: '1em'}}>
+                                
+                                <div style={{marginRight: "0", width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+                                    <p>Forum Post</p> 
+                                    
+                                    { data['forum'] !== '' ? 
+                                        <a href={data['forum']} target="_blank" rel="noreferrer" style={{textAlign: 'center'}}>
+                                            <div style={{justifyContent: 'center', alignItems: 'center'}}>
+                                                <ImageContainer image={{url: osu_logo, alt: 'osu'}} width='5em' height='5em' />
+                                            </div>
+                                        </a>
+                                        : 
+                                        <a>
+                                            <div style={{justifyContent: 'center', alignItems: 'center'}}>
+                                                <ImageContainer image={{url: osu_logo_missing, alt: 'osu missing'}} width='5em' height='5em' />
+                                            </div>
+                                        </a>
+                                    }   
+                                
+                                </div>
+                                
+                                <div style={{marginRight: "0", width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+                                    <p>Spreadsheet</p> 
+                                
+                                    { data['tourn_sheet'] !== '' ? 
+                                        <a target="_blank" rel="noreferrer" href={data['tourn_sheet']} style={{textAlign: 'center'}}>
+                                            <div style={{justifyContent: 'center', alignItems: 'center'}}>
+                                                <ImageContainer image={{url: sheets_logo, alt: 'sheet'}} width='5em' height='5em' />
+                                            </div>
+                                        </a>
+                                        : 
+                                        <a>
+                                            <div style={{justifyContent: 'center', alignItems: 'center'}}>
+                                                <ImageContainer image={{url: sheets_logo_missing, alt: 'sheet missing'}} width='5em' height='5em' />
+                                            </div>
+                                        </a>
+                                    }
+                                    
+                                </div>
+                                
+                                <div style={{marginRight: "0", width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+                                    <p>Bracket</p> 
+                                    
+                                    { data['tourn_sheet'] !== '' ? 
+                                        <a href={data['bracket']} target="_blank" rel="noreferrer" style={{textAlign: 'center'}}>
+                                            <div style={{justifyContent: 'center', alignItems: 'center'}}>
+                                                <ImageContainer image={{url: challonge_logo, alt: 'bracket'}} width='5em' height='5em' />
+                                            </div>
+                                        </a> :
+                                        <a>
+                                            <div style={{justifyContent: 'center', alignItems: 'center'}}>
+                                                <ImageContainer image={{url: challonge_logo_missing, alt: 'bracket_missing'}} width='5em' height='5em' />
+                                            </div>
+                                        </a>
+                                    }
+                                </div>
+                                
+                            </div>
+                            <div style={{display: 'flex', flexDirection: 'column', fontSize: '1.3em', justifyContent: 'center', alignItems: 'center'}}>
+                                <p>Rank Range</p>
+                                <RangeSlider range={data['rank_range']}/>
+                            </div>
+                        </div>
+
+                        <div style={{marginTop: '-2em'}}>
+                            <h2 style={{fontSize: "1.7em", marginRight: "10%", marginTop: '0'}}>Team Name: {data['team_name']} </h2>
+                        </div>
+                        
+                        <div >
+                            <Teammates members={data['teammates']} />
+                        </div>
+
+                        <div style={{fontSize: '1.3em', lineHeight: '1.8em', paddingBottom: '0.7em'}}>
+                            <p style={{margin: '0'}}>Seed: <b><u>{data['seed']}</u></b></p>
+                            <p style={{margin: '0'}}>Placement: <b><u>{data['placement']}</u></b></p>
+                        </div>
+
+                        { data['bracket'] != false && <iframe src={url} width="100%" height="500" frameborder="0" scrolling="auto" allowtransparency="true"></iframe>}
+                        
+                        <div>
+                            <ul style={{padding: 0}}>{matches}</ul>
+                        </div>
+                    </div>
+
+                    
+            }
+        </div>
+
+    );
+
+}
+
+export { TournamentDetails };
+
+/*
+<div>
+            <Navbar />
+            {
+                data != false && 
                     <div className='margin2' style={{ fontFamily: 'trebuchet ms'}}>
                         <div style={{display: "flex", alignItems: 'center', width: "100%"}}>
                             <div style={{textAlign: "left"}}>
@@ -151,16 +267,11 @@ function TournamentDetails(props) {
                         { data['bracket'] != false && <iframe src={url} width="100%" height="500" frameborder="0" scrolling="auto" allowtransparency="true"></iframe>}
                         
                         <div>
-                            <ul style={{position: 'relative', left: '2.5vw'}}>{matches}</ul>
+                            <ul style={{padding: 0}}>{matches}</ul>
                         </div>
                     </div>
 
                     
             }
         </div>
-
-    );
-
-}
-
-export { TournamentDetails };
+        */

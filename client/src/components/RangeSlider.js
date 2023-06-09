@@ -6,7 +6,7 @@ const RangeSlider = (props) => {
     const MAX_RANGE = 100000;
     const [lo, setLo] = useState(MIN_RANGE);
     const [hi, setHi] = useState(MAX_RANGE)
-
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     useEffect( () => {
         if (raw_range == 'Open Rank') {
@@ -47,6 +47,26 @@ const RangeSlider = (props) => {
         }
     }, [])
 
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+    
+        window.addEventListener('resize', handleResize);
+    
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const barWidth = () => {
+        if (windowWidth < 600) {
+            return 18;
+        } else {
+            return 23;
+        }
+    }
+
     const fillColor = () => {
         let percent1 = (lo / MAX_RANGE) * 100;
         let percent2 = (hi / MAX_RANGE) * 100;
@@ -58,8 +78,8 @@ const RangeSlider = (props) => {
     
     return (
       <div>
-        <div class="wrapper" style={{backgroundColor: "transparent", width: "32vw"}}>
-            <div class="values" style={{marginBottom: "-3rem", width: '11vw', height: '1.5vw', fontSize: '1.2vw'}}>
+        <div class="wrapper" style={{backgroundColor: "transparent", width: `${barWidth()}em` }}>
+            <div class="values" style={{marginBottom: "-3rem", width: `${barWidth() / 2.3}em`, height: '1.5em', fontSize: '0.8em'}}>
                 <span id="range1">
                     {lo}
                 </span>
@@ -68,8 +88,8 @@ const RangeSlider = (props) => {
                     {hi}
                 </span>
             </div>
-            <div class="labels" style={{marginBottom: "-3rem", width: '33vw', height: '5vw'}}>
-                <div style={{display: "flex", justifyContent: "space-between", fontSize: '1vw'}}>
+            <div class="labels" style={{marginBottom: "-3rem", width: `${barWidth()}em`, height: '3.5em'}}>
+                <div style={{display: "flex", justifyContent: "space-between", fontSize: '0.6em'}}>
                     <p style={{fontSize: "1.5em", color: "#FFFFFF"}}>{MIN_RANGE}</p>
                     <p style={{fontSize: "1.5em", color: "#FFFFFF"}}>{MAX_RANGE}+</p>
                 </div>
