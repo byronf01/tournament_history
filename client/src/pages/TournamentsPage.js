@@ -17,13 +17,14 @@ function TournamentsPage() {
     const [data, setData] = useState(Array(1));
     const [dataMaster, setDataMaster] = useState(Array(1));
     const [query, setQuery] = useState("");
+    const [sorting, setSorting] = useState('a');
     const [timerId, setTimerId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     const currentTableData = useMemo(() => {
-        
+        console.log('fire')
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
         const select = data.slice(firstPageIndex, lastPageIndex);
@@ -31,6 +32,21 @@ function TournamentsPage() {
         
     }, [currentPage, data]);
 
+    const sort_tourn = (items) => {
+        if (sorting == 'a') {
+            return items.sort( (a, b) => {
+                if (a["title"].toLowerCase() <= b["title"].toLowerCase() ) return -1;
+                else return 1
+            });
+        } else if (sorting == 'c') {
+            return items.sort( (a, b) => {
+                const ad = new Date(a['date_f']);
+                const bd = new Date(b['date_f']);
+                if (ad < bd) return -1;
+                else return 1;
+            });
+        } else return items;
+    }
     
     useEffect ( () => {
         let timer;
@@ -40,10 +56,7 @@ function TournamentsPage() {
         
             // sort array alphabetically by tournament title
             let items = result;
-            items.sort( (a, b) => {
-                if (a["title"].toLowerCase() <= b["title"].toLowerCase() ) return -1;
-                else return 1
-            })
+            sort_tourn(items)
             let tmp = Array(items.length);
             for (let i = 0; i < items.length; i++) {
                 tmp[i] = items[i]
@@ -62,6 +75,26 @@ function TournamentsPage() {
             return () => clearTimeout(timer);
         
         }, []);
+
+    useEffect(() => {
+        let items = [...dataMaster];
+        sort_tourn(items);
+        setDataMaster(items);
+        if (query !== "") {
+            const match = query.toLowerCase().replace('\\','\\\\');
+            const queriedData = items.filter((tourn) => (
+            tourn['title'].toLowerCase().match(match) ||
+            tourn['acronym'].toLowerCase().match(match) ||
+            tourn['team_name'].toLowerCase().match(match) ||
+            tourn['notes'].toLowerCase().match(match) ||
+            tourn['comments'].toLowerCase().match(match)
+            ));
+            setData(queriedData);
+        } else {
+            setData(items);
+        }
+        
+    }, [sorting])
 
     useEffect(() => {
         const handleResize = () => {
@@ -175,13 +208,24 @@ function TournamentsPage() {
             { dataMaster.length !== 1 &&
                 <div>
                     {searchBar()}
+                    <div style={{display: 'flex', justifyContent: 'center', paddingTop: '1em', fontSize: '0.8em'}}>
+                        <p style={{margin: 0}}>Sort by: </p>
+                        <input type='radio' id='choice1' name='sorting' value='Alphabetical' defaultChecked onClick={() => {
+                            setSorting('a');
+                        }}/>
+                        <label for="choice1">Alphabetical </label>
+                        <input type='radio' id='choice2' name='sorting' value='Chronlogical' onClick={() => {
+                            setSorting('c');
+                        }}/>
+                        <label for="choice2">Chronological </label>
+                    </div>
                 </div>
             }
             
             {isLoading && <Spinner />}
             {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2em'}}>Api failure, try again later</p>}
-            {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2em'}}>{data.length} tournaments found</p> :
-            data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2em'}}>{data.length} tournament found</p> : null }
+            {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2em', marginTop: '0.4em'}}>{data.length} tournaments found</p> :
+            data.length === 1 && typeof(data[0]) != 'undefined' ? <p style={{textAlign: 'center', fontSize: '1.2em', marginTop: '0.4em'}}>{data.length} tournament found</p> : null }
             {data.length !== 0 && <Pagination 
                     className="pagination-bar"
                     currentPage={currentPage}
