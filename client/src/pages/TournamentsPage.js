@@ -24,7 +24,7 @@ function TournamentsPage() {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     const currentTableData = useMemo(() => {
-        console.log('fire')
+      
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
         const select = data.slice(firstPageIndex, lastPageIndex);
@@ -81,13 +81,13 @@ function TournamentsPage() {
         sort_tourn(items);
         setDataMaster(items);
         if (query !== "") {
-            const match = query.toLowerCase().replace('\\','\\\\');
+            const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
             const queriedData = items.filter((tourn) => (
-            tourn['title'].toLowerCase().match(match) ||
-            tourn['acronym'].toLowerCase().match(match) ||
-            tourn['team_name'].toLowerCase().match(match) ||
-            tourn['notes'].toLowerCase().match(match) ||
-            tourn['comments'].toLowerCase().match(match)
+            tourn['title'].toLowerCase().match(regex) ||
+            tourn['acronym'].toLowerCase().match(regex) ||
+            tourn['team_name'].toLowerCase().match(regex) ||
+            tourn['notes'].toLowerCase().match(regex) ||
+            tourn['comments'].toLowerCase().match(regex)
             ));
             setData(queriedData);
         } else {
@@ -171,13 +171,13 @@ function TournamentsPage() {
 
     const applyQueryFilter = (newQuery) => {
         if (newQuery !== "") {
-            const match = newQuery.toLowerCase().replace('\\','\\\\');
+            const regex = new RegExp(newQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
             const queriedData = dataMaster.filter((tourn) => (
-            tourn['title'].toLowerCase().match(match) ||
-            tourn['acronym'].toLowerCase().match(match) ||
-            tourn['team_name'].toLowerCase().match(match) ||
-            tourn['notes'].toLowerCase().match(match) ||
-            tourn['comments'].toLowerCase().match(match)
+            tourn['title'].toLowerCase().match(regex) ||
+            tourn['acronym'].toLowerCase().match(regex) ||
+            tourn['team_name'].toLowerCase().match(regex) ||
+            tourn['notes'].toLowerCase().match(regex) ||
+            tourn['comments'].toLowerCase().match(regex)
             ));
             setData(queriedData);
         } else {

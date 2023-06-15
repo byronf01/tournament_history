@@ -556,6 +556,8 @@ async function getMatches() {
     // Note there can be multiple objects with the same acronym
 
     // 6/6: added player usernames for each match
+    // 6/15: added date timestamps for each match
+
     const all_data = []
     const query = await tournament_history.find()
     let map = new Map(); // player id -> list of INDEXES in data, representing matches the player has been in
@@ -582,6 +584,7 @@ async function getMatches() {
                                         "result": stage_data[k][match_details]["result"],
                                         "teams": teams,
                                         "users": [],
+                                        "timestamp": stage_data[k][match_details]['timestamp'],
                                     };
                     all_data.push(match_ret);
 

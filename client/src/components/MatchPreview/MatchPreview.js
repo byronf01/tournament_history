@@ -27,7 +27,6 @@ function MatchPreview( {acronym, mp, stage, match_name, result, teams} ) {
             color = '#D07272';
             match_result = result[0] < result[1] ? `${result[0]} - ${result[1]}` : `${result[1]} - ${result[0]}`
         }
-        console.log(match_result)
         
     }
 

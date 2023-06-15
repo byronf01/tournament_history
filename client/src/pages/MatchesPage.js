@@ -8,7 +8,7 @@ import Spinner from '../components/Spinner'
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-const API_URL_LOCAL = 'http://localhost:5000/api/data';
+const API_URL_LOCAL = 'http://localhost:5000';
 const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
 let PageSize = 20;
 
@@ -17,6 +17,7 @@ function MatchesPage() {
   const [data, setData] = useState(Array(1));
   const [dataMaster, setDataMaster] = useState(Array(1));
   const [query, setQuery] = useState("");
+  const [sorting, setSorting] = useState('a');
   const [timerId, setTimerId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingTimeExpired, setLoadingTimeExpired] = useState(false);
@@ -32,12 +33,28 @@ function MatchesPage() {
       
   }, [currentPage, data]);
 
+  const sort_matches = (items) => {
+    if (sorting == 'a') {
+        return items.sort( (a, b) => {
+            if (a["match_name"].toLowerCase() <= b["match_name"].toLowerCase() ) return -1;
+            else return 1
+        });
+    } else if (sorting == 'c') {
+        return items.sort( (a, b) => {
+            const ad = new Date(a['timestamp']);
+            const bd = new Date(b['timestamp']);
+            if (ad < bd) return -1;
+            else return 1;
+        });
+    } else return items;
+  }
+
   const fetchData = () => {
   let timer;
       
   fetch(`${API_URL}/api/matches`).then( resp => resp.json())
       .then( (res) => {
-
+          
           // get list of Matches alphabetically sorted by acronym value
           let sorted = res.sort((m1, m2) => {
               
@@ -69,6 +86,23 @@ function MatchesPage() {
     
       return () => clearTimeout(timer);
    }
+
+   useEffect(() => {
+    let items = [...dataMaster];
+    sort_matches(items);
+    setDataMaster(items);
+    if (query !== "") {
+        const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+        const queriedData = dataMaster.filter((m) => (
+          m['match_name'].toLowerCase().match(regex) 
+          || m['users'].some((u) => u.toLowerCase().match(regex))
+        ));
+        setData(queriedData);
+    } else {
+        setData(items);
+    }
+    
+  }, [sorting])
 
   useEffect(() => {
   const handleResize = () => {
@@ -188,9 +222,21 @@ function MatchesPage() {
 
       { dataMaster.length !== 1 &&
         <div>
-          {searchBar()}
+            {searchBar()}
+            <div style={{display: 'flex', justifyContent: 'center', paddingTop: '1em', fontSize: '0.8em'}}>
+                <p style={{margin: 0}}>Sort by: </p>
+                <input type='radio' id='choice1' name='sorting' value='Alphabetical' defaultChecked onClick={() => {
+                    setSorting('a');
+                }}/>
+                <label for="choice1">Alphabetical </label>
+                <input type='radio' id='choice2' name='sorting' value='Chronlogical' onClick={() => {
+                    setSorting('c');
+                }}/>
+                <label for="choice2">Chronological </label>
+            </div>
         </div>
       }
+      
       {isLoading && <Spinner />}
       {isLoading && loadingTimeExpired && <p style={{textAlign: 'center', fontSize: '1.2em'}}>Api failure, try again later</p>}
       {data.length > 1 ? <p style={{textAlign: 'center', fontSize: '1.2em'}}>{data.length} matches found</p> :
