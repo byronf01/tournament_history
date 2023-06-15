@@ -9,7 +9,7 @@ import Dropdown from '../components/Dropdown'
 import ScrollButton from '../components/ScrollButton';
 
 const API_URL_LOCAL = 'http://localhost:5000/api/data';
-const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
+const API_URL = 'https://tournament-history-9rmu.vercel.app';
 
 function Member(props) {
   const id = props.id;

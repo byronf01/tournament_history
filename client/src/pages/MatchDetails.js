@@ -12,7 +12,7 @@ import expand2 from '../assets/expandmc2.png';
 import xbutton from '../assets/xbutton.png';
 
 const API_URL_LOCAL = 'http://localhost:5000/api/data';
-const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
+const API_URL = 'https://tournament-history-9rmu.vercel.app';
 
 
 function MatchcostMenu(props) {

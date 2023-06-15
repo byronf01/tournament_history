@@ -9,7 +9,7 @@ import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 const API_URL_LOCAL = 'http://localhost:5000/api/data';
-const API_URL = 'https://tournament-history-9rmu-maxy7da5q-byronf01.vercel.app';
+const API_URL = 'https://tournament-history-9rmu.vercel.app';
 let PageSize = 10;
 
 function TournamentsPage() {
