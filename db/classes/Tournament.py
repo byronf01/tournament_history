@@ -198,8 +198,14 @@ class Tournament:
         
         while old <= new:
             resp = requests.get(f'{API_BASE_URL}matches/{all_mps[old]}', headers=headers)
-            # print("Parsing match " + all_mps[old])
-            match_info = resp.json()
+            
+            try:
+                # print("Parsing match " + all_mps[old])
+                match_info = resp.json()
+            except Exception as e:
+                print(e)
+                exit()
+
             try:
                 match_name = match_info['match']['name'] 
                 mp_acr = match_name.split(" ")[0].replace(":", "")

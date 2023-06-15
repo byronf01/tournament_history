@@ -39,6 +39,58 @@ def construct_tourn(tourn: dict) -> Tournament:
         t = Tournament(tourn, [0])
     return t
 
+def add_tournament():
+    
+    client = MongoClient(URI, server_api=ServerApi('1'))
+
+    try:
+       
+        client.admin.command('ping')
+        print("Successfully connected to MongoDB")
+
+        # Select a database and collection
+        db = client['tournament_history']
+        collection = db['tournament_historyV1.1']
+
+        if method == sheet_data: data = method()
+        else:
+            data = {}
+            ct = 1
+            while input('Continue entering? (None to exit): ') != '':
+                new_data = method()
+                data[ct] = new_data
+                ct += 1
+
+        for _, v in data.items():
+
+            if v['title'] in ISSUES and 4 in ISSUES[v['title']]:
+                print("Tournament " + v['title'] + " skipped")
+                continue
+
+           
+            query1 = { 'title': v['title'] }
+
+            dup = collection.count_documents(query1)
+            if dup > 0:
+                print(f"Tournament {v['title']} already in database ")
+                continue 
+                
+            
+            # Begin constructing mew tournament object
+            try:
+                t = construct_tourn(v)
+                collection.insert_one(t.getTournament())
+                print("New tournament added! ")
+            except Exception as e:
+                print(e)
+                foo = input("Continue? (Y/N) ")
+                if foo == 'N':
+                    break
+    except Exception as e:
+        print(e)
+    finally:
+        client.close()
+
 
 if __name__ == "__main__":
 

@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from Tournament import Tournament
+from add_tournaments import add_tournament
 
 load_dotenv()
 
@@ -285,7 +286,8 @@ def update_misc():
 
 if __name__ == "__main__":
 
-    
+    if "add" in sys.argv: 
+        add_tournament()
     update_tournaments_main()
     if "misc" in sys.argv:
         update_misc()
