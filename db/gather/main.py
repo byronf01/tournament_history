@@ -6,6 +6,7 @@ the database. Some functions only needed to run once and have been commented out
 import sys, os, re, json, requests, time, random, string
 sys.path.append('../classes')
 from datetime import datetime
+from copy import deepcopy
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -284,14 +285,66 @@ def update_misc():
                 update = input(f'{field} currently {doc[field]}, new value: ') 
                 collection.update_one({ 'title': title }, { '$set' : { field: update }})
 
+def add_date_to_matches():
+    """
+    AS OF 6/15/23: Added date timestamp to all mps
+    """
+    apiData = {
+            'client_id': 21309,
+            'client_secret': CLIENT_SECRET,
+            'grant_type': 'client_credentials',
+            'scope': 'public',
+        }
+    
+    client = MongoClient(URI, server_api=ServerApi('1'))
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB")
+    db = client['tournament_history']
+    collection = db['tournament_historyV1.1']
+    for doc in collection.find():
+        title = doc['title']
+        stages = doc['stages']
+        stages_copy = deepcopy(stages)
+        print(f'Updating {title}...')
+        for i in range(0, len(stages)):
+            stage = stages[i]
+            for round, matches in stage.items():
+                for j in range(len(matches)):
+
+                    id = [k for k in matches[j].keys()][0]
+                    
+                    response = requests.post('https://osu.ppy.sh/oauth/token', data=apiData)
+                    if response.status_code == 200:
+                        token = response.json().get('access_token')
+                    else:
+                        input('Bad response (wait a few) ')
+                        response = requests.post('https://osu.ppy.sh/oauth/token', data=apiData)
+                        token = response.json().get('access_token')
+
+                    headers = {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': f'Bearer {token}',
+                    }
+
+                    score_info = requests.get(f'{API_BASE_URL}matches/{str(id)}', headers=headers)
+                    info = score_info.json()
+                    date = info['match']['start_time']
+                    stages_copy[i][round][j][id]['timestamp'] = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%z")
+
+        collection.update_one( { 'title': title } , { '$set': { 'stages': stages_copy }})
+        print(f'Added dates for matches in {title}')
+
 if __name__ == "__main__":
 
+    add_date_to_matches()
+    """
     if "add" in sys.argv: 
         add_tournament()
     update_tournaments_main()
     if "misc" in sys.argv:
         update_misc()
-    
+    """
 
 
     

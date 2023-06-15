@@ -18,15 +18,11 @@ if __name__ == "__main__":
     client.admin.command('ping')
     print("Successfully connected to MongoDB")
 
-    # Select a database and collection
     db = client['tournament_history']
-    collection = db['tournament_history']
+    collection = db['tournament_historyV1.1']
 
     with open('backup.txt', 'a') as f:
         
         for doc in collection.find():
             doc.pop('_id')
-            for k in doc.keys(): # should just be 1
-                title = k
-            doc[k]['date_f'] = str(doc[k]['date_f'])
-            f.write(json.dumps(doc, indent = 4) )
+            f.write(json.dumps(doc, indent=4, sort_keys=True, default=str) )
