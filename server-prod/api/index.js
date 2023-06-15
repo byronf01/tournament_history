@@ -595,7 +595,7 @@ async function getMatches() {
                                         "result": stage_data[k][match_details]["result"],
                                         "teams": teams,
                                         "users": [],
-                                        "timestamp": stage_data[k][match_details]['timestamp'],
+                                        "timestamp": stage_data[k][match_details]["timestamp"],
                                     };
                     all_data.push(match_ret);
 

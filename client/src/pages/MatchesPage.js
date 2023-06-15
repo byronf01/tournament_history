@@ -25,7 +25,6 @@ function MatchesPage() {
   const dataFetchedRef = useRef(false);
 
   const currentTableData = useMemo(() => {
-      
       const firstPageIndex = (currentPage - 1) * PageSize;
       const lastPageIndex = firstPageIndex + PageSize;
       const select = data.slice(firstPageIndex, lastPageIndex);
@@ -40,6 +39,7 @@ function MatchesPage() {
             else return 1
         });
     } else if (sorting == 'c') {
+
         return items.sort( (a, b) => {
             const ad = new Date(a['timestamp']);
             const bd = new Date(b['timestamp']);
@@ -50,46 +50,37 @@ function MatchesPage() {
   }
 
   const fetchData = () => {
-  let timer;
-      
-  fetch(`${API_URL}/api/matches`).then( resp => resp.json())
-      .then( (res) => {
-          
-          // get list of Matches alphabetically sorted by acronym value
-          let sorted = res.sort((m1, m2) => {
-              
-              if (m1["acronym"].toLowerCase() < m2["acronym"].toLowerCase()) return -1;
-              else if (m1['acronym'].toLowerCase() > m2['acronym'].toLowerCase()) return 1;
-              else { // stage by tiebreaker
-                if (m1['stage'] == 'Qualifiers') return 1; // Qualifiers highest precedence
-                else if (m2['stage'] == 'Qualifiers') return -1;
-                else { // None of matches are qualifiers
-                  const s1 = parseInt(m1['stage'].split(' ')[1])
-                  const s2 = parseInt(m2['stage'].split(' ')[2])
-                  if (s1 <= s2) return -1;
-                  else return 1;
-                }
-              };
-              
-              
-          });
-          setData(sorted);
-          setDataMaster(sorted);
-          setIsLoading(false);
-          clearTimeout(timer);
-          
-      })
+    let timer;
+        
+    fetch(`${API_URL}/api/matches`).then( resp => resp.json())
+        .then( (res) => {
+            
+            // get list of Matches alphabetically sorted by default
+            let items = res;
+            console.log(items)
+            sort_matches(items)
+            let tmp = Array(items.length);
+            for (let i = 0; i < items.length; i++) {
+                tmp[i] = items[i]
+            }
+            setData(tmp);
+            setDataMaster(tmp);
+            setIsLoading(false);
+            clearTimeout(timer);
+            
+        })
 
-      timer = setTimeout(() => {
-        setLoadingTimeExpired(true);
-      }, 20000);
-    
-      return () => clearTimeout(timer);
+        timer = setTimeout(() => {
+          setLoadingTimeExpired(true);
+        }, 20000);
+      
+        return () => clearTimeout(timer);
    }
 
    useEffect(() => {
     let items = [...dataMaster];
     sort_matches(items);
+    
     setDataMaster(items);
     if (query !== "") {
         const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
@@ -225,11 +216,11 @@ function MatchesPage() {
             {searchBar()}
             <div style={{display: 'flex', justifyContent: 'center', paddingTop: '1em', fontSize: '0.8em'}}>
                 <p style={{margin: 0}}>Sort by: </p>
-                <input type='radio' id='choice1' name='sorting' value='Alphabetical' defaultChecked onClick={() => {
+                <input type='radio' id='choice1a' name='sorting2' value='Alphabetical' defaultChecked onClick={() => {
                     setSorting('a');
                 }}/>
                 <label for="choice1">Alphabetical </label>
-                <input type='radio' id='choice2' name='sorting' value='Chronlogical' onClick={() => {
+                <input type='radio' id='choice2a' name='sorting2' value='Chronlogical' onClick={() => {
                     setSorting('c');
                 }}/>
                 <label for="choice2">Chronological </label>
